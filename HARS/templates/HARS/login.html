@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="pallete-blue-off-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="{% static 'HARS/css/tachyons.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'HARS/css/pallete_AAA.css' %}"/>
+    <link rel="stylesheet" href="{% static 'HARS/css/styles.css' %}"/>
+    <style>
+        /* Optional: Additional custom styling */
+        .login-container {
+            max-width: 400px;
+        }
+    </style>
+</head>
+<!-- <body class="bg-light-gray sans-serif"> -->
+<body class="bg-color2 f4 color1 h-100">
+    <header class="pa2 pr4 f3 tr bg-color1 color2">
+            HPC Application and Reporting system
+    </header>
+    <div class="vh-100 dt w-100">
+        <div class="dtc v-mid tc">
+            <div class="login-container center bg-near-white pa4 br3 shadow-5">
+                <h2 class="f4">Login</h2>
+                <form method="POST" action="{% url 'signin' %}">
+                    {% csrf_token %}
+                    <div class="mv3">
+                        <label class="db fw6 lh-copy f6" for="username">Username</label>
+                        <input class="pa2 input-reset ba bg-transparent w-100" type="text" id="username" name="username" placeholder="CC username" required>
+                    </div>
+                    <div class="mv3">
+                        <label class="db fw6 lh-copy f6" for="password">Password</label>
+                        <input class="pa2 input-reset ba bg-transparent w-100" type="password" id="password" name="password" placeholder="CC password" required>
+                    </div>
+                    <!--<label class="pa0 ma0 lh-copy f6 pointer"><input type="checkbox"> Remember me</label> -->
+                    <div class="mt3">
+                        <button class="b ph3 pv2 input-reset ba bg-white-40 br2 color1 grow pointer f6 dib" type="submit">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

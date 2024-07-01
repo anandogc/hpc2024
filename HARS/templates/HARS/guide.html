@@ -1,0 +1,407 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="pallete-blue-off-white">
+  <title>HARS: Guide Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="{% static 'HARS/css/tachyons.min.css' %}"/>
+  <link rel="stylesheet" href="{% static 'HARS/css/pallete_AAA.css' %}"/>
+  <link rel="stylesheet" href="{% static 'HARS/css/styles.css' %}"/>
+
+
+  <body class="bg-color2 f4 color1 h-100">
+    <header class="pa2 pr4 f3 tr bg-color1 color2">
+            HPC Application and Reporting system
+    </header>
+    <nav class="nav-top tr mw8 ml-auto mr-auto pa3">
+        <span class="dib mr2 pa2" data-source="user/name"
+            data-component="Name">
+        </span>
+        <!-- <details>
+            <summary>Settings</summary>
+            <div class="dropdown-content tl ba pa2">
+                <div class="pa2">
+                    Font-Size: <select id="font_size_selector" onchange="pallete.style.fontSize=this.value; setCookies();" class="bg-color2 color1 pointer">
+                        <option value="small">Small</option>
+                        <option value="smaller">Smaller</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="large">Large</option>
+                        <option value="larger">Larger</option>
+                    </select> 
+                </div>
+                <div class="pa2">
+                    Theme: <select id="pallete_selector" onchange="pallete.className=this.value; setCookies();" class="bg-color2 color1 pointer">
+                        <option value="pallete-violet-white">Violet White</option>
+                        <option value="pallete-blue-white">Blue White</option>
+                        <option value="pallete-blue-off-white" selected>Blue Off White</option>
+                        <option value="pallete-blue-yellow">Blue Yellow</option>
+                        <option value="pallete-blue-gray">Blue Gray</option>
+                        <option value="pallete-green-white">Green White</option>
+                        <option value="pallete-green-off-white">Green Off White</option>
+                        <option value="pallete-green-yellow">Green Yellow</option>
+                        <option value="pallete-green-gray">Green Gray</option>
+                        <option value="pallete-black-white">Black White</option>
+                        <option value="pallete-black-off-white">Black Off White</option>
+                        <option value="pallete-black-yellow">Black Yellow</option>
+                        <option value="pallete-black-gray">Black Gray</option>
+                        <option value="pallete-black-pink">Black Pink</option>
+                    </select>
+                </div>
+            </div>
+        </details> -->
+        <a class="color1 no-underline ph2 pointer" href="signout">Logout</a>
+    </nav>
+
+    <main class="mw8 ml-auto mr-auto mv3">
+        <details>
+            <summary class="f3">My Profile</summary>
+
+            <section
+                class="ba ma3 br2 br--bottom"
+                data-source="{{ request.path }}user/institute_profile"
+                data-component="InstituteProfile">
+
+                <header class="bg-color1 color2 pa2">Institute Profile</header>
+                <span class="pa2">Loading ...</span>
+            </section>
+        </details>
+        
+        <!-- <details class="mt4">
+            <summary class="f3">My Account</summary>
+
+            <div
+                class="ba ma3 br2 br--bottom"
+                data-source="{{ request.path }}user/statistics"
+                data-component="Statistics">
+                <span class="pa2">Loading ...</span>
+            </div>
+        </details> -->
+        
+        <details class="mt4">
+            <summary class="f3">Work Profile</summary>
+            
+            <section
+                class="ba ma3 br2 br--bottom"
+                data-source="{{ request.path }}user/hpc_profile"
+                data-component="HPCProfile">
+                <header class="bg-color1 color2 pa2 flex justify-between">HPC Profile</header>
+                <span class="pa2">Loading ...</span>
+            </section>        
+                    
+            <section id="report" class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/report" data-component="Report">
+                <header class="bg-color1 color2 pa2 flex justify-between">Annual Report</header>
+                <span class="pa2">Loading ...</span>
+            </section>
+        </details>
+
+        <details class="mt4">
+            <summary class="f3">Applications</summary>
+            
+            <p class="mh3 mt2 mb0">Notes:</p>
+            <ol class="mt1 mh3">
+                <li>Please complete your Work Profile before applying.</li>
+                <li>Please upload your Annual-Report before renewing.</li>
+            </ol>
+
+
+
+            <details class="mt2 pl4">
+                <summary class="f3">Param Sanganak - High Priority Access</summary>
+
+                <table class="collapse center" data-source="user/charges/PS-HPA" data-component="Charges">
+                </table>
+
+                <section id="param_hp_application" class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/application/PS-HPA" data-component="Application-HP-Guide">
+                    <span class="pa2">Loading ...</span>
+                </section> 
+                
+                <!-- <section data-source="{{ request.path }}user/topup/cpu/PS-HPA" data-action="{{ request.path }}user/topup/cpu/PS-HPA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP">
+                    <header class="bg-color1 color2 pa2">
+                        CPU Topup Requests
+                    </header>
+                    <span class="pa2">Loading ...</span>
+                </section> -->
+
+                <!-- <section data-source="{{ request.path }}user/topup/gpu/PS-HPA" data-action="{{ request.path }}user/topup/gpu/PS-HPA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP">
+                    <header class="bg-color1 color2 pa2">
+                        GPU Topup Requests
+                    </header>
+                    <span class="pa2">Loading ...</span>
+                </section> -->
+            </details>
+
+            <details class="mt2 pl4">
+                <summary class="f3">Param Sanganak - Regular Access</summary>
+
+                <table class="collapse center" data-source="user/charges/PS-RA" data-component="Charges">
+                </table>
+
+                <section id="param_ra_application" class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/application/PS-RA" data-component="Application-RA-Guide">
+                    <span class="pa2">Loading ...</span>
+                </section> 
+                
+                <!-- <section data-source="{{ request.path }}user/topup/cpu/PS-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
+                    <header class="bg-color1 color2 pa2">
+                        CPU Topup Requests
+                    </header>
+                    <span class="pa2">Loading ...</span>
+                </section> -->
+
+                <!-- <section data-source="{{ request.path }}user/topup/gpu/PS-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
+                    <header class="bg-color1 color2 pa2">
+                        GPU Topup Requests
+                    </header>
+                    <span class="pa2">Loading ...</span>
+                </section> -->
+            </details>
+
+            <details class="mt2 pl4">
+                <summary class="f3">HPC2013 - Quarterly Access</summary>
+
+                <table class="collapse center" data-source="user/charges/HPC2013-QA" data-component="Charges-QA">
+                </table>
+
+                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/application/HPC2013-QA" data-component="Application-QA-Guide">
+                    <span class="pa2">Loading ...</span>
+                </section> 
+                
+                <!-- <section data-source="{{ request.path }}user/topup/cpu/HPC2013-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
+                    <header class="bg-color1 color2 pa2">
+                        CPU Topup Requests
+                    </header>
+                    <span class="pa2">Loading ...</span>
+                </section> -->
+            </details>
+        </details>
+        <details class="mt4" open="" data-component="GroupMembers" data-source="user/group_members">
+            <summary class="f3">Group Members</summary>
+        </details>
+        
+        <datalist id="domain_list">
+            <option value="AI/ML/DL"></option>
+            <option value="Air Pollution"></option>
+            <option value="Aerospace Engineering"></option>
+            <option value="Astronomy & Astrophysics"></option>
+            <option value="Atomic & Molecular Sciences"></option>
+            <option value="Big Data Analytics"></option>
+            <option value="Bioinformatics"></option>
+            <option value="Biophotonics"></option>
+            <option value="Chemical Engineering"></option>
+            <option value="Chemical Sciences"></option>
+            <option value="Civil Engineering"></option>
+            <option value="Climate & Environment Sciences"></option>
+            <option value="Complex Systems and Statistical Physics"></option>
+            <option value="Compressible Multiphase"></option>
+            <option value="Computational Biology"></option>
+            <option value="Computational Biology"></option>
+            <option value="Computational Chemistry"></option>
+            <option value="Computational Fluid Dynamics"></option>
+            <option value="Computational Metallurgy"></option>
+            <option value="Computational Nanoelectronics"></option>
+            <option value="Computational Physics"></option>
+            <option value="Computational Ultrasound Imaging"></option>
+            <option value="Condensed Matter Physics"></option>
+            <option value="Cosmology"></option>
+            <option value="Cyber Security"></option>
+            <option value="Data Science and Mathematical Optimization"></option>
+            <option value="Earth Sciences"></option>
+            <option value="Electrical Engineering"></option>
+            <option value="Electrical and Electronics Engineering"></option>
+            <option value="Finite Element Analysis"></option>
+            <option value="Fluid and thermal science"></option>
+            <option value="Geological Sciences"></option>
+            <option value="High Energy Physics"></option>
+            <option value="Materials Science and Engineering"></option>
+            <option value="Materials Science"></option>
+            <option value="Mechanical Engg. (Design)"></option>
+            <option value="Mechanical Engineering"></option>
+            <option value="Multiscale modelling"></option>
+            <option value="Neuro Science"></option>
+            <option value="Optimization"></option>
+            <option value="Particle Technology"></option>
+            <option value="Quantum Mechanics"></option>
+            <option value="RF AND Microwave"></option>
+            <option value="Robotics and ML"></option>
+            <option value="Structural Engineering Mechanics"></option>
+            <option value="Weather, Ocean, Climate"></option>
+            <option value="Wireless Communication"></option>
+        </datalist>
+        
+        <datalist id="application_list">
+            <option value="AMBER"></option>
+            <option value="ATHENA"></option>
+            <option value="Abinit"></option>
+            <option value="Alphafold"></option>
+            <option value="Amber"></option>
+            <option value="Ansys"></option>
+            <option value="Ansys-FLUENT"></option>
+            <option value="Ansys-HFSS"></option>
+            <option value="Ansys-Mechanical"></option>
+            <option value="Ansys-Workbench"></option>
+            <option value="Armadillo"></option>
+            <option value="Basilisk"></option>
+            <option value="BerkelyGW"></option>
+            <option value="Bernese"></option>
+            <option value="Biopython"></option>
+            <option value="CLASS"></option>
+            <option value="COMSOL"></option>
+            <option value="CONQUEST"></option>
+            <option value="CP2K"></option>
+            <option value="CPMD"></option>
+            <option value="CUDA"></option>
+            <option value="Conquest"></option>
+            <option value="CosmoMC"></option>
+            <option value="Cp2k"></option>
+            <option value="Cupy"></option>
+            <option value="DAMASK"></option>
+            <option value="DENISE-Black-Edition (Full Waveform Inversion)"></option>
+            <option value="DFT"></option>
+            <option value="DFTB"></option>
+            <option value="FLEUR"></option>
+            <option value="Ferret"></option>
+            <option value="Fleur"></option>
+            <option value="Fortran"></option>
+            <option value="GRADS"></option>
+            <option value="GROMACS"></option>
+            <option value="GaussView"></option>
+            <option value="Gaussian"></option>
+            <option value="Gerris flow Solver"></option>
+            <option value="Graphcast"></option>
+            <option value="Gurobi Optimization Solver"></option>
+            <option value="HPCG"></option>
+            <option value="IBM ILOG CPLEX solver and Python"></option>
+            <option value="ICON CFD"></option>
+            <option value="ImageJ"></option>
+            <option value="In-house Code (Name of the code if available)"></option>
+            <option value="In-house C sharp project"></option>
+            <option value="In-house C++ project"></option>
+            <option value="In-house FORTRAN project"></option>
+            <option value="In-house Python project"></option>
+            <option value="In-house FEM Code"></option>
+            <option value="In-house FFTK"></option>
+            <option value="In-house Molecular Simulation Insights Tool (MIST)"></option>
+            <option value="In-house NFS-DSMC"></option>
+            <option value="In-house Saras"></option>
+            <option value="In-house Tarang"></option>
+            <option value="In-house kinetic Monte Carlo code"></option>
+            <option value="Intel Math Kernel Library (Intel MKL)"></option>
+            <option value="Intel compilers"></option>
+            <option value="Jupiter notebook"></option>
+            <option value="LAMMPS"></option>
+            <option value="LIGGGHTS"></option>
+            <option value="MATLAB"></option>
+            <option value="MILC-QCD"></option>
+            <option value="MOM"></option>
+            <option value="MOOSE Framework"></option>
+            <option value="MOSEK"></option>
+            <option value="MPICH"></option>
+            <option value="MUSEN"></option>
+            <option value="Machine Learning Frameworks"></option>
+            <option value="Mathematica"></option>
+            <option value="Matlab"></option>
+            <option value="Matplotlib"></option>
+            <option value="Montepython"></option>
+            <option value="Mr Bayes"></option>
+            <option value="Multiphysics object oriented simulation environment"></option>
+            <option value="Mumax3"></option>
+            <option value="Musen"></option>
+            <option value="N2P2"></option>
+            <option value="NAMD"></option>
+            <option value="NEK5000"></option>
+            <option value="NEKO"></option>
+            <option value="NFS Nova"></option>
+            <option value="NWChem"></option>
+            <option value="NanoTCAD ViDES"></option>
+            <option value="Neko"></option>
+            <option value="Nvidia digits"></option>
+            <option value="OOFEM"></option>
+            <option value="OpenCV"></option>
+            <option value="OpenFOAM"></option>
+            <option value="OpenMM"></option>
+            <option value="OpenMP"></option>
+            <option value="OpenMPI"></option>
+            <option value="PACKMOL"></option>
+            <option value="PL/SQL"></option>
+            <option value="PLUMED"></option>
+            <option value="ParaView"></option>
+            <option value="Phononpy"></option>
+            <option value="PyFR"></option>
+            <option value="Python-TensorFlow"></option>
+            <option value="Python-QuTiP"></option>
+            <option value="Python-h5py"></option>
+            <option value="Python-mpi4Py"></option>
+            <option value="Python-numpy"></option>
+            <option value="Python-pandas"></option>
+            <option value="Python-scipy"></option>
+            <option value="Python-scikit"></option>
+            <option value="Ptyhon-seaborn"></option>
+            <option value="Ptyhon-CuPy"></option>
+            <option value="Python3"></option>
+            <option value="Q-chem"></option>
+            <option value="Quantum Espresso"></option>
+            <option value="R"></option>
+            <option value="RASPA"></option>
+            <option value="RAxML"></option>
+            <option value="REGCM"></option>
+            <option value="ROMS"></option>
+            <option value="RegCM"></option>
+            <option value="SBLI"></option>
+            <option value="SIESTA"></option>
+            <option value="SPARTA"></option>
+            <option value="SpikeInterface"></option>
+            <option value="TINKER"></option>
+            <option value="TINKER-HP"></option>
+            <option value="Tecplot"></option>
+            <option value="Tensorflow"></option>
+            <option value="Tinker"></option>
+            <option value="Tinker-HP"></option>
+            <option value="Tycho"></option>
+            <option value="VAPS"></option>
+            <option value="VASP"></option>
+            <option value="VASP CP2K Gaussian"></option>
+            <option value="VTK"></option>
+            <option value="Vasp"></option>
+            <option value="Visual studios"></option>
+            <option value="WRF-chem"></option>
+            <option value="Wannier90"></option>
+            <option value="WannierTools"></option>
+            <option value="Wavepacket Propagation"></option>
+            <option value="Weather Research Forecasting model (WRF)"></option>
+            <option value="XCompact3D"></option>
+            <option value="Yambo"></option>
+            <option value="Zeo ++"></option>
+            <option value="miniAMR"></option>
+            <option value="miniFE"></option>
+            <option value="miniMD"></option>
+            <option value="miniWeather"></option>
+        </datalist>
+    </main>
+
+    <dialog class='loader w5 h5 bg-color2 color1'>
+        <div class="emoji f1 tc"></div>
+        <p class="message tc color1"></p>
+        <div class="tc">
+            <button class="close dn">Ok</button>
+        </div>
+    </dialog>
+
+    <script>
+        const csrfToken = '{{ csrf_token }}';
+        const portal = 'Guide';
+    </script>
+    <script src="{% static 'HARS/js/jquery.min.js' %}"></script>
+    <script src="{% static 'HARS/js/message.js' %}"></script>
+    <script src="{% static 'HARS/js/init_modal.js' %}"></script>
+    <script src="{% static 'HARS/js/init_form.js' %}"></script>
+    <script src="{% static 'HARS/js/queue.js' %}"></script>
+    <script src="{% static 'HARS/js/init_component.js' %}"></script>
+    <script src="{% static 'HARS/js/cookies.js' %}"></script>
+    <script src="{% static 'HARS/js/input_tags.js' %}"></script>
+    <script src="{% static 'HARS/js/amount.js' %}"></script>
+    <script src="{% static 'HARS/js/components.js' %}"></script>
+    
+    <script>
+        render_components_in(document.body)
+    </script>
+  </body>
+</html>
