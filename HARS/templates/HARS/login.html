@@ -34,7 +34,12 @@
                         <label class="db fw6 lh-copy f6" for="password">Password</label>
                         <input class="pa2 input-reset ba bg-transparent w-100" type="password" id="password" name="password" placeholder="CC password" required>
                     </div>
-                    <!--<label class="pa0 ma0 lh-copy f6 pointer"><input type="checkbox"> Remember me</label> -->
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="dark-red">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    <label class="pa0 ma0 lh-copy f6 pointer"><input type="checkbox"> Remember me</label> 
                     <div class="mt3">
                         <button class="b ph3 pv2 input-reset ba bg-white-40 br2 color1 grow pointer f6 dib" type="submit">Login</button>
                     </div>

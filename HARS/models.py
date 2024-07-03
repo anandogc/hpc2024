@@ -220,6 +220,7 @@ class Mail(models.Model):
     setting = models.ForeignKey(MailSetting, on_delete=models.DO_NOTHING)
 
     to = models.CharField(max_length=256, blank=True)
+    cc = models.CharField(max_length=256, blank=True)
     subject = models.CharField(max_length=128, blank=True)
     body = models.TextField(blank=True)
 
@@ -229,6 +230,7 @@ class Mail(models.Model):
     def To_json(self):
         return {
             'To': self.to,
+            'CC': self.cc,
             'Subject': self.subject,
             'Body': self.body,
         }

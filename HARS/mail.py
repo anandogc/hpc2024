@@ -22,14 +22,14 @@ from .models import MailSetting
 # with open('login-form.svg', 'r') as file:
 #   svg = file.read()
 
-# for key, value in application.items():
+# for key, value in details.items():
 #     svg = svg.replace('{'+ key.lower() + '}', value)
 
-# with open('Login-Form-'+application_id+'.svg', 'w') as file:
+# with open('Login-Form-'+details_id+'.svg', 'w') as file:
 #   file.write(svg)
 
 
-# print(os.system('inkscape -A Login-Form-'+application_id+'.pdf Login-Form-'+application_id+'.svg'))
+# print(os.system('inkscape -A Login-Form-'+details_id+'.pdf Login-Form-'+details_id+'.svg'))
 
 # Send with attachment
 # https://www.geeksforgeeks.org/send-mail-attachment-gmail-account-using-python/
@@ -37,17 +37,16 @@ from .models import MailSetting
 # from your Gmail account  
 
 
-def Send_mail(mail, application):
+def Send_mail(mail, details):
     
     settings = mail.setting
     mail = mail.To_json()
-    print(settings)
       
     # instance of MIMEMultipart 
     msg = MIMEMultipart() 
   
     # Message ID
-    msg['Message-ID'] = email.utils.make_msgid('application', 'hpc.iitk.ac.in')
+    msg['Message-ID'] = email.utils.make_msgid('hars', 'hpc.iitk.ac.in')
 
     # Message Date
     t = datetime.now(timezone('Asia/Kolkata'))
@@ -57,20 +56,25 @@ def Send_mail(mail, application):
     msg['From'] = settings.from_header 
 
     # replace parts of To
-    for key, value in application.items():
+    for key, value in details.items():
         mail['To'] = mail['To'].replace('{'+ key.lower() + '}', str(value)) 
+
+    # replace parts of To
+    for key, value in details.items():
+        mail['CC'] = mail['CC'].replace('{'+ key.lower() + '}', str(value)) 
 
     # storing the receivers email address  
     msg['To'] = mail['To']
+    msg['CC'] = mail['CC'] 
       
     # replace parts of the subject 
-    for key, value in application.items():
+    for key, value in details.items():
         mail['Subject'] = mail['Subject'].replace('{'+ key.lower() + '}', str(value)) 
         
     msg['Subject'] = mail['Subject']
       
     # replace parts of the body 
-    for key, value in application.items():
+    for key, value in details.items():
         mail['Body'] = mail['Body'].replace('{'+ key.lower() + '}', str(value))
      
     # attach the body with the msg instance 
@@ -89,7 +93,7 @@ def Send_mail(mail, application):
     text = msg.as_string() 
       
     # sending the mail 
-    s.sendmail(settings.from_header, mail['To'], text) 
+    s.sendmail(settings.from_header, mail['To'] + "," + mail['CC'], text) 
       
     # terminating the session 
     s.quit()

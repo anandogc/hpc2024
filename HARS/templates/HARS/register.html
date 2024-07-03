@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="pallete-blue-off-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="{% static 'HARS/css/tachyons.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'HARS/css/pallete_AAA.css' %}"/>
+    <link rel="stylesheet" href="{% static 'HARS/css/styles.css' %}"/>
+    <style>
+        /* Optional: Additional custom styling */
+        .login-container {
+            max-width: 600px;
+        }
+    </style>
+</head>
+<!-- <body class="bg-light-gray sans-serif"> -->
+<body class="bg-color2 f4 color1 h-100">
+    <header class="pa2 pr4 f3 tr bg-color1 color2">
+            HPC Application and Reporting system
+    </header>
+    <div class="vh-100 dt w-100">
+        <div class="dtc v-mid tc">
+            <div class="login-container bg-white center pa4 br3 shadow-5">
+                <h2 class="f4">Portal Registration</h2>
+                <form method="POST" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    <table class="collapse w-100">
+                        <tbody>
+                            <tr class="striped--light-gray">
+                                <td class="tl ph3 pv1">Name:</td>
+                                <td class="tl ph3 pv1">{{name}}</td>
+                            </tr>
+                            <tr class="striped--light-gray">
+                                <td class="tl ph3 pv1">PF/Roll no:</td>
+                                <td class="tl ph3 pv1">{{uid}}</td>
+                            </tr>
+                            <tr class="striped--light-gray">
+                                <td class="tl ph3 pv1">Department:</td>
+                                <td class="tl ph3 pv1">{{department}}</td>
+                            </tr>
+                            <tr class="striped--light-gray">
+                                <td class="tl ph3 pv1">Designstion:</td>
+                                <td class="tl ph3 pv1">
+                                    <select name="designation">
+                                        <option value="S">Student</option>
+                                        <option value="PD">PostDoc</option>
+                                        <option value="PE">Project Employee</option>
+                                        <option value="F">Faculty</option>
+                                        <option value="SURGE">SURGE Student</option>
+                                    </select>
+                                </td>
+                            </tr>
+                    </table>
+                    
+                    <div class="mt3">
+                        <button class="b ph3 pv2 input-reset ba bg-white-40 br2 color1 grow pointer f6 dib" type="submit">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -132,18 +132,18 @@ const components = {
             }
             else {
                 return `
-                <form id="hpc_profile" class="ba ma3 br2 br--bottom" data-source="user/hpc_profile" data-action="user/hpc_profile" data-component="HPCProfile" data-reload="hpc_profile">
+                <form id="hpc_profile" class="ba ma3 br2 br--bottom" data-source="user/hpc_profile" data-action="user/hpc_profile" data-component="HPCProfile" data-reload="user_applications">
                     <header class="bg-color1 color2 pa2 flex justify-between">HPC Profile</header>
                     <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
                         <tbody>
                             <tr class="striped--light-gray">
-                                <td class="pv1 ph3 w-20">Research Title:</td>
+                                <td class="pv1 ph3 w-20">Research Title*:</td>
                                 <td class="pa1">
                                     <input name="Research_Title" type="text" class="ma1 pa1 w-90 ba bg-white-40 br2 color1" required/>
                                 </td>
                             </tr>
                             <tr class="striped--light-gray">
-                                <td class="pv1 ph3">Domain:</td>
+                                <td class="pv1 ph3">Domain*:</td>
                                 <td class="pa1">
                                     <div class="tag-container ma1 pa1 w-90 ba bg-white-40 br2 color1" id="domain-container">
                                         <input list="domain_list" id="domain-input" placeholder="Select or type..." class="bg-white-40 br2 color1">
@@ -151,13 +151,13 @@ const components = {
                                     </div>
                             </tr>
                             <tr class="striped--light-gray">
-                                <td class="pv1 ph3">Sub-Domain:</td>
+                                <td class="pv1 ph3">Sub-Domain*:</td>
                                 <td class="pa1">
                                     <input name="Sub-Domain" type="text" class="ma1 pa1 w-90 ba bg-white-40 br2 color1" required/>
                                 </td>
                             </tr>
                             <tr class="striped--light-gray">
-                                <td class="pv1 ph3">Software:</td>
+                                <td class="pv1 ph3">Software*:</td>
                                 <td class="pa1">
                                     <div class="tag-container ma1 pa1 w-90 ba bg-white-40 br2 color1" id="software-container">
                                         <input list="application_list" id="software-input" placeholder="Select or type..." class="bg-white-40 br2 color1">
@@ -166,13 +166,13 @@ const components = {
                                 </td>
                             </tr>
                             <tr class="striped--light-gray">
-                                <td class="pv1 ph3">Contact-no:</td>
+                                <td class="pv1 ph3">Contact-no*:</td>
                                 <td class="pa1">
                                     <input name="Contact" type="text" class="ma1 pa1 w-90 ba bg-white-40 br2 color1" required/>
                                 </td>
                             </tr>
                             <tr class="striped--light-gray">
-                                <td class="pv1 ph3">Gender:</td>
+                                <td class="pv1 ph3">Gender*:</td>
                                 <td class="pa1">
                                     <select name="Gender" class="ma1 pa1 ba bg-white-40 br2 color1">
                                         <option value="-">-----</option>
@@ -184,7 +184,7 @@ const components = {
                             </tr>
                             `+ ( (portal==='User') ?
                             `<tr class="striped--light-gray">
-                                <td class="pv1 ph3">PI Email:</td>
+                                <td class="pv1 ph3">PI Email*:</td>
                                 <td class="pa1">
                                     <input name="pi_username" type="text" class="ma1 pa1 w5 ba bg-white-40 br2 color1" required/>@iitk.ac.in
                                 </td>
@@ -193,6 +193,9 @@ const components = {
                                 <td class="pv1 ph3 tc" colspan="2">
                                     <input type="submit" value="Save"/>
                                 </td>
+                            </tr>
+                            <tr class="striped--light-gray">
+                                <td class="pv1 ph3" colspan="2">*: Required fields</td>
                             </tr>
                         </tbody>
                     </table>
@@ -208,7 +211,7 @@ const components = {
     "Report": {
         view: function() {
             return `
-            <form id="report" class="ba ma3 br2 br--bottom overflow-hidden" data-source="user/report" data-action="user/report" data-component="Report" data-reload="report">
+            <form id="report" class="ba ma3 br2 br--bottom overflow-hidden" data-source="user/report" data-action="user/report" data-component="Report">
                 <header class="bg-color1 color2 pa2 flex justify-between">Annual Report</header>
                 <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
                     <tbody>
@@ -321,7 +324,7 @@ const components = {
             else {
                 default_amount = self.data["AccountType"]["default_cpu_core_hours"]*self.data['Rates']['cpu_per_core_hour'] + self.data["AccountType"]["default_gpu_node_hours"]*self.data['Rates']['gpu_per_node_hour']
                 return `
-                <form class="ba ma3 br2 br--bottom" data-action="user/application/PS-HPA" data-source="user/application/PS-HPA"  data-component="Application-HP">
+                <form class="ba ma3 br2 br--bottom" data-action="user/application/PS-HPA" data-source="user/application/PS-HPA" data-component="Application-HP">
                     <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
 
                     <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
@@ -353,14 +356,19 @@ const components = {
             }
         },
         view: function() {
-            return `
-            <div  data-source="user/application/PS-HPA"  data-component="Application" data-reload="param_hp_application">
-                `+self.application(self)+`
-            </div>
-            `
+            if (self.status != 404) {
+                return `
+                <div data-source="user/application/PS-HPA" data-component="Application-HP">
+                    `+self.application(self)+`
+                </div>
+                `
+            }
+            else {
+                return `<div class="tc" data-source="user/application/PS-HPA" data-component="Application-HP">Please complete your Work Profile and refresh the page to apply for an account.</div>`
+            }
         },
         "onupdate": function() {
-            param_hp_application_amount.innerHTML = Number(self.data['Rates']['cpu_per_core_hour']*param_hp_application_cpu.value + self.data['Rates']['gpu_per_node_hour']*param_hp_application_gpu.value).toLocaleString('en-IN')
+            //param_hp_application_amount.innerHTML = Number(self.data['Rates']['cpu_per_core_hour']*param_hp_application_cpu.value + self.data['Rates']['gpu_per_node_hour']*param_hp_application_gpu.value).toLocaleString('en-IN')
         }
     },
     "Application-HP-Guide": {
@@ -458,17 +466,17 @@ const components = {
         view: function() {
             if (self.status != 404) {
                 return `
-                <div  data-source="user/application/PS-HPA"  data-component="Application" data-reload="param_hp_application">
+                <div data-source="user/application/PS-HPA" data-component="Application-HP-Guide">
                     `+self.application(self)+`
                 </div>
                 `
             }
             else {
-                return `<div class="tc">Please complete your Work Profile and refresh the page to apply for an account.</div>`
+                return `<div class="tc" data-source="user/application/PS-HPA" data-component="Application-HP-Guide">Please complete your Work Profile and refresh the page to apply for an account.</div>`
             }
         },
         "onupdate": function() {
-            param_hp_application_amount_guide.innerHTML = Number(self.data['Rates']['cpu_per_core_hour']*param_hp_application_cpu.value + self.data['Rates']['gpu_per_node_hour']*param_hp_application_gpu.value).toLocaleString('en-IN')
+            // param_hp_application_amount_guide.innerHTML = Number(self.data['Rates']['cpu_per_core_hour']*param_hp_application_cpu.value + self.data['Rates']['gpu_per_node_hour']*param_hp_application_gpu.value).toLocaleString('en-IN')
         }
     },
 
@@ -723,14 +731,19 @@ const components = {
             }
         },
         view: function() {
+            if (self.status != 404) {
             return `
-            <div data-source="user/application/PS-HPA"  data-component="Application" data-reload="param_hp_application">
+            <div data-source="user/application/PS-HPA" data-component="Application-RA">
                 `+self.application(self)+`
             </div>
             `
+            }
+            else {
+                return `<div class="tc" data-source="user/application/PS-HPA" data-component="Application-RA">Please complete your Work Profile and refresh the page to apply for an account.</div>`
+            }
         },
         "onupdate": function() {
-            param_hp_application_amount.innerHTML = Number(self.data['Rates']['cpu_per_core_hour']*param_hp_application_cpu.value + self.data['Rates']['gpu_per_node_hour']*param_hp_application_gpu.value).toLocaleString('en-IN')
+            //param_hp_application_amount.innerHTML = Number(self.data['Rates']['cpu_per_core_hour']*param_hp_application_cpu.value + self.data['Rates']['gpu_per_node_hour']*param_hp_application_gpu.value).toLocaleString('en-IN')
         }
     },
     "Application-RA-Guide": {
@@ -798,7 +811,7 @@ const components = {
 
                                 <td class="pv2 ph3 bl">Payment Mode</td>
                                 <td class="pv2 ph3">
-                                    <select name="payment_mode" class="bg-white-40 ba br2">
+                                    <select name="payment_mode" class="bg-white-40 ba br2" onchange="set_payment_mode(this)">
                                         <option>Project</option>
                                         <option>Bank</option>
                                     </select>
@@ -809,14 +822,14 @@ const components = {
                                 <td class="pv2 w-20 ph3"><input class="bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" type="number" name="cpu_core_hour" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`" min="0" step="`+self.data["cpu_step"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text"/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" required/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">GPU node hours</td>
                                 <td class="pv2 ph3"><input class="bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" type="number" name="gpu_node_hour" value="`+self.data["AccountType"]["default_gpu_node_hours"]+`" min="0" step="`+self.data["gpu_step"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text"/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" required/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
@@ -833,17 +846,17 @@ const components = {
         view: function() {
             if (self.status != 404) {
                 return `
-                <div data-source="user/application/`+self.data["account_type"]+`"  data-component="Application" data-reload="param_hp_application">
+                <div data-source="user/application/`+self.data["account_type"]+`"  data-component="Application-RA-Guide">
                     `+self.application(self)+`
                 </div>
                 `
             }
             else {
-                return `<div class="tc">Please complete your Work Profile and refresh the page to apply for an account.</div>`
+                return `<div class="tc" data-source="user/application/`+self.data["account_type"]+`" data-component="Application-RA-Guide">Please complete your Work Profile and refresh the page to apply for an account.</div>`
             }
         },
         "onupdate": function() {
-            param_hp_application_amount.innerHTML = Number(self.data['Rates']['cpu_per_core_hour']*param_hp_application_cpu.value + self.data['Rates']['gpu_per_node_hour']*param_hp_application_gpu.value).toLocaleString('en-IN')
+            //param_hp_application_amount.innerHTML = Number(self.data['Rates']['cpu_per_core_hour']*param_hp_application_cpu.value + self.data['Rates']['gpu_per_node_hour']*param_hp_application_gpu.value).toLocaleString('en-IN')
         }
     },
 
@@ -1087,8 +1100,8 @@ const components = {
                                     <td class="pv2 ph3">Stage</td>
                                     <td class="pv2 ph3">`+self.stage(self.data["Application"])+`</td>
 
-                                    <td class="pv2 ph3 bl">Bank Screenshot</td>
-                                    <td class="pv2 ph3">`+self.screenshot(self.data)+`</td>
+                                    <td class="pv2 ph3 bl"></td>
+                                    <td class="pv2 ph3"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1124,8 +1137,8 @@ const components = {
                                 <td class="pv2 ph3">Stage</td>
                                 <td class="pv2 ph3"><input class="bg-white-40 ba br2" type="submit" value="Apply"/></td>                                
 
-                                <td class="pv2 ph3 bl">Bank Screenshot</td>
-                                <td class="pv2 ph3">`+self.screenshot(self.data)+`</td>
+                                <td class="pv2 ph3 bl"></td>
+                                <td class="pv2 ph3"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1133,11 +1146,16 @@ const components = {
             }
         },
         view: function() {
-            return `
-            <div data-source="user/application/HPC2013-QA"  data-component="Application-QA">
-                `+self.application(self)+`
-            </div>
-            `
+            if (self.status != 404) {
+                return `
+                <div data-source="user/application/HPC2013-QA" data-component="Application-QA">
+                    `+self.application(self)+`
+                </div>
+                `
+            }
+            else {
+                return `<div class="tc" data-source="user/application/HPC2013-QA" data-component="Application-QA">Please complete your Work Profile and refresh the page to apply for an account.</div>`
+            }
         },
         "onupdate": function() {
             // hpc2013_amount.innerText='₹' + Number(self.data["rate"])
@@ -1162,7 +1180,7 @@ const components = {
         },
         payment_mode: function(mode) {
             return `
-            <select name="payment_mode">
+            <select name="payment_mode" onchange="set_payment_mode(this)">
                 <option>Project</option>
                 <option>Bank</option>
             </select>`
@@ -1384,20 +1402,6 @@ const components = {
                 details += `<details id="`+self.data[member]["username"]+`" class="mt2 pl4">
                                 <summary class="f3">` + member + `</summary>
 
-                                <h2 class="f3 ml3">Param Sanganak - High Priority Access</h2>
-
-                                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/application/PS-HPA" data-component="Application-Group-Student">
-                                    <span class="pa2">Loading ...</span>
-                                </section> 
-
-                                <!-- <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-HPA" data-component="Topup-Student-HPA">
-                                    <span class="pa2">Loading ...</span>
-                                </section> -->
-
-                                <!-- <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/gpu/PS-HPA" data-component="Topup-Student-HPA">
-                                    <span class="pa2">Loading ...</span>
-                                </section> -->
-
                                 <h2 class="f3 ml3">Param Sanganak - Regular Access</h2>
 
                                 <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/application/PS-RA" data-component="Application-Group-Student">
@@ -1409,6 +1413,20 @@ const components = {
                                 </section> -->
 
                                 <!-- <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/gpu/PS-RA" data-component="Topup-Student-HPA">
+                                    <span class="pa2">Loading ...</span>
+                                </section> -->
+
+                                <h2 class="f3 ml3">Param Sanganak - High Priority Access</h2>
+
+                                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/application/PS-HPA" data-component="Application-Group-Student">
+                                    <span class="pa2">Loading ...</span>
+                                </section> 
+
+                                <!-- <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-HPA" data-component="Topup-Student-HPA">
+                                    <span class="pa2">Loading ...</span>
+                                </section> -->
+
+                                <!-- <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/gpu/PS-HPA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
                                 </section> -->
 
@@ -1461,7 +1479,7 @@ const components = {
         },
         payment_mode: function(mode) {
             return `
-            <select name="payment_mode">
+            <select name="payment_mode" onchange="set_payment_mode(this)">
                 <option `+( (mode == 'Project') ? 'selected' : '')+`>Project</option>
                 <option `+( (mode == 'Bank') ? 'selected' : '' )+`>Bank</option>
             </select>`
@@ -1585,7 +1603,7 @@ const components = {
         },
         payment_mode: function(mode) {
             return `
-            <select name="payment_mode">
+            <select name="payment_mode" onchange="set_payment_mode(this)">
                 <option `+( (mode == 'Project') ? 'selected' : '')+`>Project</option>
                 <option `+( (mode == 'Bank') ? 'selected' : '' )+`>Bank</option>
             </select>`

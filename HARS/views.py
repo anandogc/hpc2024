@@ -13,6 +13,7 @@ from django.db.utils import IntegrityError
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login, logout
+from django.contrib import messages
 
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
@@ -48,24 +49,53 @@ def signin(request):
         #Search configuration
         LDAP_SEARCH_BASE = "ou=People,dc=iitk,dc=ac,dc=in"
         LDAP_SEARCH_FILTER = "(uid=%s)"
-        LDAP_SEARCH_SCOPE =  ldap3.LEVEL
-        LDAP_SEARCH_ATTRIBUTES = ['cn', 'iitkFileNumber'] # , 'userType'
+        LDAP_SEARCH_SCOPE = ldap3.LEVEL
+        LDAP_SEARCH_ATTRIBUTES = ['cn', 'iitkFileNumber', 'userType', 'department'] # , 
 
 
         DN = LDAP_BIND_DN % (username)
         server = ldap3.Server(LDAP_SERVER, get_info=None)
         connection = ldap3.Connection(server, user=DN, password=password, raise_exceptions=False)
 
-        try:
-            if not connection.bind():
-                return redirect('/user/profile/login')
-                
-        except:
-            return redirect('/user/profile/login')
+        if not connection.bind():
+           messages.error(request, "Incorrect username or password.")
 
-        user = get_user_model().objects.get(username = username)
-        login(request, user)
-        return redirect('index') 
+           return redirect('signin')
+                
+        try:
+            # https://stackoverflow.com/a/16606463
+            user = get_user_model().objects.get(username = username)
+            login(request, user)
+            return redirect('index') 
+
+        except:
+            #LDAP3 Get user details
+            search_args = {
+                'search_base'   : LDAP_SEARCH_BASE,
+                'search_filter' : LDAP_SEARCH_FILTER % username,
+                'search_scope'  : LDAP_SEARCH_SCOPE,
+                'attributes'    : LDAP_SEARCH_ATTRIBUTES
+            }
+
+            if not connection.search(**search_args):
+                return redirect('login')
+
+            entry = connection.response[0]
+
+            name = entry['attributes']['cn'][0]
+            uid = entry['attributes']['iitkFileNumber'][0]
+            userType = entry['attributes']['userType'][0]
+            department = entry['attributes']['department'][0]
+
+            print(department, entry, entry['attributes']['department'])
+
+            request.session['register'] = True
+            request.session['name'] = name
+            request.session['uid'] = uid
+            request.session['department'] = department
+            request.session['username'] = username 
+
+            return redirect('register') 
 
     else:
         return render(request, "HARS/login.html")
@@ -73,6 +103,42 @@ def signin(request):
 def signout(request):
         logout(request)
         return redirect('signin') 
+
+def register(request):
+    if request.method == "POST":
+
+        #try:
+            user = get_user_model().objects.create_user(username = request.session["username"])
+
+            ip = InstituteProfile(
+                name = request.session["name"],
+                id_no = request.session["uid"],
+                department = request.session["department"],
+                designation = request.POST["designation"],
+                user = user,
+                )
+
+            ip.save()
+
+            print(ip)
+
+        #except:
+        #    print("Unable to create user:", request.session["username"])
+            login(request, user)
+            return redirect('index') 
+
+    else:
+        if 'register' in request.session:
+            data = {
+                'name': request.session["name"],
+                'uid': request.session["uid"],
+                'department': request.session["department"],
+                'username': request.session["username"],
+            }
+            return render(request, "HARS/register.html", data)
+
+        else:
+            return redirect('signin')
 
 def name(request):
     ip = get_object_or_404(InstituteProfile, user=request.user)
@@ -83,9 +149,11 @@ def name(request):
     return JsonResponse(data)
 
 def index(request):
-    ip = get_object_or_404(InstituteProfile, user=request.user)
+    try:
+        ip = InstituteProfile.objects.get(user=request.user)
+    except:
+        return redirect('signin')
 
-    print(ip.designation)
     if ip.designation == 'F':
         return render(request, "HARS/guide.html")
     else:
@@ -322,6 +390,9 @@ def application(request, account_type_id):
 
             amount = rate.cpu_per_core_hour * int(r["cpu_core_hour"]) + rate.gpu_per_node_hour * gpu_node_hour
 
+            if (amount == 0):
+                return HttpResponse("Total amount must be more than zero.", status=422)
+
             renew_date = HARSDates.objects.get(parameter='renew_date').value
             latest_application = Application.objects.filter(hpc_profile=profile, account_type=at, request_at__gt=renew_date).order_by('request_at').last()
 
@@ -381,6 +452,17 @@ def application(request, account_type_id):
             renew_date = HARSDates.objects.get(parameter='renew_date').value
             latest_application = Application.objects.filter(hpc_profile=profile, account_type=at, request_at__gt=renew_date).order_by('request_at').last()
             if (latest_application):
+
+                project_no = latest_application.project_no
+
+                if (project_no is None):
+                    project_no = "N/A"
+
+                budget_head = latest_application.budget_head
+
+                if (budget_head is None):
+                    budget_head = "N/A"
+
                 data["Application"] = {
                     "application_id": latest_application.pk,
                     "request_at": latest_application.request_at.date().strftime("%d/%m/%y"),
@@ -391,15 +473,15 @@ def application(request, account_type_id):
                     "gpu_node_hour":  latest_application.gpu_node_hours,
                     "amount": latest_application.amount,
                     "payment_mode": latest_application.payment_mode,
-                    "project_no": latest_application.project_no,
-                    "budget_head": latest_application.budget_head,
+                    "project_no": project_no,
+                    "budget_head": budget_head,
                 }
 
 
             return JsonResponse(data)
     else:
         ip = InstituteProfile.objects.get(user=request.user)
-        profile = HPCProfile.objects.get(institute_profile=ip)
+        profile = get_object_or_404(HPCProfile, institute_profile=ip)
         at = AccountType.objects.get(type_id=account_type_id)
         rate = QuarterlyRate.objects.get(designation=ip.designation).rate
 
@@ -407,6 +489,7 @@ def application(request, account_type_id):
             "account_type": "HPC2013-QA",
             "rate": rate
         }
+
 
         if request.method=="POST":
             r = json.loads(request.body)

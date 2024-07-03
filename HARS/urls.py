@@ -8,6 +8,7 @@ urlpatterns = [
     # path("guide", views.guide, name="guide"),
     path("signin", views.signin, name="signin"),
     path("signout", views.signout, name="signout"),
+    path("register", views.register, name="register"),
     path("user/institute_profile", views.institute_profile, name="institute_profile"),
     path("user/statistics", views.statistics, name="statistics"),
     path("user/hpc_profile", views.hpc_profile, name="hpc_profile"),

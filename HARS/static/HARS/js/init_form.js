@@ -89,21 +89,21 @@ async function form_submit(event){
 
 				init_component(that)
 				
-				// let reload = that.getAttribute('data-reload')
+				let reload = that.getAttribute('data-reload')
 	
-				// if (reload !== null) {
-				// 	if (!reload.includes(',') ) {					
-				// 		let c = document.getElementById(reload)
-				// 		render_components_in(c)
-				// 	}
-				// 	else {
-				// 		reload.split(',').forEach(function(r) {
-				// 			let c = document.getElementById(r)
-				// 			render_components_in(c)
-				// 		})
-				// 	}
+				if (reload !== null) {
+					if (!reload.includes(',') ) {					
+						let c = document.getElementById(reload)
+						render_components_in(c)
+					}
+					else {
+						reload.split(',').forEach(function(r) {
+							let c = document.getElementById(r)
+							render_components_in(c)
+						})
+					}
 		
-				// }
+				}
 				message.closeMessage()
 			})
 		}

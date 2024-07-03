@@ -87,3 +87,31 @@ function update_application_amount_QA(currentInput, rate) {
 
     amount_container.textContent = '₹' + Number(amount).toLocaleString('en-In')
 }
+
+function set_payment_mode(select) {
+    let form = select.closest('form');
+
+    if (!form) {
+        form = select.querySelector('form')
+    }
+
+    let project_no = form.querySelector('input[name=project_no]')
+    let budget_head = form.querySelector('input[name=budget_head]')
+
+    if (select.value == "Project") {
+        project_no.setAttribute('required', 'required')
+        budget_head.setAttribute('required', 'required')
+
+        project_no.removeAttribute('disabled')
+        budget_head.removeAttribute('disabled')
+    }
+
+    else if (select.value == "Bank") {
+        project_no.removeAttribute('required')
+        budget_head.removeAttribute('required')
+
+        project_no.setAttribute('disabled', 'disabled')
+        budget_head.setAttribute('disabled', 'disabled')
+    }
+
+}
