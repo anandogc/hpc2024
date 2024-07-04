@@ -36,8 +36,49 @@ from .models import Mail
 
 from .mail import Send_mail
 
+def fetch_LDAP_details(username):
+    LDAP_SERVER = '172.31.1.1'
+
+    #Search configuration
+    LDAP_SEARCH_BASE = "ou=People,dc=iitk,dc=ac,dc=in"
+    LDAP_SEARCH_FILTER = "(uid=%s)"
+    LDAP_SEARCH_SCOPE = ldap3.LEVEL
+    LDAP_SEARCH_ATTRIBUTES = ['cn', 'iitkFileNumber', 'userType', 'department'] # , 
+
+
+    server = ldap3.Server(LDAP_SERVER, get_info=None)
+    connection = ldap3.Connection(server, auto_bind=True, raise_exceptions=False)
+
+    if not connection.bind():
+        raise "Unable to connect with LDAP server"
+
+    #LDAP3 Get user details
+    search_args = {
+        'search_base'   : LDAP_SEARCH_BASE,
+        'search_filter' : LDAP_SEARCH_FILTER % username,
+        'search_scope'  : LDAP_SEARCH_SCOPE,
+        'attributes'    : LDAP_SEARCH_ATTRIBUTES
+    }
+
+    if not connection.search(**search_args):
+        raise "Unable to communicate with LDAP server"
+
+
+    entry = connection.response[0]
+
+    name = entry['attributes']['cn'][0]
+    uid = entry['attributes']['iitkFileNumber'][0]
+    userType = entry['attributes']['userType'][0]
+    department = entry['attributes']['department'][0]
+
+    return name, uid, userType, department
+
+
 # Create your views here.
 def signin(request):
+    if (request.user.is_authenticated):
+        return redirect('index')
+
     if request.method == "POST":
         username = request.POST.get("username").lower().strip()
         password = request.POST.get('password')
@@ -66,6 +107,13 @@ def signin(request):
             # https://stackoverflow.com/a/16606463
             user = get_user_model().objects.get(username = username)
             login(request, user)
+
+            if not remember_me:
+                request.session.set_expiry(0)
+            else:
+                # Set the session to expire in 2 weeks
+                request.session.set_expiry(1209600)
+
             return redirect('index') 
 
         except:
@@ -87,8 +135,6 @@ def signin(request):
             userType = entry['attributes']['userType'][0]
             department = entry['attributes']['department'][0]
 
-            print(department, entry, entry['attributes']['department'])
-
             request.session['register'] = True
             request.session['name'] = name
             request.session['uid'] = uid
@@ -107,25 +153,27 @@ def signout(request):
 def register(request):
     if request.method == "POST":
 
-        #try:
-            user = get_user_model().objects.create_user(username = request.session["username"])
+        user = get_user_model().objects.create_user(username = request.session["username"])
 
-            ip = InstituteProfile(
-                name = request.session["name"],
-                id_no = request.session["uid"],
-                department = request.session["department"],
-                designation = request.POST["designation"],
-                user = user,
-                )
+        ip = InstituteProfile(
+            name = request.session["name"],
+            id_no = request.session["uid"],
+            department = request.session["department"],
+            designation = request.POST["designation"],
+            user = user,
+            )
 
-            ip.save()
+        ip.save()
 
-            print(ip)
+        login(request, user)
 
-        #except:
-        #    print("Unable to create user:", request.session["username"])
-            login(request, user)
-            return redirect('index') 
+        if not remember_me:
+            request.session.set_expiry(0)
+        else:
+            # Set the session to expire in 2 weeks
+            request.session.set_expiry(1209600)
+
+        return redirect('index') 
 
     else:
         if 'register' in request.session:
@@ -212,9 +260,33 @@ def hpc_profile(request):
         ip = get_object_or_404(InstituteProfile, user=request.user)
 
         if "pi_username" in r:
-            pi_user = get_user_model().objects.get(username=r["pi_username"])
-            pi_ip = get_object_or_404(InstituteProfile, user=pi_user)
-            pi_name = pi_ip.name
+            pi_user = get_user_model().objects.filter(username=r["pi_username"]).last()
+            if (pi_user):
+                pi_ip = get_object_or_404(InstituteProfile, user=pi_user)
+
+                if pi_ip.designation == "F":
+                    pi_name = pi_ip.name
+                else:
+                    return HttpResponse("Please put the email of your Thesis Supervisor/Research Guide in the PI Email.", status=422)
+                    
+            else:
+                name, uid, userType, department = fetch_LDAP_details(r["pi_username"])
+
+                if userType == 'fc':
+                    pi_user = get_user_model().objects.create_user(username=r["pi_username"])
+                    pi_ip = InstituteProfile(
+                        name=name,
+                        id_no = uid,
+                        department=department,
+                        user=pi_user,
+                        designation="F"
+                        )
+                    pi_ip.save()
+                    pi_name = name
+
+                else:
+                    return HttpResponse("Please put the email of your Thesis Supervisor/Research Guide in the PI Email.", status=422)
+
         else:
             pi_ip = None    # For Guide there is no PI
             pi_name = None

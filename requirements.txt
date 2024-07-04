@@ -1,3 +1,4 @@
 django>=4,<5
 django-environ
 ldap3
+pytz
