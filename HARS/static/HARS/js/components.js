@@ -20,7 +20,7 @@ const components = {
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv1 ph3">Department:</td>
-                                <td>`+self.data["Department"]+`</td>
+                                <td>`+self.data["Department"].toUpperCase()+`</td>
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv1 ph3">Roll/PF No.:</td>
@@ -132,7 +132,7 @@ const components = {
             }
             else {
                 return `
-                <form id="hpc_profile" class="ba ma3 br2 br--bottom" data-source="user/hpc_profile" data-action="user/hpc_profile" data-component="HPCProfile" data-reload="user_applications">
+                <form id="hpc_profile" class="ba ma3 br2 br--bottom" data-source="user/hpc_profile" data-action="user/hpc_profile" data-component="HPCProfile" data-reload="application_details">
                     <header class="bg-color1 color2 pa2 flex justify-between">HPC Profile</header>
                     <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
                         <tbody>
@@ -290,6 +290,7 @@ const components = {
         },
         application: function(self) {
             if ("Application" in self.data) {
+
                 return `
                 <section class="ba ma3 br2 br--bottom">
                         <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
@@ -338,7 +339,7 @@ const components = {
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Payment Mode</td>
-                                <td class="pv2 ph3">Project<input type="hidden" name="payment_mode" value="project"</td>
+                                <td class="pv2 ph3">Project<input type="hidden" name="payment_mode" value="Project"</td>
 
                                 <td class="pv2 ph3 bl">GPU node hours</td>
                                 <td class="pv2 ph3"><input name="gpu_node_hour" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, `+ self.data['Rates']['gpu_per_node_hour']+`)" class="w-100 bg-white-40 ba br2" type="number" value="`+self.data["AccountType"]["default_gpu_node_hours"]+`" /></td>
@@ -364,7 +365,7 @@ const components = {
                 `
             }
             else {
-                return `<div class="tc" data-source="user/application/PS-HPA" data-component="Application-HP">Please complete your Work Profile and refresh the page to apply for an account.</div>`
+                return `<div class="tc" data-source="user/application/PS-HPA" data-component="Application-HP">Please complete your Work Profile to apply for an account.</div>`
             }
         },
         "onupdate": function() {
@@ -385,6 +386,7 @@ const components = {
         },
         application: function(self) {
             if ("Application" in self.data) {
+
                 return `
                 <section class="ba ma3 br2 br--bottom">
                         <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
@@ -472,7 +474,7 @@ const components = {
                 `
             }
             else {
-                return `<div class="tc" data-source="user/application/PS-HPA" data-component="Application-HP-Guide">Please complete your Work Profile and refresh the page to apply for an account.</div>`
+                return `<div class="tc" data-source="user/application/PS-HPA" data-component="Application-HP-Guide">Please complete your Work Profile to apply for an account.</div>`
             }
         },
         "onupdate": function() {
@@ -660,7 +662,10 @@ const components = {
             }
         },
         application: function(self) {
-            if ("Application" in self.data) {
+	
+		
+      	    	if ("Application" in self.data) {
+
                 return `
                 <section class="ba ma3 br2 br--bottom">
                         <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
@@ -739,7 +744,7 @@ const components = {
             `
             }
             else {
-                return `<div class="tc" data-source="user/application/PS-HPA" data-component="Application-RA">Please complete your Work Profile and refresh the page to apply for an account.</div>`
+                return `<div class="tc" data-source="user/application/PS-HPA" data-component="Application-RA">Please complete your Work Profile to apply for an account.</div>`
             }
         },
         "onupdate": function() {
@@ -760,6 +765,7 @@ const components = {
         },
         application: function(self) {
             if ("Application" in self.data) {
+
                 return `
                 <section class="ba ma3 br2 br--bottom">
                         <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
@@ -852,7 +858,7 @@ const components = {
                 `
             }
             else {
-                return `<div class="tc" data-source="user/application/`+self.data["account_type"]+`" data-component="Application-RA-Guide">Please complete your Work Profile and refresh the page to apply for an account.</div>`
+                return `<div class="tc" data-source="user/application/PS-RA" data-component="Application-RA-Guide">Please complete your Work Profile to apply for an account.</div>`
             }
         },
         "onupdate": function() {
@@ -1060,9 +1066,9 @@ const components = {
         duration: function(id, rate) {
             return `<select name="duration" onchange="` + id + `_amount.innerText='₹' + (this.value-0)*`+rate+`" class="bg-white-40 ba br2 w-90">
                     <option value='1'> 1 Quarter (July 2023 - Sep 2023) </option>
-                    <option value='2'> 2Q (Till 31<sup>st</sup> Dec 2023)</option>
+                    <!-- <option value='2'> 2Q (Till 31<sup>st</sup> Dec 2023)</option>
                     <option value='3'> 3Q (Till 31<sup>st</sup> March 2024)</option>
-                    <option value='4'> 4Q (Till 30<sup>st</sup> June 2024)</option>
+                    <option value='4'> 4Q (Till 30<sup>st</sup> June 2024)</option> -->
                 </select>`
         },
         screenshot: function(data) {
@@ -1154,7 +1160,7 @@ const components = {
                 `
             }
             else {
-                return `<div class="tc" data-source="user/application/HPC2013-QA" data-component="Application-QA">Please complete your Work Profile and refresh the page to apply for an account.</div>`
+                return `<div class="tc" data-source="user/application/HPC2013-QA" data-component="Application-QA">Please complete your Work Profile to apply for an account.</div>`
             }
         },
         "onupdate": function() {
@@ -1187,7 +1193,7 @@ const components = {
 
         },
         application: function(self) {
-            console.log(self.data)
+            //console.log(self.data)
             if ("Application" in self.data && self.data["Application"]["pi_time"]) {
                 return `
                 <div class="ba ma3 br2 br--bottom">
@@ -1268,11 +1274,16 @@ const components = {
             }
         },
         view: function() {
-            return `
-            <div data-source="user/application/`+self.data["account_type"]+`" data-component="Application-QA-Guide">
-                `+self.application(self)+`
-            </div>
-            `
+	if (self.status != 404) {
+                 return `
+	            <div data-source="user/application/`+self.data["account_type"]+`" data-component="Application-QA-Guide">
+        	        `+self.application(self)+`
+	            </div>
+	            `
+            }
+            else {
+                return `<div class="tc" data-source="user/application/HPC2013-QA" data-component="Application-QA">Please complete your Work Profile to apply for an account.</div>`
+            }
         },
         "onupdate": function(component) {
             //update_application_amount(component, self.data["Rates"]["cpu_per_core_hour"], self.data["Rates"]["gpu_per_node_hour"])
@@ -1477,12 +1488,18 @@ const components = {
                 `
             }
         },
-        payment_mode: function(mode) {
-            return `
-            <select name="payment_mode" onchange="set_payment_mode(this)">
-                <option `+( (mode == 'Project') ? 'selected' : '')+`>Project</option>
-                <option `+( (mode == 'Bank') ? 'selected' : '' )+`>Bank</option>
-            </select>`
+        payment_mode: function(account_type, mode) {
+	    if (account_type == 'PS-HPA') {
+		return `Project`
+	    }
+	    else {
+
+	            return `
+	            <select name="payment_mode" onchange="set_payment_mode(this)">
+	                <option `+( (mode == 'Project') ? 'selected' : '')+`>Project</option>
+	                <option `+( (mode == 'Bank') ? 'selected' : '' )+`>Bank</option>
+	            </select>`
+	   }
 
         },
         application: function(self) {
@@ -1526,6 +1543,8 @@ const components = {
                 </div>`
             }
             else {
+		let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled';
+
                 return `
                 <form class="ba ma3 br2 br--bottom" data-source="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-action="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-component="Application-Group-Student">
                     <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
@@ -1537,21 +1556,21 @@ const components = {
                                 <td class="pv2 w-20 ph3">`+self.data["Application"]["application_id"]+`</td>
 
                                 <td class="pv2 ph3 bl">Payment Mode</td>
-                                <td class="pv2 ph3">`+self.payment_mode(self.data["Application"]["payment_mode"])+`</td>
+                                <td class="pv2 ph3">`+self.payment_mode(self.data["account_type"], self.data["Application"]["payment_mode"])+`</td>
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 w-30 ph3">CPU core hours</td>
                                 <td class="pv2 w-20 ph3"><input oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="cpu_core_hour" type="number" min="0" step="`+self.data["cpu_step"]+`" required value="`+self.data["Application"]["cpu_core_hour"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["project_no"]+`"/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["project_no"]+`" ` +input_project+ `/></td>                               
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">GPU node hours</td>
                                 <td class="pv2 ph3"><input oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="gpu_node_hour" type="number" min="0" step="`+self.data["gpu_step"]+`" required value="`+self.data["Application"]["gpu_node_hour"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`"/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`" ` +input_project+ `//></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
@@ -1650,6 +1669,7 @@ const components = {
                 </div>`
             }
             else {
+		let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled'
                 return `
                 <form class="ba ma3 br2 br--bottom" data-source="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-action="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-component="Application-Group-Student-QA">
                     <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
@@ -1665,17 +1685,17 @@ const components = {
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 w-30 ph3">Quarters</td>
-                                <td class="pv2 w-20 ph3"><input oninput="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="duration" type="number" min="1" max="4" setp="1" required value="`+self.data["Application"]["duration"]+`"/></td>
+                                <td class="pv2 w-20 ph3"><input oninput="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="duration" type="number" min="1" max="1" setp="1" required value="`+self.data["Application"]["duration"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["project_no"]+`"/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["project_no"]+`" ` +input_project+ `/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3"></td>
                                 <td class="pv2 ph3"></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`"/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`" ` +input_project+ `/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>

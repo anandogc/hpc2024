@@ -78,10 +78,12 @@ async function form_submit(event){
 		if (response.status == 200) {
 			response.text().then(function(text) {
 				
-				let dialog = $(that).closest('dialog')[0]
+				/*let dialog = $(that).closest('dialog')[0]
 				if (dialog) {
 					dialog.close()
-				}
+				}*/
+
+				message.closeMessage()
 	
 				if (that.getAttribute('data-reload-page')) {
 					location.reload();

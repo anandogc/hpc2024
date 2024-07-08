@@ -14,7 +14,7 @@
             HPC Application and Reporting system
     </header>
     <nav class="nav-top tr mw8 ml-auto mr-auto pa3">
-        <span class="dib mr2 pa2" data-source="user/name"
+        <span class="dib mr2 pa2" data-source="{{ request.path }}user/name"
             data-component="Name">
         </span>
         <!-- <details>
@@ -88,13 +88,13 @@
                 <span class="pa2">Loading ...</span>
             </section>        
                     
-            <section id="report" class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/report" data-component="Report">
+            <!-- <section id="report" class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/report" data-component="Report">
                 <header class="bg-color1 color2 pa2 flex justify-between">Annual Report</header>
                 <span class="pa2">Loading ...</span>
-            </section>
+	    </section> -->
         </details>
 
-        <details class="mt4">
+        <details id="application_details" class="mt4">
             <summary class="f3">Application Details</summary>
             
             <p class="mh3 mt2 mb0">Notes:</p>
@@ -106,7 +106,7 @@
             <details class="mt2 pl4">
                 <summary class="f3">Param Sanganak - Regular Access</summary>
 
-                <table class="collapse center" data-source="user/charges/PS-RA" data-component="Charges">
+                <table class="collapse center" data-source="{{ request.path }}user/charges/PS-RA" data-component="Charges">
                 </table>
 
                 <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/paramsanganak/" target="_blank">Param Sanganak Webpage</a> for more information</p>
@@ -134,7 +134,8 @@
             <details class="mt2 pl4">
                 <summary class="f3">Param Sanganak - High Priority Access</summary>
 
-                <table class="collapse center" data-source="user/charges/PS-HPA" data-component="Charges">
+                <table class="collapse center" data-source="{{ request.path }}user/charges/PS-HPA" data-component="Charges">
+
                 </table>
 
                 <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/paramsanganak/" target="_blank">Param Sanganak Webpage</a> for more information</p>
@@ -161,7 +162,7 @@
             <details class="mt2 pl4">
                 <summary class="f3">HPC2013 - Quarterly Access</summary>
 
-                <table class="collapse center" data-source="user/charges/HPC2013-QA" data-component="Charges-QA">
+                <table class="collapse center" data-source="{{ request.path }}user/charges/HPC2013-QA" data-component="Charges-QA">
                 </table>
 
                 <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/hpc2013/" target="_blank">HPC-2013 Webpage</a> for more information</p>
@@ -178,7 +179,7 @@
                 </section> -->
             </details>
         </details>
-        <details class="mt4" open="" data-component="GroupMembers" data-source="user/group_members">
+        <details class="mt4" open="" data-component="GroupMembers" data-source="{{ request.path }}user/group_members">
             <summary class="f3">Group Members</summary>
         </details>
         

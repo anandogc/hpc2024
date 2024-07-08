@@ -13,6 +13,8 @@ from django.db.utils import IntegrityError
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+
 from django.contrib import messages
 
 from django.shortcuts import get_object_or_404
@@ -35,6 +37,7 @@ from .models import HARSDates
 from .models import Mail
 
 from .mail import Send_mail
+
 
 def fetch_LDAP_details(username):
     LDAP_SERVER = '172.31.1.1'
@@ -76,10 +79,8 @@ def fetch_LDAP_details(username):
 
 # Create your views here.
 def signin(request):
-    if (request.user.is_authenticated):
-        return redirect('index')
+    if request.method == "POST": 
 
-    if request.method == "POST":
         username = request.POST.get("username").lower().strip()
         password = request.POST.get('password')
         remember_me = request.POST.get('remember_me') == 'on'
@@ -108,11 +109,11 @@ def signin(request):
             user = get_user_model().objects.get(username = username)
             login(request, user)
 
-            if not remember_me:
-                request.session.set_expiry(0)
-            else:
-                # Set the session to expire in 2 weeks
-                request.session.set_expiry(1209600)
+            #if not remember_me:
+            #    request.session.set_expiry(0)
+            #else:
+            #    # Set the session to expire in 2 weeks
+            #    request.session.set_expiry(1209600)
 
             return redirect('index') 
 
@@ -167,11 +168,11 @@ def register(request):
 
         login(request, user)
 
-        if not remember_me:
-            request.session.set_expiry(0)
-        else:
-            # Set the session to expire in 2 weeks
-            request.session.set_expiry(1209600)
+        #if not remember_me:
+        #    request.session.set_expiry(0)
+        #else:
+        #    # Set the session to expire in 2 weeks
+        #    request.session.set_expiry(1209600)
 
         return redirect('index') 
 
@@ -188,6 +189,7 @@ def register(request):
         else:
             return redirect('signin')
 
+@login_required
 def name(request):
     ip = get_object_or_404(InstituteProfile, user=request.user)
     data = {
@@ -196,6 +198,7 @@ def name(request):
 
     return JsonResponse(data)
 
+@login_required
 def index(request):
     try:
         ip = InstituteProfile.objects.get(user=request.user)
@@ -207,9 +210,7 @@ def index(request):
     else:
         return render(request, "HARS/user.html")
 
-def guide(request):
-    return render(request, "HARS/guide.html")
-
+@login_required
 def institute_profile(request):
     ip = get_object_or_404(InstituteProfile, user=request.user)
 
@@ -221,6 +222,7 @@ def institute_profile(request):
             "Designation": InstituteProfile.Designation(ip.designation).label
         })
 
+@login_required
 def statistics(request):
     return JsonResponse({
             "Updated_on": "16/06/2024 08:14 AM",
@@ -253,6 +255,7 @@ def statistics(request):
             
         })
 
+@login_required
 def hpc_profile(request):
     if request.method == "POST":
         r = json.loads(request.body)
@@ -335,6 +338,7 @@ def hpc_profile(request):
                 "PI": pi_name
             })
 
+@login_required
 def report(request):
     if request.method == "POST":
         r = json.loads(request.body)
@@ -382,6 +386,7 @@ def report(request):
 
         return JsonResponse(data)
 
+@login_required
 def view_report(request):
     ip = InstituteProfile.objects.get(user=request.user)
     profile = HPCProfile.objects.get(institute_profile=ip)
@@ -394,7 +399,7 @@ def view_report(request):
     else:
         raise Http404()
    
-
+@login_required
 def charges(request, account_type_id):
 
     if account_type_id != "HPC2013-QA":
@@ -417,6 +422,7 @@ def charges(request, account_type_id):
 
         return JsonResponse(data)
 
+@login_required
 def application(request, account_type_id):
 
     if account_type_id != "HPC2013-QA":
@@ -638,7 +644,7 @@ def application(request, account_type_id):
                 }
         return JsonResponse(data)
 
-
+@login_required
 def topup(request, resource, account_type_id):
     data = {}
 
@@ -749,7 +755,7 @@ def topup(request, resource, account_type_id):
     return JsonResponse(data)
 
 
-
+@login_required
 def group_members(request):
     ip = InstituteProfile.objects.get(user=request.user)
 
@@ -765,6 +771,7 @@ def group_members(request):
 
     return JsonResponse(data)
 
+@login_required
 def group_member_application(request, username, account_type_id):
     ip = InstituteProfile.objects.get(user=request.user)
     at = AccountType.objects.get(type_id=account_type_id)
@@ -891,7 +898,7 @@ def group_member_application(request, username, account_type_id):
 
             return JsonResponse(data)
 
-
+@login_required
 def group_member_topup(request, username, resource, account_type_id):
     ip = InstituteProfile.objects.get(user=request.user)
     at = AccountType.objects.get(type_id=account_type_id)
@@ -1002,4 +1009,5 @@ def group_member_topup(request, username, resource, account_type_id):
             })
 
         return JsonResponse(data)
+
 

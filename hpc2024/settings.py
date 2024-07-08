@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-u$ensd=z9k8_08yrejpb_i-$!m@khaa3xfo*b-hy=rb(38p8ls
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['www.hpc.iitk.ac.in']
 
 
 # Application definition
@@ -75,9 +75,18 @@ WSGI_APPLICATION = 'hpc2024.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
+    #'default': {
+    #    'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': BASE_DIR / 'db.sqlite3',
+    #}
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'hpc2024',
+        'USER': 'hpc',
+        'PASSWORD': 'ATOS00644',
+        #'HOST': '',
+        #'PORT': 'db_port_number',
     }
 }
 
@@ -116,14 +125,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = '/var/www/html/hars'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/HARS_Portal'
-LOGIN_URL = '/HARS_Portal/profile/login'
-LOGOUT_REDIRECT_URL = '/HARS_Portal'
-AUTH_PROFILE_MODULE = 'HARS_Portal.InstituteProfile'
+LOGIN_REDIRECT_URL = '/hars'
+LOGIN_URL = '/hars/signin'
+LOGOUT_REDIRECT_URL = '/hars'
+#AUTH_PROFILE_MODULE = 'HARS_Portal.InstituteProfile'
