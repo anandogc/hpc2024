@@ -3,6 +3,17 @@ from django.db import models
 
 # Create your models here.
 
+class Project(models.Model):
+    project_no = models.CharField(null=True, max_length=48)
+    pf_no = models.CharField(null=True, max_length=48)
+
+
+class CoreHour(models.Model):
+    username = models.CharField(null=True, max_length=48)
+    core_hour = models.CharField(null=True, max_length=48)
+    year = models.CharField(null=True, max_length=48)
+
+
 class InstituteProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(null=True, max_length=48)
@@ -19,7 +30,7 @@ class InstituteProfile(models.Model):
     designation = models.CharField(null=True, max_length=16, choices=Designation.choices, default=Designation.S)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.name} ({self.user.username})"
 
 
 class HPCProfile(models.Model):
@@ -118,7 +129,7 @@ class Application(models.Model):
     account_type = models.ForeignKey(AccountType, on_delete=models.CASCADE)
 
     def user(self):
-        return self.hpc_profile.institute_profile.name
+        return f"{self.hpc_profile.institute_profile.name} ({self.hpc_profile.institute_profile.id_no}, {self.hpc_profile.institute_profile.user.username})"
 
     def type_name(self):
         return self.account_type.name

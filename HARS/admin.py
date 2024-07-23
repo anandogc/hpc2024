@@ -18,6 +18,7 @@ from .models import Topup
 from .models import HARSDates
 from .models import MailSetting
 from .models import Mail
+from .models import CoreHour
 
 # Register your models here.
 # https://books.agiliq.com/projects/django-admin-cookbook/en/latest/export.html
@@ -106,8 +107,10 @@ class QuarterlyRateAdmin(admin.ModelAdmin, ExportCsvMixin):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin, UserAccountMixin):
-    list_display = ('pk', 'user', 'request_at', 'type_name', 'cpu_core_hours', 'gpu_node_hours', 'amount')
-    actions = ["create_user_acount"]
+    list_display = ('pk', 'user', 'request_at', 'pi_time', 'type_name', 'cpu_core_hours', 'gpu_node_hours', 'amount')
+    list_filter = ('account_type',)
+    # search_fields = ['user']
+    actions = ["create_user_acount", "export_as_csv"]
 
 @admin.register(UserAccount)
 class UserAccountAdmin(admin.ModelAdmin, ExportCsvMixin):
@@ -152,4 +155,12 @@ class MailAdmin(admin.ModelAdmin, ExportCsvMixin):
     actions = ["export_as_csv"]
 
 
+
+@admin.register(CoreHour)
+class CoreHourAdmin(admin.ModelAdmin, ExportCsvMixin):
+    list_display = ('username', 'core_hour')
+    search_fields = ['username']
+    actions = ["export_as_csv"]
+
+ 
 

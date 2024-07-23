@@ -35,6 +35,7 @@ from .models import UserAccount
 from .models import Topup
 from .models import HARSDates
 from .models import Mail
+from .models import CoreHour
 
 from .mail import Send_mail
 
@@ -405,12 +406,19 @@ def charges(request, account_type_id):
     if account_type_id != "HPC2013-QA":
         at = AccountType.objects.get(type_id=account_type_id)
         rates = Rate.objects.get(account_type=at)
+        
         data = {
             "cpu_per_core_hour": rates.cpu_per_core_hour,
             "gpu_per_node_hour": rates.gpu_per_node_hour,
             "cpu_unit_recharge": rates.cpu_unit_recharge,
-            "gpu_unit_recharge": rates.gpu_unit_recharge
+            "gpu_unit_recharge": rates.gpu_unit_recharge,
+            "last_core_hour": 0
         }
+
+        corehour = CoreHour.objects.filter(username=request.user.username).last()
+
+        if corehour:
+            data["last_core_hour"] = corehour.core_hour
 
         return JsonResponse(data)
     else:
@@ -428,25 +436,43 @@ def application(request, account_type_id):
     if account_type_id != "HPC2013-QA":
         data = {"account_type": account_type_id}
 
-
+        ip = InstituteProfile.objects.get(user=request.user)
+        profile = get_object_or_404(HPCProfile, institute_profile=ip)
+        at = AccountType.objects.get(type_id=account_type_id)
+ 
         if account_type_id == "PS-HPA":
             data["cpu_step"] = 1
             data["gpu_step"] = 1
+
+            data['AccountType'] = {
+                "name": at.name,
+                "admin": at.admin,
+                "default_cpu_core_hours": 0, # at.default_cpu_core_hours,
+                "default_gpu_node_hours": 0 # at.default_gpu_node_hours
+            }
 
         if account_type_id == "PS-RA":
             data["cpu_step"] = 20000
             data["gpu_step"] = 300
 
+            core_hour = 20000
 
-        ip = InstituteProfile.objects.get(user=request.user)
-        profile = get_object_or_404(HPCProfile, institute_profile=ip)
-        at = AccountType.objects.get(type_id=account_type_id)
-        data['AccountType'] = {
-            "name": at.name,
-            "admin": at.admin,
-            "default_cpu_core_hours": at.default_cpu_core_hours,
-            "default_gpu_node_hours": at.default_gpu_node_hours
-        }
+            try:
+                core_hour = CoreHour.objects.get(username=request.user.username).core_hour
+                core_hour = round(int(core_hour) / 20000) * 20000
+
+                if core_hour < 20000:
+                    core_hour = 20000
+            except:
+                cour_hour = at.default_cpu_core_hours
+
+
+            data['AccountType'] = {
+                "name": at.name,
+                "admin": at.admin,
+                "default_cpu_core_hours": core_hour,
+                "default_gpu_node_hours": 0 # at.default_gpu_node_hours
+            }
 
 
 

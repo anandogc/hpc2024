@@ -257,6 +257,32 @@ const components = {
                 </table>`
         }
     },
+   "Charges-RA": {
+        view: function() {
+            return `
+                <table class="collapse center">
+                    <tbody>
+                        <tr>
+                            <td class="pv2 ph3 tc b" colspan="2">Charges</td>
+                        </tr>
+                        <tr>
+                            <td class="pv2 ph3">CPU core hours:</td>
+                            <td class="pv2 ph3">₹`+self.data["cpu_per_core_hour"]+` per core hour</td>
+                        </tr>
+                        <tr>
+                            <td class="pv2 ph3">GPU node hours:</td>
+                            <td class="pv2 ph3">₹`+self.data["gpu_per_node_hour"]+` per node hour</td>
+                        </tr>
+                        <tr>
+                            <td class="pv2 ph3">Last year's CPU core hours:</td>
+                            <td class="pv2 ph3">`+Number(self.data["last_core_hour"]).toLocaleString('en-IN')+`</td>
+                        </tr>
+
+                    </tbody>
+                </table>`
+        }
+    },
+
     "Charges-QA": {
         view: function() {
             return `
@@ -699,7 +725,7 @@ const components = {
             }
             else {
                 return `
-                <form class="ba ma3 br2 br--bottom" data-source="user/application/`+self.data["account_type"]+`" data-action="user/application/`+self.data["account_type"]+`" data-component="Application-RA">
+                <form class="ba ma3 br2 br--bottom" data-source="user/application/PS-RA" data-action="user/application/PS-RA" data-component="Application-RA">
                     <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
 
                     <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
@@ -709,7 +735,7 @@ const components = {
                                 <td class="pv2 w-20 ph3"></td>
 
                                 <td class="pv2 w-30 ph3 bl">CPU core hours</td>
-                                <td class="pv2 w-20 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="cpu_core_hour" type="number" min="0" step="20000" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`"/></td>
+                                <td class="pv2 w-20 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="cpu_core_hour" type="number" min="0" step="`+self.data['cpu_step']+`" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`"/></td>
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Payment Mode</td>
@@ -721,7 +747,7 @@ const components = {
                                 </td>
 
                                 <td class="pv2 ph3 bl">GPU node hours</td>
-                                <td class="pv2 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="gpu_node_hour" type="number" min="0" step="300" value="`+self.data["AccountType"]["default_gpu_node_hours"]+`"/></td>
+                                <td class="pv2 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="gpu_node_hour" type="number" min="0" step="`+self.data['gpu_step']+`"" value="`+self.data["AccountType"]["default_gpu_node_hours"]+`"/></td>
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Stage</td>
@@ -738,13 +764,13 @@ const components = {
         view: function() {
             if (self.status != 404) {
             return `
-            <div data-source="user/application/PS-HPA" data-component="Application-RA">
+            <div data-source="user/application/PS-RA" data-component="Application-RA">
                 `+self.application(self)+`
             </div>
             `
             }
             else {
-                return `<div class="tc" data-source="user/application/PS-HPA" data-component="Application-RA">Please complete your Work Profile to apply for an account.</div>`
+                return `<div class="tc" data-source="user/application/PS-RA" data-component="Application-RA">Please complete your Work Profile to apply for an account.</div>`
             }
         },
         "onupdate": function() {
@@ -806,7 +832,7 @@ const components = {
             }
             else {
                 return `
-                <form class="ba ma3 br2 br--bottom" data-source="user/application/`+self.data["account_type"]+`" data-action="user/application/`+self.data["account_type"]+`" data-component="Application-RA-Guide">
+                <form class="ba ma3 br2 br--bottom" data-source="user/application/PS-RA" data-action="user/application/PS-RA" data-component="Application-RA-Guide">
                     <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
 
                     <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
@@ -852,7 +878,7 @@ const components = {
         view: function() {
             if (self.status != 404) {
                 return `
-                <div data-source="user/application/`+self.data["account_type"]+`"  data-component="Application-RA-Guide">
+                <div data-source="user/application/PS-RA"  data-component="Application-RA-Guide">
                     `+self.application(self)+`
                 </div>
                 `
@@ -1065,7 +1091,7 @@ const components = {
         },
         duration: function(id, rate) {
             return `<select name="duration" onchange="` + id + `_amount.innerText='₹' + (this.value-0)*`+rate+`" class="bg-white-40 ba br2 w-90">
-                    <option value='1'> 1 Quarter (July 2023 - Sep 2023) </option>
+                    <option value='1'> 1 Quarter (August 2024 - Sep 2024) </option>
                     <!-- <option value='2'> 2Q (Till 31<sup>st</sup> Dec 2023)</option>
                     <option value='3'> 3Q (Till 31<sup>st</sup> March 2024)</option>
                     <option value='4'> 4Q (Till 30<sup>st</sup> June 2024)</option> -->

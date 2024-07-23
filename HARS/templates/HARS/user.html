@@ -107,15 +107,22 @@
             <details class="mt2 pl4">
                 <summary class="f3 b">Param Sanganak - Regular Access</summary>
 
-                <table class="collapse center" data-source="{{ request.path }}user/charges/PS-RA" data-component="Charges">
+                <table class="collapse center" data-source="{{ request.path }}user/charges/PS-RA" data-component="Charges-RA">
                 </table>
 
-                <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/paramsanganak/" target="_blank">Param Sanganak Webpage</a> for more information</p>
+                <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/web/paramsanganak/" target="_blank">Param Sanganak Webpage</a> for more information</p>
 
                 <section id="param_ra_application" class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/application/PS-RA" data-component="Application-RA">
                     <span class="pa2">Loading ...</span>
                 </section> 
-                
+               
+		<!--<p class="br2 bg-near-white pa2">An example calculation for 4 months:<br/>
+		Say we expect to use 4 nodes for 100 days in 4 months.<br/>
+		The CPU core hours will be 100 * 24 * 48 * 4 = ₹ 4,60,800.<br/>
+		Since the CPU core hours can be added in multiples of 2,00,000.<br/>
+		You may apply for 4,00,000 CPU core hours.<br/>
+		Which shall cost 4,00,000 * 0.003 = ₹1,200 only.</p>-->
+
                 <!-- <section data-source="{{ request.path }}user/topup/cpu/PS-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
                     <header class="bg-color1 color2 pa2">
                         CPU Topup Requests
@@ -137,7 +144,7 @@
                 <table class="collapse center" data-source="{{ request.path }}user/charges/PS-HPA" data-component="Charges">
                 </table>
 
-                <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/paramsanganak/" target="_blank">Param Sanganak Webpage</a> for more information</p>
+                <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/web/paramsanganak/" target="_blank">Param Sanganak Webpage</a> for more information</p>
 
                 <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/application/PS-HPA" data-component="Application-HP">
                     <span class="pa2">Loading ...</span>
@@ -165,7 +172,7 @@
                 <table class="collapse center" data-source="{{ request.path }}user/charges/HPC2013-QA" data-component="Charges-QA">
                 </table>
 
-                <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/hpc2013/" target="_blank">HPC-2013 Webpage</a> for more information</p>
+                <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/web/hpc2013/" target="_blank">HPC-2013 Webpage</a> for more information</p>
 
                 <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/application/HPC2013-QA" data-component="Application-QA">
                     <span class="pa2">Loading ...</span>
@@ -393,7 +400,7 @@
     <script src="{% static 'HARS/js/cookies.js' %}"></script>
     <script src="{% static 'HARS/js/input_tags.js' %}"></script>
     <script src="{% static 'HARS/js/amount.js' %}"></script>
-    <script src="{% static 'HARS/js/components.js' %}"></script>
+    <script src="{% static 'HARS/js/components.js' %}?v1"></script>
     
     <script>
         render_components_in(document.body)
