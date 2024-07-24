@@ -264,6 +264,7 @@ def hpc_profile(request):
         ip = get_object_or_404(InstituteProfile, user=request.user)
 
         if "pi_username" in r:
+            r["pi_username"] = r["pi_username"].lower().strip()
             pi_user = get_user_model().objects.filter(username=r["pi_username"]).last()
             if (pi_user):
                 pi_ip = get_object_or_404(InstituteProfile, user=pi_user)
