@@ -1091,7 +1091,7 @@ const components = {
         },
         duration: function(id, rate) {
             return `<select name="duration" onchange="` + id + `_amount.innerText='₹' + (this.value-0)*`+rate+`" class="bg-white-40 ba br2 w-90">
-                    <option value='1'> 1 Quarter (August 2024 - Sep 2024) </option>
+                    <option value='1'> 1 Quarter (Aug 2024 - Oct 2024) </option>
                     <!-- <option value='2'> 2Q (Till 31<sup>st</sup> Dec 2023)</option>
                     <option value='3'> 3Q (Till 31<sup>st</sup> March 2024)</option>
                     <option value='4'> 4Q (Till 30<sup>st</sup> June 2024)</option> -->
@@ -1516,7 +1516,7 @@ const components = {
         },
         payment_mode: function(account_type, mode) {
 	    if (account_type == 'PS-HPA') {
-		return `Project`
+		return `Project <input type='hidden' name='payment_mode' value='Project'/>`
 	    }
 	    else {
 

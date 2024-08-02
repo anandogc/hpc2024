@@ -121,12 +121,16 @@ class Application(models.Model):
         PROJECT = 'Project', 'Project' 
 
     payment_mode = models.CharField(max_length=16, choices=PaymentMode.choices, default=PaymentMode.PROJECT)
-    project_no = models.CharField(max_length=16, null=True, blank=True)
-    budget_head = models.CharField(max_length=16, null=True, blank=True)
+    project_no = models.CharField(max_length=32, null=True, blank=True)
+    budget_head = models.CharField(max_length=32, null=True, blank=True)
     screenshot = models.DateTimeField(null=True, blank=True)
 
     hpc_profile = models.ForeignKey(HPCProfile, on_delete=models.CASCADE)
     account_type = models.ForeignKey(AccountType, on_delete=models.CASCADE)
+
+    email_sent = models.BooleanField(default=False)
+
+    notes = models.CharField(max_length=256, null=True, blank=True)
 
     def user(self):
         return f"{self.hpc_profile.institute_profile.name} ({self.hpc_profile.institute_profile.id_no}, {self.hpc_profile.institute_profile.user.username})"

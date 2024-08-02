@@ -17,6 +17,7 @@ import email.utils
 from email import encoders 
 
 from .models import MailSetting
+from .models import Mail
 
 # Generate PDF from data
 # with open('login-form.svg', 'r') as file:
@@ -37,11 +38,14 @@ from .models import MailSetting
 # from your Gmail account  
 
 
-def Send_mail(mail, details):
+def Send_mail(profile_name, details):
     
+    mail = Mail.objects.get(profile_name=profile_name)
     settings = mail.setting
+
     mail = mail.To_json()
       
+
     # instance of MIMEMultipart 
     msg = MIMEMultipart() 
   

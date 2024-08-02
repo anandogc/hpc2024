@@ -107,7 +107,7 @@ class QuarterlyRateAdmin(admin.ModelAdmin, ExportCsvMixin):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin, UserAccountMixin):
-    list_display = ('pk', 'user', 'request_at', 'pi_time', 'type_name', 'cpu_core_hours', 'gpu_node_hours', 'amount')
+    list_display = ('pk', 'user', 'request_at', 'pi_time', 'type_name', 'cpu_core_hours', 'gpu_node_hours', 'amount', 'payment_mode', 'email_sent', 'notes')
     list_filter = ('account_type',)
     # search_fields = ['user']
     actions = ["create_user_acount", "export_as_csv"]

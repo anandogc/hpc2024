@@ -846,16 +846,6 @@ def group_member_application(request, username, account_type_id):
 
 
     if (student_application):
-        if not student_application.project_no:
-            project_no = ""
-        else:
-            project_no = student_application.project_no
-
-        if not student_application.budget_head:
-            budget_head = ""
-        else:
-            budget_head = student_application.budget_head
-
         if request.method == 'POST':
             r = json.loads(request.body)
 
@@ -865,12 +855,22 @@ def group_member_application(request, username, account_type_id):
             # Make it timezone-aware
             aware_dt = timezone.make_aware(naive_dt, timezone.get_current_timezone())
 
+            if "project_no" in r:
+                project_no = r["project_no"]
+            else:
+                project_no = None
+
+            if "budget_head" in r:
+                budget_head = r["budget_head"]
+            else:
+                budget_head = None
+
 
 
             student_application.pi_time        = aware_dt
             student_application.payment_mode   = r["payment_mode"]
-            student_application.project_no     = r["project_no"]
-            student_application.budget_head    = r["budget_head"]
+            student_application.project_no     = project_no
+            student_application.budget_head    = budget_head
 
             if "cpu_core_hour" in r:
                 
@@ -884,7 +884,7 @@ def group_member_application(request, username, account_type_id):
                 amount = int(r["duration"]) * Qrate
 
                 student_application.duration = r["duration"]
-                student_application.amount         = amount
+                student_application.amount   = amount
 
 
             student_application.save()
@@ -907,6 +907,16 @@ def group_member_application(request, username, account_type_id):
             return JsonResponse(data)
 
         else:
+            if not student_application.project_no:
+                project_no = ""
+            else:
+                project_no = student_application.project_no
+
+            if not student_application.budget_head:
+                budget_head = ""
+            else:
+                budget_head = student_application.budget_head
+
 
             data["Application"] = {
                 "application_id": student_application.pk,
