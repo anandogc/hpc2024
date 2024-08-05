@@ -7,6 +7,7 @@ import csv
 
 
 from .models import InstituteProfile
+from .models import Project
 from .models import HPCProfile
 from .models import Report
 from .models import AccountType
@@ -75,6 +76,14 @@ class InstituteProfileAdmin(admin.ModelAdmin, ExportCsvMixin):
     search_fields = ['name', 'department', 'id_no', 'designation']
     list_filter = ('department', 'designation')
     actions = ["export_as_csv"]
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin, ExportCsvMixin):
+    list_display = ('pf_no', 'pi_name', 'pi_type', 'project_name', 'project_title', 'project_type', 'start_date', 'end_date')
+    search_fields = ['pf_no', 'pi_name', 'project_name', 'project_title']
+    list_filter = ('project_type', 'pi_type')
+    actions = ["export_as_csv"]
+
 
 @admin.register(HPCProfile)
 class HPCProfileAdmin(admin.ModelAdmin, ExportCsvMixin):

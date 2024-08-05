@@ -12,7 +12,7 @@ class Report(models.Model):
 
 class Section(models.Model):
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
-    parent = models.ForeignKey(Section, on_delete=models.CASCADE, null=True)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(null=True, max_length=48)
     order = models.IntegerField(default=0)
     content = models.TextField(null=True)

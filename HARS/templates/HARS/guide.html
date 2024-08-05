@@ -76,7 +76,21 @@
                 <span class="pa2">Loading ...</span>
             </div>
         </details> -->
-        
+
+        <details class="mt4">
+            <summary class="f3">My Projects</summary>
+            <section class="ba mh3 mt3 br2 br--bottom overflow-hidden"
+                        data-source="user/project"
+                        data-component="Projects">
+                <header class="bg-color1 color2 pa2 flex">
+                    <div class="w-20">Project No.</div>
+                    <div class="w-40">Title</div>
+                    <div class="w-20">Start Date</div>
+                    <div class="w-20">End Date</div>
+                </header>
+            </section> 
+        </details>
+
         <details class="mt4">
             <summary class="f3">Work Profile</summary>
             
@@ -123,19 +137,19 @@
 		You may apply for 4,00,000 CPU core hours.<br/>
 		Which shall cost 4,00,000 * 0.003 = ₹1,200 only.</p>-->
 
-                <!-- <section data-source="{{ request.path }}user/topup/cpu/PS-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
+                <section data-source="{{ request.path }}user/topup/cpu/PS-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
                     <header class="bg-color1 color2 pa2">
                         CPU Topup Requests
                     </header>
                     <span class="pa2">Loading ...</span>
-                </section> -->
+                </section>
 
-                <!-- <section data-source="{{ request.path }}user/topup/gpu/PS-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
+                <section data-source="{{ request.path }}user/topup/gpu/PS-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
                     <header class="bg-color1 color2 pa2">
                         GPU Topup Requests
                     </header>
                     <span class="pa2">Loading ...</span>
-                </section> -->
+                </section>
             </details>
 
             <details class="mt2 pl4">
@@ -151,19 +165,19 @@
                     <span class="pa2">Loading ...</span>
                 </section> 
                 
-                <!-- <section data-source="{{ request.path }}user/topup/cpu/PS-HPA" data-action="{{ request.path }}user/topup/cpu/PS-HPA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP">
+                <section data-source="{{ request.path }}user/topup/cpu/PS-HPA" data-action="{{ request.path }}user/topup/cpu/PS-HPA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP">
                     <header class="bg-color1 color2 pa2">
                         CPU Topup Requests
                     </header>
                     <span class="pa2">Loading ...</span>
-                </section> -->
+                </section>
 
-                <!-- <section data-source="{{ request.path }}user/topup/gpu/PS-HPA" data-action="{{ request.path }}user/topup/gpu/PS-HPA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP">
+                <section data-source="{{ request.path }}user/topup/gpu/PS-HPA" data-action="{{ request.path }}user/topup/gpu/PS-HPA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP">
                     <header class="bg-color1 color2 pa2">
                         GPU Topup Requests
                     </header>
                     <span class="pa2">Loading ...</span>
-                </section> -->
+                </section>
             </details>
 
             <details class="mt2 pl4">

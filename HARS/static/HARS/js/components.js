@@ -111,6 +111,63 @@ const components = {
         }
     },
 
+    "Projects": {
+        view: function() {
+            let section = `
+                <section class="ba mh3 mt3 br2 br--bottom overflow-hidden"
+                    data-source="user/project"
+                    data-component="Projects">
+                        <header class="bg-color1 color2 pa2 flex">
+                            <div class="w-30">Project No.</div>
+                            <div class="w-50">Title</div>
+                            <div class="w-10 mh1">Start Date</div>
+                            <div class="w-10 mh1">End Date</div>
+                        </header>`
+            let list = ``;
+            self.data.list.forEach(function(d) {
+                list += `  
+                    <div class="bg-color2 color1 pa2 flex bb">
+                        <div class="w-30 mr1">` + d.project_name + `</div>
+                        <div class="w-50 overflow-hidden nowrap mh1">` + d.project_title + `</div>
+                        <div class="w-10 mh1">` + d.start_date + `</div>
+                        <div class="w-10 mh1">` + d.end_date + `</div>
+                    </div>
+                    `
+            })
+            if (self.data.list.length == 0) {
+                list = `<div class="pa1">No available projects in our records.</div>`
+            }
+            
+            section += list + `
+                </section>`
+
+            let project_list = ``;
+            self.data.list.forEach(function(d) {
+                project_list += `<option value="` + d.project_name + `">`
+            })
+
+            let budget_head = ``;
+            ["CONT", "CONS"].forEach(function(d) {
+                budget_head += `<option value="` + d + `">`
+            })
+            
+              
+            return `
+                <div>
+                    ` + section + `
+                    <datalist id="project_list">
+                        ` + project_list + `
+                    </datalist>
+                    <datalist id="project_list_for_group">
+                    ` + project_list + `
+                    </datalist>
+                    <datalist id="budget_head">
+                        ` + budget_head + `
+                    </datalist>
+                </div>`
+        }   
+    },
+
     "HPCProfile": {
         view: function() {
             if (self.data) {
@@ -470,14 +527,14 @@ const components = {
                                 <td class="pv2 w-20 ph3"><input name="cpu_core_hour" type="number" class="w-100 bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" type="text" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`" min="0" step="`+self.data["cpu_step"]+`"/></td>
                                 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text"/></td>
+                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" list="project_list"/></td>
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">GPU node hours</td>
                                 <td class="pv2 ph3"><input name="gpu_node_hour" type="number" class="w-100 bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" type="text" value="`+self.data["AccountType"]["default_gpu_node_hours"]+`" min="0" step="`+self.data["gpu_step"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text"/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" list="budget_head"/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
@@ -688,9 +745,9 @@ const components = {
             }
         },
         application: function(self) {
-	
-		
-      	    	if ("Application" in self.data) {
+    
+        
+                if ("Application" in self.data) {
 
                 return `
                 <section class="ba ma3 br2 br--bottom">
@@ -854,14 +911,14 @@ const components = {
                                 <td class="pv2 w-20 ph3"><input class="bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" type="number" name="cpu_core_hour" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`" min="0" step="`+self.data["cpu_step"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" required/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" list="project_list" required/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">GPU node hours</td>
                                 <td class="pv2 ph3"><input class="bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" type="number" name="gpu_node_hour" value="`+self.data["AccountType"]["default_gpu_node_hours"]+`" min="0" step="`+self.data["gpu_step"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" required/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" list="budget_head" required/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
@@ -1278,14 +1335,14 @@ const components = {
                                 <td class="pv2 w-20 ph3"><input oninput="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="duration" type="number" min="1" max="1" setp="1" required value="1"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value=""/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="" list="project_list"/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3"></td>
                                 <td class="pv2 ph3"></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value=""/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="" list="budget_head"/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
@@ -1300,12 +1357,12 @@ const components = {
             }
         },
         view: function() {
-	if (self.status != 404) {
+    if (self.status != 404) {
                  return `
-	            <div data-source="user/application/`+self.data["account_type"]+`" data-component="Application-QA-Guide">
-        	        `+self.application(self)+`
-	            </div>
-	            `
+                <div data-source="user/application/`+self.data["account_type"]+`" data-component="Application-QA-Guide">
+                    `+self.application(self)+`
+                </div>
+                `
             }
             else {
                 return `<div class="tc" data-source="user/application/HPC2013-QA" data-component="Application-QA">Please complete your Work Profile to apply for an account.</div>`
@@ -1445,13 +1502,13 @@ const components = {
                                     <span class="pa2">Loading ...</span>
                                 </section> 
 
-                                <!-- <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-RA" data-component="Topup-Student-HPA">
+                                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-RA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
-                                </section> -->
+                                </section>
 
-                                <!-- <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/gpu/PS-RA" data-component="Topup-Student-HPA">
+                                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/gpu/PS-RA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
-                                </section> -->
+                                </section>
 
                                 <h2 class="f3 ml3">Param Sanganak - High Priority Access</h2>
 
@@ -1459,13 +1516,13 @@ const components = {
                                     <span class="pa2">Loading ...</span>
                                 </section> 
 
-                                <!-- <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-HPA" data-component="Topup-Student-HPA">
+                                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-HPA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
-                                </section> -->
+                                </section>
 
-                                <!-- <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/gpu/PS-HPA" data-component="Topup-Student-HPA">
+                                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/gpu/PS-HPA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
-                                </section> -->
+                                </section>
 
                                 <h2 class="f3 ml3">HPC2013 - Quarterly Access</h2>
 
@@ -1515,17 +1572,17 @@ const components = {
             }
         },
         payment_mode: function(account_type, mode) {
-	    if (account_type == 'PS-HPA') {
-		return `Project <input type='hidden' name='payment_mode' value='Project'/>`
-	    }
-	    else {
+        if (account_type == 'PS-HPA') {
+              return `Project <input type='hidden' name='payment_mode' value='Project'/>`
+            }
+            else {
 
-	            return `
-	            <select name="payment_mode" onchange="set_payment_mode(this)">
-	                <option `+( (mode == 'Project') ? 'selected' : '')+`>Project</option>
-	                <option `+( (mode == 'Bank') ? 'selected' : '' )+`>Bank</option>
-	            </select>`
-	   }
+                    return `
+                    <select name="payment_mode" onchange="set_payment_mode(this)">
+                        <option `+( (mode == 'Project') ? 'selected' : '')+`>Project</option>
+                        <option `+( (mode == 'Bank') ? 'selected' : '' )+`>Bank</option>
+                    </select>`
+           }
 
         },
         application: function(self) {
@@ -1569,7 +1626,7 @@ const components = {
                 </div>`
             }
             else {
-		let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled';
+        let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled';
 
                 return `
                 <form class="ba ma3 br2 br--bottom" data-source="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-action="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-component="Application-Group-Student">
@@ -1589,14 +1646,14 @@ const components = {
                                 <td class="pv2 w-20 ph3"><input oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="cpu_core_hour" type="number" min="0" step="`+self.data["cpu_step"]+`" required value="`+self.data["Application"]["cpu_core_hour"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["project_no"]+`" ` +input_project+ `/></td>                               
+                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["project_no"]+`" list="project_list_for_group" ` +input_project+ `/></td>                               
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">GPU node hours</td>
                                 <td class="pv2 ph3"><input oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="gpu_node_hour" type="number" min="0" step="`+self.data["gpu_step"]+`" required value="`+self.data["Application"]["gpu_node_hour"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`" ` +input_project+ `//></td>                                
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`" list="budget_head" ` +input_project+ `//></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
@@ -1695,7 +1752,7 @@ const components = {
                 </div>`
             }
             else {
-		let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled'
+        let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled'
                 return `
                 <form class="ba ma3 br2 br--bottom" data-source="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-action="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-component="Application-Group-Student-QA">
                     <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
@@ -1765,10 +1822,33 @@ const components = {
                 return `RnD Approval`
             }
         },
-        describe: function(data) {
+        project_details: function(project_name, budget_head) {
+            if (budget_head.length > 0) {
+                return project_name + '<br/>(' + budget_head + ')'
+            }
+            else {
+                return project_name
+            }
+        },
+        payment_mode: function(account_type, mode) {
+            if (account_type == 'PS-HPA') {
+              return `Project <input type='hidden' name='payment_mode' value='Project'/>`
+            }
+            else {
+
+                return `
+                    <select name="payment_mode" onchange="set_payment_mode(this)">
+                        <option `+( (mode == 'Project') ? 'selected' : '')+`>Project</option>
+                        <option `+( (mode == 'Bank') ? 'selected' : '' )+`>Bank</option>
+                    </select>`
+           }
+        },
+        describe: function(account_type, data) {
             list = ``
 
             for (let topup of data) {
+                let input_project = (topup["payment_mode"] == 'Project') ? 'required' : 'disabled'
+
                 if (!!topup.pi_time) {
                     list+=`
                         <tr class="striped--light-gray">
@@ -1776,7 +1856,7 @@ const components = {
                             <td class="pv2 ph4 tr">`+Number(topup["hours"]).toLocaleString('en-In')+`</td>
                             <td class="pv2 ph3 tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</td>
                             <td class="pv2 ph3">`+topup["payment_mode"]+`</td>
-                            <td class="pv2 ph3">`+topup["project_no"]+`<br/>(`+topup["budget_head"]+`)</td>
+                            <td class="pv2 ph3">`+self.project_details(topup["project_no"], topup["budget_head"])+`</td>
                             <td class="pv2 ph3">`+self.stage(topup)+`</td>
                         </tr>`
                 }
@@ -1785,12 +1865,12 @@ const components = {
                         <tr class="striped--light-gray">
                             <input type="hidden" name="id" value="`+topup["id"]+`"/>
                             <td class="pv2 ph3">`+topup["request_at"]+`</td>
-                            <td class="pv2 ph3"><input name="hours" onkeyup="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" type="number" min="1" setp="1" required value="`+self.data["AccountType"]["default_core_hours"][self.data["resource"]]+`" /></td>
+                            <td class="pv2 ph3"><input name="hours" oninput="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" type="number" min="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" step="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" required value="`+self.data["AccountType"]["default_core_hours"][self.data["resource"]]+`" /></td>
                             <td class="pv2 ph3 tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</td>
-                            <td class="pv2 ph3">Project<input type="hidden" name="payment_mode" value="Project"/></td>
+                            <td class="pv2 ph3">`+self.payment_mode(account_type, topup["payment_mode"])+`</td>
                             <td class="pv2 ph3">
-                                <input name="project_no" class="bg-white-40 ba br2" type="text" placeholder="Project no."/>
-                                <input name="budget_head" class="bg-white-40 ba br2" type="text" placeholder="Budget head"/>
+                                <input name="project_no" class="bg-white-40 ba br2" type="text" placeholder="Project no." list="project_list_for_group" `+input_project+`/>
+                                <input name="budget_head" class="bg-white-40 ba br2" type="text" placeholder="Budget head" list="budget_head" `+input_project+`/>
                             </td>
                             <td class="pv2 ph3">
                                 <!--<input type="checkbox" name="delete_request"/> Delete Request<br/>-->
@@ -1824,7 +1904,7 @@ const components = {
                                 <td class="pv2 w-10 ph3">Project Info</td>
                                 <td class="pv2 w-30 ph3">Stage</td>
                             </tr>
-                            `+self.describe(self.data["Topups"])+`
+                            `+self.describe(self.data["account_type"], self.data["Topups"])+`
                         </tbody>
                     </table>
                 </form>`

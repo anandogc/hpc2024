@@ -4,8 +4,18 @@ from django.db import models
 # Create your models here.
 
 class Project(models.Model):
-    project_no = models.CharField(null=True, max_length=48)
     pf_no = models.CharField(null=True, max_length=48)
+    pi_name = models.CharField(null=True, max_length=96)
+    pi_type = models.CharField(null=True, max_length=16)
+    project_name = models.CharField(null=True, max_length=32)
+    project_title = models.CharField(null=True, max_length=128)
+    project_type = models.CharField(null=True, max_length=16)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
+
+    class Meta:
+        unique_together = [["pf_no", "project_name"]]
+
 
 
 class CoreHour(models.Model):

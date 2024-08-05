@@ -26,6 +26,7 @@ from django.http import FileResponse, Http404, HttpResponseForbidden
 
 from .models import InstituteProfile
 from .models import HPCProfile
+from .models import Project
 from .models import Report
 from .models import AccountType
 from .models import Rate
@@ -255,6 +256,32 @@ def statistics(request):
             ]
             
         })
+
+@login_required
+def project(request):
+    ip = get_object_or_404(InstituteProfile, user=request.user)
+    pf_no = ip.id_no
+    if len(pf_no) == 4:
+        pf_no = '0' + pf_no
+
+    projects = Project.objects.filter(pf_no=pf_no)
+    list_of_projects = {
+        'list': []
+    }
+    print(projects)
+    for p in projects:
+        list_of_projects['list'].append({
+                'pf_no': p.pf_no,
+                'pi_name': p.pi_name,
+                'pi_type': p.pi_type,
+                'project_name': p.project_name,
+                'project_title': p.project_title,
+                'project_type': p.project_type,
+                'start_date': p.start_date.strftime("%d/%m/%y"),
+                'end_date': p.end_date.strftime("%d/%m/%y"),
+            })
+
+    return JsonResponse(list_of_projects)
 
 @login_required
 def hpc_profile(request):
@@ -998,14 +1025,23 @@ def group_member_topup(request, username, resource, account_type_id):
 
         amount = int(r["hours"]) * data['Rates']["per_hour"][resource]
 
+        if "project_no" in r:
+            project_no = r["project_no"]
+        else:
+            project_no = None
+
+        if "budget_head" in r:
+            budget_head = r["budget_head"]
+        else:
+            budget_head = None
 
         student_topup.pi_time        = aware_dt
         student_topup.hours          = int(r["hours"])
         student_topup.units          = amount/data['Rates']['unit_recharge'][resource]
         student_topup.amount         = amount
         student_topup.payment_mode   = r["payment_mode"]
-        student_topup.project_no     = r["project_no"]
-        student_topup.budget_head    = r["budget_head"]
+        student_topup.project_no     = project_no
+        student_topup.budget_head    = budget_head
 
         student_topup.save()
 

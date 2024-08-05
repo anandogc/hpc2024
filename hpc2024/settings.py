@@ -10,7 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import environ
 from pathlib import Path
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +28,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u$ensd=z9k8_08yrejpb_i-$!m@khaa3xfo*b-hy=rb(38p8ls'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['www.hpc.iitk.ac.in']
+ALLOWED_HOSTS = ['localhost','www.hpc.iitk.ac.in']
 
 
 # Application definition
@@ -38,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'HARS.apps.HARSConfig',
+    # 'report.apps.ReportConfig',
 ]
 
 MIDDLEWARE = [
@@ -75,19 +84,11 @@ WSGI_APPLICATION = 'hpc2024.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': BASE_DIR / 'db.sqlite3',
-    #}
-
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hpc2024',
-        'USER': 'hpc',
-        'PASSWORD': 'ATOS00644',
-        #'HOST': '',
-        #'PORT': 'db_port_number',
-    }
+    'default': env.db()
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
 }
 
 
@@ -125,15 +126,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = '/var/www/html/hars'
+STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/hars'
-LOGIN_URL = '/hars/signin'
-LOGOUT_REDIRECT_URL = '/hars'
+LOGIN_REDIRECT_URL = env('BASE_URL')+''
+LOGIN_URL = env('BASE_URL')+'/signin'
+
+LOGOUT_REDIRECT_URL = env('BASE_URL')+''
+
 #AUTH_PROFILE_MODULE = 'HARS_Portal.InstituteProfile'
