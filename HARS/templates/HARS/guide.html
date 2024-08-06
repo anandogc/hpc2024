@@ -14,7 +14,7 @@
             HPC Application and Reporting system
     </header>
     <nav class="nav-top tr mw8 ml-auto mr-auto pa3">
-        <span class="dib mr2 pa2" data-source="{{ request.path }}user/name"
+        <span class="dib mr2 pa2" data-source="user/name"
             data-component="Name">
         </span>
         <!-- <details>
@@ -58,7 +58,7 @@
 
             <section
                 class="ba ma3 br2 br--bottom"
-                data-source="{{ request.path }}user/institute_profile"
+                data-source="user/institute_profile"
                 data-component="InstituteProfile">
 
                 <header class="bg-color1 color2 pa2">Institute Profile</header>
@@ -71,7 +71,7 @@
 
             <div
                 class="ba ma3 br2 br--bottom"
-                data-source="{{ request.path }}user/statistics"
+                data-source="user/statistics"
                 data-component="Statistics">
                 <span class="pa2">Loading ...</span>
             </div>
@@ -96,13 +96,13 @@
             
             <section
                 class="ba ma3 br2 br--bottom"
-                data-source="{{ request.path }}user/hpc_profile"
+                data-source="user/hpc_profile"
                 data-component="HPCProfile">
                 <header class="bg-color1 color2 pa2 flex justify-between">HPC Profile</header>
                 <span class="pa2">Loading ...</span>
             </section>        
                     
-            <!-- <section id="report" class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/report" data-component="Report">
+            <!-- <section id="report" class="ba ma3 br2 br--bottom overflow-hidden" data-source="user/report" data-component="Report">
                 <header class="bg-color1 color2 pa2 flex justify-between">Annual Report</header>
                 <span class="pa2">Loading ...</span>
 	    </section> -->
@@ -120,13 +120,13 @@
             <details class="mt2 pl4">
                 <summary class="f3">Param Sanganak - Regular Access</summary>
 
-                <table class="collapse center" data-source="{{ request.path }}user/charges/PS-RA" data-component="Charges-RA">
+                <table class="collapse center" data-source="user/charges/PS-RA" data-component="Charges-RA">
                 </table>
 
                 <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/web/paramsanganak/" target="_blank">Param Sanganak Webpage</a> for more information</p>
 
 
-                <section id="param_ra_application" class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/application/PS-RA" data-component="Application-RA-Guide">
+                <section id="param_ra_application" class="ba ma3 br2 br--bottom overflow-hidden" data-source="user/application/PS-RA" data-component="Application-RA-Guide">
                     <span class="pa2">Loading ...</span>
                 </section>
 
@@ -137,14 +137,14 @@
 		You may apply for 4,00,000 CPU core hours.<br/>
 		Which shall cost 4,00,000 * 0.003 = ₹1,200 only.</p>-->
 
-                <section data-source="{{ request.path }}user/topup/cpu/PS-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
+                <section data-source="user/topup/cpu/PS-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
                     <header class="bg-color1 color2 pa2">
                         CPU Topup Requests
                     </header>
                     <span class="pa2">Loading ...</span>
                 </section>
 
-                <section data-source="{{ request.path }}user/topup/gpu/PS-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
+                <section data-source="user/topup/gpu/PS-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
                     <header class="bg-color1 color2 pa2">
                         GPU Topup Requests
                     </header>
@@ -155,24 +155,24 @@
             <details class="mt2 pl4">
                 <summary class="f3">Param Sanganak - High Priority Access</summary>
 
-                <table class="collapse center" data-source="{{ request.path }}user/charges/PS-HPA" data-component="Charges">
+                <table class="collapse center" data-source="user/charges/PS-HPA" data-component="Charges">
 
                 </table>
 
                 <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/web/paramsanganak/" target="_blank">Param Sanganak Webpage</a> for more information</p>
 
-                <section id="param_hp_application" class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/application/PS-HPA" data-component="Application-HP-Guide">
+                <section id="param_hp_application" class="ba ma3 br2 br--bottom overflow-hidden" data-source="user/application/PS-HPA" data-component="Application-HP-Guide">
                     <span class="pa2">Loading ...</span>
                 </section> 
                 
-                <section data-source="{{ request.path }}user/topup/cpu/PS-HPA" data-action="{{ request.path }}user/topup/cpu/PS-HPA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP">
+                <section data-source="user/topup/cpu/PS-HPA" data-action="user/topup/cpu/PS-HPA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP">
                     <header class="bg-color1 color2 pa2">
                         CPU Topup Requests
                     </header>
                     <span class="pa2">Loading ...</span>
                 </section>
 
-                <section data-source="{{ request.path }}user/topup/gpu/PS-HPA" data-action="{{ request.path }}user/topup/gpu/PS-HPA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP">
+                <section data-source="user/topup/gpu/PS-HPA" data-action="user/topup/gpu/PS-HPA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP">
                     <header class="bg-color1 color2 pa2">
                         GPU Topup Requests
                     </header>
@@ -183,16 +183,16 @@
             <details class="mt2 pl4">
                 <summary class="f3">HPC2013 - Quarterly Access</summary>
 
-                <table class="collapse center" data-source="{{ request.path }}user/charges/HPC2013-QA" data-component="Charges-QA">
+                <table class="collapse center" data-source="user/charges/HPC2013-QA" data-component="Charges-QA">
                 </table>
 
                 <p class="tc">Please visit <a class="color1" href="https://www.hpc.iitk.ac.in/web/hpc2013/" target="_blank">HPC-2013 Webpage</a> for more information</p>
 
-                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="{{ request.path }}user/application/HPC2013-QA" data-component="Application-QA-Guide">
+                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="user/application/HPC2013-QA" data-component="Application-QA-Guide">
                     <span class="pa2">Loading ...</span>
                 </section> 
                 
-                <!-- <section data-source="{{ request.path }}user/topup/cpu/HPC2013-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
+                <!-- <section data-source="user/topup/cpu/HPC2013-RA" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
                     <header class="bg-color1 color2 pa2">
                         CPU Topup Requests
                     </header>
@@ -200,7 +200,7 @@
                 </section> -->
             </details>
         </details>
-        <details class="mt4" open="" data-component="GroupMembers" data-source="{{ request.path }}user/group_members">
+        <details class="mt4" open="" data-component="GroupMembers" data-source="user/group_members">
             <summary class="f3">Group Members</summary>
         </details>
         

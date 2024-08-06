@@ -83,10 +83,16 @@ async function init_component(c) {
         render_component(c)
         return;
     }
-    
-    console.log("Fetching", source, c)
 
-    fetch(source, {
+    let url = location.href
+
+    if (url.substr(-1) != '/') url += '/';
+    if (source[0] == '/') source = source.substr(1);
+
+    
+    console.log("Fetching", url, source, c)
+
+    fetch(url+source, {
       method: 'GET',
       headers: {
         'Accept': 'application/json'

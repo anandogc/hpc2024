@@ -9,7 +9,7 @@ const components = {
     "InstituteProfile": {
         view: function() {
             return `
-                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="/user/profile" data-component="InstituteProfile">
+                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="user/profile" data-component="InstituteProfile">
 
                     <header class="bg-color1 color2 pa2">Institute Profile</header>
                     <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
@@ -118,8 +118,8 @@ const components = {
                     data-source="user/project"
                     data-component="Projects">
                         <header class="bg-color1 color2 pa2 flex">
-                            <div class="w-30">Project No.</div>
-                            <div class="w-50">Title</div>
+                            <div class="w-30 mr1">Project No.</div>
+                            <div class="w-50 mh1">Title</div>
                             <div class="w-10 mh1">Start Date</div>
                             <div class="w-10 mh1">End Date</div>
                         </header>`

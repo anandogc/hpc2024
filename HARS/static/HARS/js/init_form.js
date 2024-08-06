@@ -66,6 +66,14 @@ async function form_submit(event){
 	if (!action) {
 		action = this.getAttribute('data-source')
 	}
+
+	let url = location.href
+
+    if (url.substr(-1) != '/') url += '/';
+    if (action[0] == '/') action = action.substr(1);
+
+    
+    console.log("Submitting at", url, action)
 	
 	fetch(action, {
 	    method: method,
