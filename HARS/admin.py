@@ -79,7 +79,7 @@ class InstituteProfileAdmin(admin.ModelAdmin, ExportCsvMixin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin, ExportCsvMixin):
-    list_display = ('pf_no', 'pi_name', 'pi_type', 'project_name', 'project_title', 'project_type', 'start_date', 'end_date')
+    list_display = ('pk', 'pf_no', 'pi_name', 'pi_type', 'project_name', 'project_title', 'project_type', 'start_date', 'end_date')
     search_fields = ['pf_no', 'pi_name', 'project_name', 'project_title']
     list_filter = ('project_type', 'pi_type')
     actions = ["export_as_csv"]

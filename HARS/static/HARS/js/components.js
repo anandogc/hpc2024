@@ -1752,7 +1752,7 @@ const components = {
                 </div>`
             }
             else {
-        let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled'
+            let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled'
                 return `
                 <form class="ba ma3 br2 br--bottom" data-source="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-action="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-component="Application-Group-Student-QA">
                     <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
@@ -1771,14 +1771,14 @@ const components = {
                                 <td class="pv2 w-20 ph3"><input oninput="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="duration" type="number" min="1" max="1" setp="1" required value="`+self.data["Application"]["duration"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["project_no"]+`" ` +input_project+ `/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["project_no"]+`" list="project_list_for_group" ` +input_project+ `/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3"></td>
                                 <td class="pv2 ph3"></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`" ` +input_project+ `/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`" list="budget_head" ` +input_project+ `/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
