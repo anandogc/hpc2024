@@ -1502,13 +1502,13 @@ const components = {
                                     <span class="pa2">Loading ...</span>
                                 </section> 
 
-                                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-RA" data-component="Topup-Student-HPA">
+                                <!--<section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-RA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
                                 </section>
 
                                 <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/gpu/PS-RA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
-                                </section>
+                                </section>-->
 
                                 <h2 class="f3 ml3">Param Sanganak - High Priority Access</h2>
 
@@ -1516,13 +1516,13 @@ const components = {
                                     <span class="pa2">Loading ...</span>
                                 </section> 
 
-                                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-HPA" data-component="Topup-Student-HPA">
+                                <!--<section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-HPA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
                                 </section>
 
                                 <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/gpu/PS-HPA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
-                                </section>
+                                </section>-->
 
                                 <h2 class="f3 ml3">HPC2013 - Quarterly Access</h2>
 
