@@ -23,11 +23,15 @@ def Send_emails_for_account_type(account_type):
         if a.payment_mode == 'Bank':
             email = f"{a.hpc_profile.institute_profile.user.username}@iitk.ac.in"
             name = a.hpc_profile.institute_profile.name
+            id_no = a.hpc_profile.institute_profile.id_no
 
             amount = a.amount
 
             #try:
-            Send_mail("Bank_payment", {'name': name, 'email': email, 'amount': amount})
+            Send_mail("Bank_payment", {'name': name, 'email': email, 'amount': amount, 'id_no': id_no})
+            a.email_sent = True
+            a.save()
+
             #except:
             #    pass
 
