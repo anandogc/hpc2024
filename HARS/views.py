@@ -749,10 +749,21 @@ def topup(request, resource, account_type_id):
     default_user_account_expiry = HARSDates.objects.get(parameter='default_user_account_expiry').value
 
     user_account = UserAccount.objects.filter(institute_profile=ip, account_type=at, create_time__gt=renew_date).order_by('create_time').last()
+    if not user_account and request.method == "POST":
+        return HttpResponse("Please activate your account before applying for Topup.", status=422)
 
     if (user_account):
         if request.method == "POST":
             r = json.loads(request.body)
+
+            project_no = None
+            if 'project_no' in r:
+                project_no = r["project_no"]
+
+
+            budget_head = None
+            if 'budget_head' in r:
+                budget_head = r["budget_head"]
 
             topup = Topup(
                 resource=resource.upper(),
@@ -760,6 +771,8 @@ def topup(request, resource, account_type_id):
                 units=int(r["hours"])*data["Rates"]["per_hour"][resource]/data['Rates']["unit_recharge"][resource],
                 amount=int(r["hours"])*data["Rates"]["per_hour"][resource],
                 payment_mode=r["payment_mode"],
+                project_no=project_no,
+                budget_head=budget_head,
                 user_account=user_account
             )
 
@@ -785,7 +798,7 @@ def topup(request, resource, account_type_id):
             return JsonResponse(data)
 
         else:
-            topup = Topup.objects.filter(user_account=user_account, resource=resource.upper(), request_at__gt=renew_date).order_by('request_at')
+            topup = Topup.objects.filter(user_account=user_account, resource=resource.upper(), request_at__gt=renew_date).order_by('-request_at')
 
             for t in topup:
                 data["Topup"].append({
@@ -1012,7 +1025,12 @@ def group_member_topup(request, username, resource, account_type_id):
     student_hpc_profile = get_object_or_404(HPCProfile, institute_profile=student_ip, pi_profile=ip)  # This variable is not used, but used to verity that this is a student of existing PI
     student_user_account = get_object_or_404(UserAccount, institute_profile=student_ip, account_type=at, create_time__gt=renew_date)
     
+  
     if request.method == 'POST':
+        if not student_user_account:
+            return HttpResponse("Please activate your account before applying for Topup.", status=422)
+
+
         r = json.loads(request.body)
 
         student_topup = get_object_or_404(Topup, user_account=student_user_account, pk=r["id"], request_at__gt=renew_date)
@@ -1044,6 +1062,31 @@ def group_member_topup(request, username, resource, account_type_id):
         student_topup.budget_head    = budget_head
 
         student_topup.save()
+
+        if not student_topup.project_no:
+            project_no = ""
+        else:
+            project_no = student_topup.project_no
+
+        if not student_topup.budget_head:
+            budget_head = ""
+        else:
+            budget_head = student_topup.budget_head
+
+        data = {
+            "id": student_topup.pk,
+            "request_at": student_topup.request_at.date().strftime("%d/%m/%Y"),
+            "pi_time": student_topup.pi_time,
+            "rnd_time": student_topup.rnd_time,
+            "admin_time": student_topup.admin_time,
+            "resource": student_topup.resource,
+            "hours": student_topup.hours,
+            "units": student_topup.units,
+            "amount": student_topup.amount,
+            "payment_mode": student_topup.payment_mode,
+            "project_no": project_no,
+            "budget_head": budget_head
+        }
 
         return JsonResponse(data)
     

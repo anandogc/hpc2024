@@ -53,7 +53,9 @@ function render_component(c) {
     
     console.log("Rendering:", newItem)
     
-    init_form(newItem)
+    if (!newItem.classList.contains('get-only'))
+        init_form(newItem)
+
     init_modal(newItem)
     init_observe(newItem)
     //render_components_in(newItem)

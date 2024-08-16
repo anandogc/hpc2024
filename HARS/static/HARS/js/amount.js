@@ -61,8 +61,6 @@ function update_application_amount(currentInput, cpu_rate, gpu_rate) {
         form = currentInput.querySelector('form')
     }
 
-    console.log(currentInput)
-
     let cpu_hours = Number(form.querySelector('[name=cpu_core_hour]').value)
     let gpu_hours = Number(form.querySelector('[name=gpu_node_hour]').value)
     let amount_container = form.querySelector('.amount')
@@ -115,3 +113,120 @@ function set_payment_mode(select) {
     }
 
 }
+
+function stage(data) {
+    if (data.admin_time) {
+        return `Active`
+    }
+    else if (data.rnd_time) {
+        return `Admin Approval`
+    }
+    else {
+        return `RnD Approval`
+    }
+}
+
+function project_details(project_name, budget_head) {
+    if (budget_head.length > 0) {
+        return project_name + '<br/>(' + budget_head + ')'
+    }
+    else {
+        return project_name
+    }
+}
+
+
+async function topup_group_submit(event) {
+    event.preventDefault();
+
+    for (const el of event.target.querySelectorAll("[required]")) {
+      el.classList.remove('b--dark-red')
+      el.parentElement.classList.remove('b--dark-red')
+
+      if (el.value === '') {        
+        if (el.type !== 'hidden') {
+            el.classList.add('b--dark-red')
+            el.focus()
+            return;
+        }
+        else {
+            el.parentElement.classList.add('b--dark-red')
+            el.parentElement.querySelector('input').focus()
+            return;
+        }
+      }
+    }
+
+    message.showLoader("Processing request")
+    let that = event.target;
+    
+    const data = {}
+    
+        
+    for (const pair of new FormData(event.target)) {        
+        if (pair[1] instanceof File) {
+            let dataURL = await readFileAsDataURL(pair[1]);
+            let file = [pair[1].name, pair[1].size, dataURL]
+
+            data[pair[0]] = file
+    
+        }
+        else {
+            data[pair[0]] = pair[1]
+        }
+    }   
+    
+    let method = event.target.getAttribute('data-method')
+    if (method === null)
+        method = "POST"
+
+    let action = event.target.getAttribute('data-action');
+    if (!action) {
+        action = event.target.getAttribute('data-source')
+    }
+
+    let url = location.href
+
+    if (url.substr(-1) != '/') url += '/';
+    if (action[0] == '/') action = action.substr(1);
+
+    
+    console.log("Submitting at", url, action)
+
+    fetch(url+action, {
+        method: method,
+         headers: {
+            'X-CSRFToken': csrfToken,
+        },
+        body: JSON.stringify(data),
+    }).then(function(response) {
+
+        if (response.status == 200) {
+            response.json().then(function(topup) {
+
+                message.closeMessage()
+                let new_topup = document.createElement('div')
+                new_topup.classList.add('striped--light-gray')
+                new_topup.innerHTML = `
+                        <div class="pv2 ph3 w-10 dib tc">`+topup["request_at"]+`</div>
+                        <div class="pv2 ph4 w-20 dib tr">`+Number(topup["hours"]).toLocaleString('en-In')+`</div>
+                        <div class="pv2 ph3 w-10 dib tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</div>
+                        <div class="pv2 ph3 w-10 dib tc">`+topup["payment_mode"]+`</div>
+                        <div class="pv2 ph3 w-20 dib tl">`+project_details(topup["project_no"], topup["budget_head"])+`</div>
+                        <div class="pv2 ph3 w-20 dib tr">`+stage(topup)+`</div>`
+
+                let form = event.target.closest('form');
+
+                form.parentNode.replaceChild(new_topup, form);
+            })
+        }
+        else {
+            response.text().then((text) => {
+                message.error(text)
+            })      
+        }
+    })
+
+    return false
+}
+

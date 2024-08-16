@@ -527,7 +527,7 @@ const components = {
                                 <td class="pv2 w-20 ph3"><input name="cpu_core_hour" type="number" class="w-100 bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" type="text" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`" min="0" step="`+self.data["cpu_step"]+`"/></td>
                                 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" list="project_list"/></td>
+                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" list="project_list" required/></td>
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">GPU node hours</td>
@@ -631,11 +631,16 @@ const components = {
                     </tr>
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3">`+self.data["date"]+`</td>
-                        <td class="pv2 ph3"><input onkeyup="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" name="hours" type="number" min="1" setp="1" required value="`+self.data["AccountType"]["default_core_hours"][self.data["resource"]]+`" /></td>
-                        <td class="pv2 ph3 tr">₹`+Number(self.data["AccountType"]["default_amounts"][self.data["resource"]]).toLocaleString("en-IN")+`</td>
-                        <td class="pv2 ph3">Project<input type="hidden" name="payment_mode" value="Project"/></td>
+                        <td class="pv2 ph3"><input oninput="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" name="hours" type="number" min="0" step="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" required value="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" /></td>
+                        <td class="pv2 ph3 tr">₹`+Number(self.data["Rates"]["unit_recharge"][self.data["resource"]] * self.data["Rates"]["per_hour"][self.data["resource"]]).toLocaleString("en-IN")+`</td>
                         <td class="pv2 ph3">
-                                <input class="bg-white-40 ba br2" type="submit" value="Apply"/>
+                            <select class="bg-white-40 ba br2" name="payment_mode">
+                                <option>Project</option>
+                                <option>Bank</option>
+                            </select>
+                        </td>
+                        <td class="pv2 ph3">
+                                <input type="submit" value="Apply"/>
                         </td>
                     </tr>
                     `+self.describe(self.data["Topup"])+`
@@ -696,7 +701,7 @@ const components = {
                 return "GPU Topup Requests"
         },
         view: function() {
-            return `<form data-source="user/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" data-action="user/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP">
+            return `<form data-source="user/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" data-action="user/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-HP-Guide">
             <header class="bg-color1 color2 pa2">
                 `+self.title(self.data["resource"])+`
             </header>
@@ -712,12 +717,12 @@ const components = {
                     </tr>
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3">`+self.data["date"]+`</td>
-                        <td class="pv2 ph3"><input onkeyup="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" name="hours" type="number" min="1" setp="1" required value="`+self.data["AccountType"]["default_core_hours"][self.data["resource"]]+`" /></td>
+                        <td class="pv2 ph3"><input oninput="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" name="hours" type="number" min="0" step="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" required value="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" /></td>
                         <td class="pv2 ph3 tr">₹`+Number(self.data["AccountType"]["default_amounts"][self.data["resource"]]).toLocaleString("en-IN")+`</td>
                         <td class="pv2 ph3">Project<input type="hidden" name="payment_mode" value="Project"/></td>
                         <td class="pv2 ph3">
-                            <input name="project_no" class="bg-white-40 ba br2" type="text" placeholder="Project no."/>
-                            <input name="budget_head" class="bg-white-40 ba br2" type="text" placeholder="Budget head"/>
+                            <input name="project_no" class="bg-white-40 ba br2" type="text" placeholder="Project no." list="project_list" required/>
+                            <input name="budget_head" class="bg-white-40 ba br2" type="text" placeholder="Budget head" list="budget_head"/>
                         </td>
                         <td class="pv2 ph3">
                                 <input class="bg-white-40 ba br2" type="submit" value="Apply"/>
@@ -918,7 +923,7 @@ const components = {
                                 <td class="pv2 ph3"><input class="bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" type="number" name="gpu_node_hour" value="`+self.data["AccountType"]["default_gpu_node_hours"]+`" min="0" step="`+self.data["gpu_step"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" list="budget_head" required/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" list="budget_head"/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
@@ -984,9 +989,8 @@ const components = {
                 list+=`
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3">`+topup["request_at"]+`</td>
-                        <td class="pv2 ph3 tr"><span class="ph3">`+topup["units"]+`</span> × ₹`+ data["Rates"]["unit_recharge"][data["resource"]] +`</td>
+                        <td class="pv2 ph4 tr">`+Number(topup["hours"]).toLocaleString('en-In')+`</td>
                         <td class="pv2 ph3 tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</td>
-                        <td class="pv2 ph3 tr">`+Number(topup["hours"]).toLocaleString('en-In')+`</td>
                         <td class="pv2 ph3">`+topup["payment_mode"]+`</td>
                         <td class="pv2 ph3">`+self.stage(topup)+`</td>
                     </tr>`
@@ -1008,25 +1012,23 @@ const components = {
             <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
                 <tbody>
                     <tr class="striped--light-gray">
-                        <td class="pv2 ph3">Request Date</td>
-                        <td class="pv2 ph3">Units</td>
-                        <td class="pv2 ph3 tr">Amount</td>
-                        <td class="pv2 ph3 tr">Core hours</td>
-                        <td class="pv2 ph3">Payment Source</td>
-                        <td class="pv2 ph3">Stage</td>
+                        <td class="pv2 ph3 w-20">Request Date</td>
+                        <td class="pv2 ph3 w-20 tr">Core hours</td>
+                        <td class="pv2 ph3 w-20 tr">Amount</td>
+                        <td class="pv2 ph3 w-20">Payment Source</td>
+                        <td class="pv2 ph3 w-20">Stage</td>
                     </tr>
                     <tr class="striped--light-gray">
-                        <td class="pv2 ph3 w-15">`+self.data["date"]+`</td>
-                        <td class="pv2 ph3 w-20 tr"><input class="w-50 bg-white-40 ba br2 tr" onkeyup="update_amount_in_next_cell(this, `+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`); update_in_row(this, '.hours', `+self.data["Rates"]["unit_recharge"][self.data["resource"]]/self.data["Rates"]["per_hour"][self.data["resource"]]+`)"  onchange="update_amount_in_next_cell(this, `+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`); update_in_row(this, '.hours', `+self.data["Rates"]["unit_recharge"][self.data["resource"]]/self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" name="units" type="number" min="1" setp="1" required value="1" /> × ₹ `+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`</td>
-                        <td class="pv2 ph3 w-10 tr">₹`+Number(self.data["Rates"]["unit_recharge"][self.data["resource"]]).toLocaleString("en-IN")+`</td>
-                        <td class="pv2 ph3 w-15 tr hours">`+Number(self.data["Rates"]["unit_recharge"][self.data["resource"]]/self.data["Rates"]["per_hour"][self.data["resource"]]).toLocaleString("en-IN")+`<input type="hidden" name="hours" value="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]/self.data["Rates"]["per_hour"][self.data["resource"]]+`"</td>
-                        <td class="pv2 ph3 s-20">
+                        <td class="pv2 ph3">`+self.data["date"]+`</td>
+                        <td class="pv2 ph3"><input oninput="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" name="hours" type="number" min="0" step="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" required value="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" /></td>
+                        <td class="pv2 ph3 tr">₹`+Number(self.data["Rates"]["unit_recharge"][self.data["resource"]] * self.data["Rates"]["per_hour"][self.data["resource"]]).toLocaleString("en-IN")+`</td>
+                        <td class="pv2 ph3">
                             <select class="bg-white-40 ba br2" name="payment_mode">
                                 <option>Project</option>
                                 <option>Bank</option>
                             </select>
                         </td>
-                        <td class="pv2 ph3 w-20">
+                        <td class="pv2 ph3">
                                 <input type="submit" value="Apply"/>
                         </td>
                     </tr>
@@ -1072,11 +1074,10 @@ const components = {
                 list+=`
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3">`+topup["request_at"]+`</td>
-                        <td class="pv2 ph3 tr"><span class="ph3">`+topup["units"]+`</span> × ₹`+ data["Rates"]["unit_recharge"][data["resource"]] +`</td>
+                        <td class="pv2 ph4 tr">`+Number(topup["hours"]).toLocaleString('en-In')+`</td>
                         <td class="pv2 ph3 tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</td>
-                        <td class="pv2 ph3 tr">`+Number(topup["hours"]).toLocaleString('en-In')+`</td>
                         <td class="pv2 ph3">`+topup["payment_mode"]+`</td>
-                        <td class="pv2 ph3">`+topup["project_no"]+`<br/>`+topup["budget_head"]+`</td>
+                        <td class="pv2 ph3">`+(topup["project_no"] ? topup["project_no"] : '') +`<br/>`+(topup["budget_head"] ? topup["budget_head"] : '')+`</td>
                         <td class="pv2 ph3">`+self.stage(topup)+`</td>
                     </tr>`
             }
@@ -1090,35 +1091,33 @@ const components = {
                 return "GPU Topup Requests"
         },
         view: function() {
-            return `<form data-source="user/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" data-action="user/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA">
+            return `<form data-source="user/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" data-action="user/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-RA-Guide">
             <header class="bg-color1 color2 pa2">
                 `+self.title(self.data["resource"])+`
             </header>
             <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
                 <tbody>
                     <tr class="striped--light-gray">
-                        <td class="pv2 ph3">Request Date</td>
-                        <td class="pv2 ph3">Units</td>
-                        <td class="pv2 ph3 tr">Amount</td>
-                        <td class="pv2 ph3 tr">Core hours</td>
-                        <td class="pv2 ph3">Payment Source</td>
-                        <td class="pv2 ph3">Project Info</td>
-                        <td class="pv2 ph3">Stage</td>
+                        <td class="pv2 w-10 ph3">Request Date</td>
+                        <td class="pv2 w-20 ph3 tr">`+self.data["unit"][self.data["resource"]]+`</td>
+                        <td class="pv2 w-20 ph3 tr">Amount</td>
+                        <td class="pv2 w-20 ph3">Payment Source</td>
+                        <td class="pv2 w-20 ph3">Project Info</td>
+                        <td class="pv2 w-30 ph3">Stage</td>
                     </tr>
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3 w-15">`+self.data["date"]+`</td>
-                        <td class="pv2 ph3 w-20 tr"><input class="w-50 bg-white-40 ba br2 tr" onkeyup="update_amount_in_next_cell(this, `+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`); update_in_row(this, '.hours', `+self.data["Rates"]["unit_recharge"][self.data["resource"]]/self.data["Rates"]["per_hour"][self.data["resource"]]+`)"  onchange="update_amount_in_next_cell(this, `+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`); update_in_row(this, '.hours', `+self.data["Rates"]["unit_recharge"][self.data["resource"]]/self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" name="units" type="number" min="1" setp="1" required value="1" /> × ₹ `+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`</td>
+                        <td class="pv2 ph3"><input oninput="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" name="hours" type="number" min="0" step="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" required value="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" /></td>
                         <td class="pv2 ph3 w-10 tr">₹`+Number(self.data["Rates"]["unit_recharge"][self.data["resource"]]).toLocaleString("en-IN")+`</td>
-                        <td class="pv2 ph3 w-15 tr hours">`+Number(self.data["Rates"]["unit_recharge"][self.data["resource"]]/self.data["Rates"]["per_hour"][self.data["resource"]]).toLocaleString("en-IN")+`<input type="hidden" name="hours" value="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]/self.data["Rates"]["per_hour"][self.data["resource"]]+`"</td>
                         <td class="pv2 ph3 s-20">
-                            <select class="bg-white-40 ba br2" name="payment_mode">
+                            <select class="bg-white-40 ba br2" name="payment_mode" onchange="set_payment_mode(this)">
                                 <option>Project</option>
                                 <option>Bank</option>
                             </select>
                         </td>
                         <td class="pv2 ph3 w-20">
-                            <input name="project_no" class="bg-white-40 ba br2" type="text" placeholder="Project no."/>
-                            <input name="budget_head" class="bg-white-40 ba br2" type="text" placeholder="Budget head"/>
+                            <input name="project_no" class="bg-white-40 ba br2" type="text" placeholder="Project no." list="project_list" required/>
+                            <input name="budget_head" class="bg-white-40 ba br2" type="text" placeholder="Budget head" list="budget_head"/>
                         </td>
                         <td class="pv2 ph3 w-20">
                                 <input type="submit" value="Apply"/>
@@ -1317,6 +1316,8 @@ const components = {
                 </div>`
             }
             else {
+                let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled';
+
                 return `
                 <form class="ba ma3 br2 br--bottom" data-source="user/application/`+self.data["account_type"]+`" data-action="user/application/`+self.data["account_type"]+`" data-component="Application-QA-Guide">
                     <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
@@ -1335,7 +1336,7 @@ const components = {
                                 <td class="pv2 w-20 ph3"><input oninput="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="duration" type="number" min="1" max="1" setp="1" required value="1"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="" list="project_list"/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="" list="project_list" required/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3"></td>
@@ -1502,13 +1503,13 @@ const components = {
                                     <span class="pa2">Loading ...</span>
                                 </section> 
 
-                                <!--<section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-RA" data-component="Topup-Student-HPA">
+                                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-RA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
                                 </section>
 
                                 <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/gpu/PS-RA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
-                                </section>-->
+                                </section>
 
                                 <h2 class="f3 ml3">Param Sanganak - High Priority Access</h2>
 
@@ -1516,13 +1517,13 @@ const components = {
                                     <span class="pa2">Loading ...</span>
                                 </section> 
 
-                                <!--<section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-HPA" data-component="Topup-Student-HPA">
+                                <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/cpu/PS-HPA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
                                 </section>
 
                                 <section class="ba ma3 br2 br--bottom overflow-hidden" data-source="group/`+self.data[member]["username"]+`/topup/gpu/PS-HPA" data-component="Topup-Student-HPA">
                                     <span class="pa2">Loading ...</span>
-                                </section>-->
+                                </section>
 
                                 <h2 class="f3 ml3">HPC2013 - Quarterly Access</h2>
 
@@ -1626,7 +1627,7 @@ const components = {
                 </div>`
             }
             else {
-        let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled';
+            let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled';
 
                 return `
                 <form class="ba ma3 br2 br--bottom" data-source="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-action="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-component="Application-Group-Student">
@@ -1653,7 +1654,7 @@ const components = {
                                 <td class="pv2 ph3"><input oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="gpu_node_hour" type="number" min="0" step="`+self.data["gpu_step"]+`" required value="`+self.data["Application"]["gpu_node_hour"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`" list="budget_head" ` +input_project+ `//></td>                                
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`" list="budget_head"/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
@@ -1778,7 +1779,7 @@ const components = {
                                 <td class="pv2 ph3"></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`" list="budget_head" ` +input_project+ `/></td>                                
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["budget_head"]+`" list="budget_head"/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
@@ -1851,32 +1852,32 @@ const components = {
 
                 if (!!topup.pi_time) {
                     list+=`
-                        <tr class="striped--light-gray">
-                            <td class="pv2 ph3">`+topup["request_at"]+`</td>
-                            <td class="pv2 ph4 tr">`+Number(topup["hours"]).toLocaleString('en-In')+`</td>
-                            <td class="pv2 ph3 tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</td>
-                            <td class="pv2 ph3">`+topup["payment_mode"]+`</td>
-                            <td class="pv2 ph3">`+self.project_details(topup["project_no"], topup["budget_head"])+`</td>
-                            <td class="pv2 ph3">`+self.stage(topup)+`</td>
-                        </tr>`
+                        <div class="striped--light-gray">
+                            <div class="pv2 ph3 w-10 dib tc">`+topup["request_at"]+`</div>
+                            <div class="pv2 ph4 w-20 dib tr">`+Number(topup["hours"]).toLocaleString('en-In')+`</div>
+                            <div class="pv2 ph3 w-10 dib tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</div>
+                            <div class="pv2 ph3 w-10 dib tc">`+topup["payment_mode"]+`</div>
+                            <div class="pv2 ph3 w-20 dib tl">`+self.project_details(topup["project_no"], topup["budget_head"])+`</div>
+                            <div class="pv2 ph3 w-20 dib tr">`+self.stage(topup)+`</div>
+                        </div>`
                 }
                 else {
                     list += `
-                        <tr class="striped--light-gray">
+                        <form class="striped--light-gray" data-action="group/`+self.data["username"]+`/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" method="POST" onsubmit="topup_group_submit(event)">
                             <input type="hidden" name="id" value="`+topup["id"]+`"/>
-                            <td class="pv2 ph3">`+topup["request_at"]+`</td>
-                            <td class="pv2 ph3"><input name="hours" oninput="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" type="number" min="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" step="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" required value="`+self.data["AccountType"]["default_core_hours"][self.data["resource"]]+`" /></td>
-                            <td class="pv2 ph3 tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</td>
-                            <td class="pv2 ph3">`+self.payment_mode(account_type, topup["payment_mode"])+`</td>
-                            <td class="pv2 ph3">
-                                <input name="project_no" class="bg-white-40 ba br2" type="text" placeholder="Project no." list="project_list_for_group" `+input_project+`/>
-                                <input name="budget_head" class="bg-white-40 ba br2" type="text" placeholder="Budget head" list="budget_head" `+input_project+`/>
-                            </td>
-                            <td class="pv2 ph3">
+                            <div class="pv2 ph3 w-10 dib tc">`+topup["request_at"]+`</div>
+                            <div class="pv2 ph3 w-20 dib tr"><input name="hours" oninput="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-80 bg-white-40 ba br2 tr" type="number" min="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" step="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" required value="`+topup["hours"]+`" /></div>
+                            <div class="pv2 ph3 w-10 dib tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</div>
+                            <div class="pv2 ph3 w-10 dib tc">`+self.payment_mode(account_type, topup["payment_mode"])+`</div>
+                            <div class="pv2 ph3 w-20 dib tc">
+                                <input name="project_no" class="bg-white-40 ba br2 w-90" type="text" placeholder="Project no." list="project_list_for_group" `+input_project+`/>
+                                <input name="budget_head" class="bg-white-40 ba br2 w-90" type="text" placeholder="Budget head" list="budget_head"/>
+                            </div>
+                            <div class="pv2 ph3 w-20 dib tc">
                                 <!--<input type="checkbox" name="delete_request"/> Delete Request<br/>-->
                                 <input class="bg-white-40 ba br2" type="submit" value="Save"/>
-                            </td>
-                        </tr>`
+                            </div>
+                        </form>`
                 }
             }
 
@@ -1890,24 +1891,22 @@ const components = {
         },
         view: function() {
             if (self.status == 200) {
-                    return `<form data-source="group/`+self.data["username"]+`/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" data-action="group/`+self.data["username"]+`/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" class="ba mv3 mh3 br2 br--bottom" data-component="Topup-Student-HPA">
+                    return `<div data-source="group/`+self.data["username"]+`/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" data-action="group/`+self.data["username"]+`/topup/`+self.data["resource"]+`/`+self.data["account_type"]+`" class="ba mv3 mh3 br2 br--bottom get-only" data-component="Topup-Student-HPA">
                     <header class="bg-color1 color2 pa2">
                         `+self.title(self.data["resource"])+`
                     </header>
-                    <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
-                        <tbody>
-                            <tr class="striped--light-gray">
-                                <td class="pv2 w-10 ph3">Request Date</td>
-                                <td class="pv2 w-20 ph3 tr">`+self.data["unit"][self.data["resource"]]+`</td>
-                                <td class="pv2 w-20 ph3 tr">Amount</td>
-                                <td class="pv2 w-10 ph3">Payment Source</td>
-                                <td class="pv2 w-10 ph3">Project Info</td>
-                                <td class="pv2 w-30 ph3">Stage</td>
-                            </tr>
-                            `+self.describe(self.data["account_type"], self.data["Topups"])+`
-                        </tbody>
+                    <div class="ba br2 b--black-10 w-100">
+                            <div class="striped--light-gray">
+                                <div class="pv2 w-10 ph3 dib tc">Request Date</div>
+                                <div class="pv2 w-20 ph3 dib tr">`+self.data["unit"][self.data["resource"]]+`</div>
+                                <div class="pv2 w-10 ph3 dib tr">Amount</div>
+                                <div class="pv2 w-10 ph3 dib tc">Payment Source</div>
+                                <div class="pv2 w-20 ph3 dib tl">Project Info</div>
+                                <div class="pv2 w-20 ph3 dib tc">Stage</div>
+                            </div>
+                            `+self.describe(self.data["account_type"], self.data["Topups"], self)+`
                     </table>
-                </form>`
+                </div>`
             }
             else if (self.status == 404) {
                 return `<span class="pl4 mt2 db">Topup: No active user account</span>`
