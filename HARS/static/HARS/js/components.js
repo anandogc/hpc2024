@@ -126,7 +126,7 @@ const components = {
             let list = ``;
             self.data.list.forEach(function(d) {
                 list += `  
-                    <div class="bg-color2 color1 pa2 flex bb">
+                    <div class="bg-color2 color1 pa2 flex bb striped--light-gray">
                         <div class="w-30 mr1">` + d.project_name + `</div>
                         <div class="w-50 overflow-hidden nowrap mh1">` + d.project_title + `</div>
                         <div class="w-10 mh1">` + d.start_date + `</div>
