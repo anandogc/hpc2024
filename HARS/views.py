@@ -756,25 +756,28 @@ def topup(request, resource, account_type_id):
         if request.method == "POST":
             r = json.loads(request.body)
 
-            project_no = None
-            if 'project_no' in r:
-                project_no = r["project_no"]
-
-
-            budget_head = None
-            if 'budget_head' in r:
-                budget_head = r["budget_head"]
-
             topup = Topup(
                 resource=resource.upper(),
                 hours=int(r["hours"]),
                 units=int(r["hours"])*data["Rates"]["per_hour"][resource]/data['Rates']["unit_recharge"][resource],
                 amount=int(r["hours"])*data["Rates"]["per_hour"][resource],
                 payment_mode=r["payment_mode"],
-                project_no=project_no,
-                budget_head=budget_head,
                 user_account=user_account
             )
+
+
+            if ip.designation == "F":
+                # Naive datetime
+                naive_dt = datetime.now()
+
+                # Make it timezone-aware
+                aware_dt = timezone.make_aware(naive_dt, timezone.get_current_timezone())
+                topup.pi_time = aware_dt
+
+                if "project_no" in r:
+                    topup.project_no = r["project_no"]
+                    topup.budget_head = r["budget_head"]
+
 
             topup.save()
 
