@@ -1108,7 +1108,7 @@ const components = {
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3 w-15">`+self.data["date"]+`</td>
                         <td class="pv2 ph3"><input oninput="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" name="hours" type="number" min="0" step="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" required value="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" /></td>
-                        <td class="pv2 ph3 w-10 tr">₹`+Number(self.data["Rates"]["unit_recharge"][self.data["resource"]]).toLocaleString("en-IN")+`</td>
+                        <td class="pv2 ph3 w-10 tr">₹`+Number(self.data["Rates"]["unit_recharge"][self.data["resource"]]*self.data["Rates"]["per_hour"][self.data["resource"]]).toLocaleString("en-IN")+`</td>
                         <td class="pv2 ph3 s-20">
                             <select class="bg-white-40 ba br2" name="payment_mode" onchange="set_payment_mode(this)">
                                 <option>Project</option>

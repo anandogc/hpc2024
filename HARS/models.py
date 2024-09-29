@@ -62,7 +62,10 @@ class HPCProfile(models.Model):
     pi_profile = models.ForeignKey(InstituteProfile, related_name='pi', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.institute_profile.name}: {self.research_title}, {self.domain}, {self.contact}"
+        if self.pi_profile:
+            return f"Name: {self.institute_profile.name}, PI: {self.pi_profile.name}, Contact: {self.contact}"
+        else:
+            return f"Name: {self.institute_profile.name}, PI: Self, Contact: {self.contact}"
 
     def user(self):
         return self.institute_profile.name
@@ -142,6 +145,9 @@ class Application(models.Model):
 
     notes = models.CharField(max_length=256, null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.account_type.name}: ( {self.hpc_profile.institute_profile.name}, {self.hpc_profile.institute_profile.id_no}, {self.hpc_profile.institute_profile.user.username} )"
+
     def user(self):
         return f"{self.hpc_profile.institute_profile.name} ({self.hpc_profile.institute_profile.id_no}, {self.hpc_profile.institute_profile.user.username})"
 
@@ -219,8 +225,21 @@ class Topup(models.Model):
     project_no = models.CharField(max_length=32, null=True, blank=True)
     budget_head = models.CharField(max_length=32, null=True, blank=True)
 
+    def __str__(self):
+        print(self.user_account.institute_profile.name)
+        return f"{self.user_account.account_type.name}: ({self.user_account.institute_profile.name}, {self.user_account.institute_profile.id_no}, {self.user_account.institute_profile.user.username})"
+
     def name(self):
         return self.user_account.institute_profile.name
+
+    def pi_name(self):
+        if self.user_account.institute_profile.work_profile.pi_profile:
+            return self.user_account.institute_profile.work_profile.pi_profile.name
+        else:
+            return self.user_account.institute_profile.name
+
+
+
 
 class HARSDates(models.Model):
     parameter = models.CharField(max_length=32, unique=True)

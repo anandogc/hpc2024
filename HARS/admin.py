@@ -127,7 +127,7 @@ class UserAccountAdmin(admin.ModelAdmin, ExportCsvMixin):
 
 @admin.register(Topup)
 class TopupAdmin(admin.ModelAdmin, ExportCsvMixin):
-    list_display = ('name', 'user_account', 'request_at', 'pi_time', 'rnd_time', 'admin_time', 'resource', 'hours', 'units', 'amount', 'payment_mode', 'project_no', 'budget_head')
+    list_display = ('name', 'pi_name', 'user_account', 'request_at', 'pi_time', 'rnd_time', 'admin_time', 'resource', 'hours', 'units', 'amount', 'payment_mode', 'project_no', 'budget_head')
     list_filter = ('resource',)
     actions = ["export_as_csv"]
 
