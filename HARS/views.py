@@ -514,6 +514,7 @@ def application(request, account_type_id):
 
         if request.method == "POST":
             r = json.loads(request.body)
+
             rate = Rate.objects.get(account_type=at)
 
             gpu_node_hour = int(r["gpu_node_hour"])
@@ -522,11 +523,22 @@ def application(request, account_type_id):
 
             amount = rate.cpu_per_core_hour * int(r["cpu_core_hour"]) + rate.gpu_per_node_hour * gpu_node_hour
 
-            if (amount == 0):
-                return HttpResponse("Total amount must be more than zero.", status=422)
+            # if (amount == 0):
+            #     return HttpResponse("Total amount must be more than zero.", status=422)
 
             renew_date = HARSDates.objects.get(parameter='renew_date').value
             latest_application = Application.objects.filter(hpc_profile=profile, account_type=at, request_at__gt=renew_date).order_by('request_at').last()
+
+            if "pool_allocation" in r:
+                pool_allocation = True
+
+                if ip.designation != 'F':   # For pool allocation parameters set by faculties will be commonly used by all group members
+                    r["cpu_core_hour"] = 0
+                    r["gpu_node_hour"] = 0
+                    r["payment_mode"] = "Pool"
+
+            else:
+                pool_allocation = False
 
             if "project_no" in r:
                 project_no = r["project_no"]
@@ -540,6 +552,7 @@ def application(request, account_type_id):
 
             if (not latest_application):
                 new_application = Application(
+                    pool_allocation = pool_allocation,
                     cpu_core_hours = int(r["cpu_core_hour"]),
                     gpu_node_hours = int(r["gpu_node_hour"]),
                     amount = amount,
@@ -556,10 +569,19 @@ def application(request, account_type_id):
 
                     # Make it timezone-aware
                     aware_dt = timezone.make_aware(naive_dt, timezone.get_current_timezone())
-                    new_application.pi_time = aware_dt
-
+                    new_application.pi_time = aware_dt       
 
                 new_application.save()
+
+                if ip.designation == "F":
+                    user_account = UserAccount(
+                                application = new_application,
+                                institute_profile = new_application.hpc_profile.institute_profile,
+                                account_type = new_application.account_type,
+                                is_active = True
+                    )
+
+                    user_account.save()
 
             else:
                 return HttpResponse("Application already exists")
@@ -570,6 +592,7 @@ def application(request, account_type_id):
                 "pi_time": new_application.pi_time,
                 "rnd_time": new_application.rnd_time,
                 "admin_time": new_application.admin_time,
+                "pool_allocation": new_application.pool_allocation,
                 "cpu_core_hour":  new_application.cpu_core_hours,
                 "gpu_node_hour":  new_application.gpu_node_hours,
                 "amount": new_application.amount,
@@ -601,6 +624,7 @@ def application(request, account_type_id):
                     "pi_time": latest_application.pi_time,
                     "rnd_time": latest_application.rnd_time,
                     "admin_time": latest_application.admin_time,
+                    "pool_allocation": latest_application.pool_allocation,
                     "cpu_core_hour":  latest_application.cpu_core_hours,
                     "gpu_node_hour":  latest_application.gpu_node_hours,
                     "amount": latest_application.amount,
@@ -756,8 +780,18 @@ def topup(request, resource, account_type_id):
         if request.method == "POST":
             r = json.loads(request.body)
 
+            if "pool_allocation" in r:
+                pool_allocation = True
+
+                if ip.designation != 'F':   # For pool allocation parameters set by faculties will be commonly used by all group members
+                    r["hours"] = 0
+
+            else:
+                pool_allocation = False
+
             topup = Topup(
                 resource=resource.upper(),
+                pool_allocation=pool_allocation,
                 hours=int(r["hours"]),
                 units=int(r["hours"])*data["Rates"]["per_hour"][resource]/data['Rates']["unit_recharge"][resource],
                 amount=int(r["hours"])*data["Rates"]["per_hour"][resource],
@@ -789,6 +823,7 @@ def topup(request, resource, account_type_id):
                     'pi_time': t.pi_time,
                     'rnd_time': t.rnd_time,
                     'admin_time': t.admin_time,
+                    'pool_allocation': t.pool_allocation,
                     'resource': t.resource,
                     'hours': t.hours,
                     'units': t.units,
@@ -809,6 +844,7 @@ def topup(request, resource, account_type_id):
                     'pi_time': t.pi_time,
                     'rnd_time': t.rnd_time,
                     'admin_time': t.admin_time,
+                    'pool_allocation': t.pool_allocation,
                     'resource': t.resource,
                     'hours': t.hours,
                     'units': t.units,
@@ -932,12 +968,23 @@ def group_member_application(request, username, account_type_id):
 
             student_application.save()
 
+            user_account = UserAccount(
+                            application = student_application,
+                            institute_profile = student_application.hpc_profile.institute_profile,
+                            account_type = student_application.account_type,
+                            is_active = True
+                )
+
+            user_account.save()
+ 
+
             data["Application"] = {
                 "application_id": student_application.pk,
                 "request_at": student_application.request_at.date().strftime("%d/%m/%y"),
                 "pi_time": student_application.pi_time,
                 "rnd_time": student_application.rnd_time,
                 "admin_time": student_application.admin_time,
+                "pool_allocation":  student_application.pool_allocation,
                 "cpu_core_hour":  student_application.cpu_core_hours,
                 "gpu_node_hour":  student_application.gpu_node_hours,
                 "duration":  student_application.duration,
@@ -967,6 +1014,7 @@ def group_member_application(request, username, account_type_id):
                 "pi_time": student_application.pi_time,
                 "rnd_time": student_application.rnd_time,
                 "admin_time": student_application.admin_time,
+                "pool_allocation":  student_application.pool_allocation,
                 "cpu_core_hour":  student_application.cpu_core_hours,
                 "gpu_node_hour":  student_application.gpu_node_hours,
                 "duration":  student_application.duration,
@@ -1056,9 +1104,17 @@ def group_member_topup(request, username, resource, account_type_id):
         else:
             budget_head = None
 
+        if "payment_mode" in r and r["payment_mode"] == "Pool":
+            hours = 0
+            amount = 0
+
+        else:
+            hours = int(r["hours"])
+
+
         student_topup.pi_time        = aware_dt
-        student_topup.hours          = int(r["hours"])
-        student_topup.units          = amount/data['Rates']['unit_recharge'][resource]
+        student_topup.hours          = hours
+        # student_topup.units          = amount/data['Rates']['unit_recharge'][resource]
         student_topup.amount         = amount
         student_topup.payment_mode   = r["payment_mode"]
         student_topup.project_no     = project_no
@@ -1082,6 +1138,7 @@ def group_member_topup(request, username, resource, account_type_id):
             "pi_time": student_topup.pi_time,
             "rnd_time": student_topup.rnd_time,
             "admin_time": student_topup.admin_time,
+            "pool_allocation": student_topup.pool_allocation,
             "resource": student_topup.resource,
             "hours": student_topup.hours,
             "units": student_topup.units,
@@ -1118,6 +1175,7 @@ def group_member_topup(request, username, resource, account_type_id):
                 "pi_time": student_topup.pi_time,
                 "rnd_time": student_topup.rnd_time,
                 "admin_time": student_topup.admin_time,
+                "pool_allocation": student_topup.pool_allocation,
                 "resource": student_topup.resource,
                 "hours": student_topup.hours,
                 "units": student_topup.units,

@@ -113,9 +113,10 @@ async function init_component(c) {
                     
                     execute_queue(component_name);
                 }
-            }).catch(() => {
+            }).catch((err) => {
                 let component_name = c.getAttribute('data-component');
                 console.error(component_name + ": Not JSON data")
+                console.error(err)
                 // location.reload()
             });
         }

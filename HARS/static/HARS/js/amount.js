@@ -104,7 +104,7 @@ function set_payment_mode(select) {
         budget_head.removeAttribute('disabled')
     }
 
-    else if (select.value == "Bank") {
+    else if (select.value == "Bank" || select.value == "Pool") {
         project_no.removeAttribute('required')
         budget_head.removeAttribute('required')
 

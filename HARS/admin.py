@@ -116,8 +116,8 @@ class QuarterlyRateAdmin(admin.ModelAdmin, ExportCsvMixin):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin, UserAccountMixin):
-    list_display = ('pk', 'user', 'request_at', 'pi_time', 'type_name', 'cpu_core_hours', 'gpu_node_hours', 'amount', 'payment_mode', 'email_sent', 'notes')
-    list_filter = ('account_type',)
+    list_display = ('pk', 'user', 'request_at', 'pi_time', 'type_name', 'pool_allocation', 'cpu_core_hours', 'gpu_node_hours', 'amount', 'payment_mode', 'email_sent', 'notes')
+    list_filter = ('account_type', 'pool_allocation')
     # search_fields = ['user']
     actions = ["create_user_acount", "export_as_csv"]
 
@@ -127,7 +127,7 @@ class UserAccountAdmin(admin.ModelAdmin, ExportCsvMixin):
 
 @admin.register(Topup)
 class TopupAdmin(admin.ModelAdmin, ExportCsvMixin):
-    list_display = ('name', 'pi_name', 'user_account', 'request_at', 'pi_time', 'rnd_time', 'admin_time', 'resource', 'hours', 'units', 'amount', 'payment_mode', 'project_no', 'budget_head')
+    list_display = ('name', 'pi_name', 'user_account', 'request_at', 'pi_time', 'rnd_time', 'admin_time', 'pool_allocation', 'resource', 'hours', 'units', 'amount', 'payment_mode', 'project_no', 'budget_head')
     list_filter = ('resource',)
     actions = ["export_as_csv"]
 

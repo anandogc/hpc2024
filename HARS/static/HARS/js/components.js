@@ -361,11 +361,11 @@ const components = {
             if (data.admin_time) {
                 return `Active`
             }
-            else if (data.rnd_time) {
-                return `Admin Approval`
-            }
+            // else if (data.rnd_time) {
+            //     return `Admin Approval`
+            // }
             else if (data.pi_time) {
-                return `RnD Approval`
+                return `Admin Approval`
             }
             else {
                 return `PI Approval`
@@ -383,6 +383,13 @@ const components = {
                                 <tr class="striped--light-gray">
                                     <td class="pv2 w-30 ph3">Application Id</td>
                                     <td class="pv2 w-20 ph3">`+self.data["Application"]["application_id"]+`</td>
+
+                                    <td class="pv2 w-30 ph3 bl">Request Date</td>
+                                    <td class="pv2 w-20 ph3">`+self.data["Application"]["request_at"]+`</td>
+                                </tr>
+                                <tr class="striped--light-gray">
+                                    <td class="pv2 w-30 ph3">Pool Allocation</td>
+                                    <td class="pv2 w-20 ph3">`+(self.data["Application"]["pool_allocation"] ? '✔' : '✖')+`</td>
 
                                     <td class="pv2 w-30 ph3 bl">CPU core hours</td>
                                     <td class="pv2 w-20 ph3">`+Number(self.data["Application"]["cpu_core_hour"]).toLocaleString("en-IN")+`</td>
@@ -460,11 +467,11 @@ const components = {
             if (data.admin_time) {
                 return `Active`
             }
-            else if (data.rnd_time) {
-                return `Admin Approval`
-            }
+            // else if (data.pi_time) {
+            //     return `Admin Approval`
+            // }
             else {
-                return `RnD Approval`
+                return `Admin Approval`
             }
         },
         application: function(self) {
@@ -571,11 +578,11 @@ const components = {
                 if (data.admin_time) {
                     return `Active`
                 }
-                else if (data.rnd_time) {
-                    return `Admin Approval`
-                }
+                // else if (data.rnd_time) {
+                //     return `Admin Approval`
+                // }
                 else if (data.pi_time) {
-                    return `RnD Approval`
+                    return `Admin Approval`
                 }
                 else {
                     return `PI Approval`
@@ -585,11 +592,11 @@ const components = {
                 if (data.admin_time) {
                     return `Active`
                 }
-                else if (data.rnd_time) {
-                    return `Admin Approval`
-                }
+                // else if (data.rnd_time) {
+                //     return `Admin Approval`
+                // }
                 else {
-                    return `RnD Approval`
+                    return `Admin Approval`
                 }
             }
         },
@@ -655,11 +662,11 @@ const components = {
                 if (data.admin_time) {
                     return `Active`
                 }
-                else if (data.rnd_time) {
-                    return `Admin Approval`
-                }
+                // else if (data.rnd_time) {
+                //     return `Admin Approval`
+                // }
                 else if (data.pi_time) {
-                    return `RnD Approval`
+                    return `Admin Approval`
                 }
                 else {
                     return `PI Approval`
@@ -669,11 +676,8 @@ const components = {
                 if (data.admin_time) {
                     return `Active`
                 }
-                else if (data.rnd_time) {
-                    return `Admin Approval`
-                }
                 else {
-                    return `RnD Approval`
+                    return `Admin Approval`
                 }
             }
         },
@@ -739,11 +743,11 @@ const components = {
             if (data.admin_time) {
                 return `Active`
             }
-            else if (data.rnd_time) {
-                return `Admin Approval`
-            }
+            // else if (data.rnd_time) {
+            //     return `Admin Approval`
+            // }
             else if (data.pi_time) {
-                return `RnD Approval`
+                return `Admin Approval`
             }
             else {
                 return `PI Approval`
@@ -763,6 +767,13 @@ const components = {
                                 <tr class="striped--light-gray">
                                     <td class="pv2 w-30 ph3">Application Id</td>
                                     <td class="pv2 w-20 ph3">`+self.data["Application"]["application_id"]+`</td>
+
+                                    <td class="pv2 w-30 ph3 bl">Request Date</td>
+                                    <td class="pv2 w-20 ph3">`+self.data["Application"]["request_at"]+`</td>
+                                </tr>
+                                <tr class="striped--light-gray">
+                                    <td class="pv2 w-30 ph3">Pool Allocation</td>
+                                    <td class="pv2 w-20 ph3">`+(self.data["Application"]["pool_allocation"] ? '✔' : '✖')+`</td>
 
                                     <td class="pv2 w-30 ph3 bl">CPU core hours</td>
                                     <td class="pv2 w-20 ph3">`+Number(self.data["Application"]["cpu_core_hour"]).toLocaleString("en-IN")+`</td>
@@ -795,6 +806,13 @@ const components = {
                             <tr class="striped--light-gray">
                                 <td class="pv2 w-30 ph3">Application Id</td>
                                 <td class="pv2 w-20 ph3"></td>
+
+                                <td class="pv2 w-30 ph3 bl">Request Date</td>
+                                <td class="pv2 w-20 ph3"></td>
+                            </tr>
+                            <tr class="striped--light-gray">
+                                <td class="pv2 w-30 ph3">Pool Allocation</td>
+                                <td class="pv2 w-20 ph3"><input type="checkbox" name="pool_allocation"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">CPU core hours</td>
                                 <td class="pv2 w-20 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="cpu_core_hour" type="number" min="0" step="`+self.data['cpu_step']+`" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`"/></td>
@@ -844,11 +862,11 @@ const components = {
             if (data.admin_time) {
                 return `Active`
             }
-            else if (data.rnd_time) {
-                return `Admin Approval`
-            }
+            // else if (data.rnd_time) {
+            //     return `Admin Approval`
+            // }
             else {
-                return `RnD Approval`
+                return `Admin Approval`
             }
         },
         application: function(self) {
@@ -863,6 +881,13 @@ const components = {
                                 <tr class="striped--light-gray">
                                     <td class="pv2 w-30 ph3">Application Id</td>
                                     <td class="pv2 w-20 ph3">`+self.data["Application"]["application_id"]+`</td>
+
+                                    <td class="pv2 w-30 ph3 bl">Request Date</td>
+                                    <td class="pv2 w-20 ph3">`+self.data["Application"]["request_at"]+`</td>
+                                </tr>
+                                <tr class="striped--light-gray">
+                                    <td class="pv2 w-30 ph3">Pool Allocation</td>
+                                    <td class="pv2 w-20 ph3">`+(self.data["Application"]["pool_allocation"] ? '✔' : '✖')+`</td>
 
                                     <td class="pv2 ph3 bl">Payment Mode</td>
                                     <td class="pv2 ph3">`+self.data["Application"]["payment_mode"]+`</td> 
@@ -902,6 +927,13 @@ const components = {
                             <tr class="striped--light-gray">
                                 <td class="pv2 w-30 ph3">Application Id</td>
                                 <td class="pv2 w-20 ph3"></td>
+
+                                <td class="pv2 w-30 ph3 bl">Request Date</td>
+                                <td class="pv2 w-20 ph3"></td>
+                            </tr>
+                            <tr class="striped--light-gray">
+                                <td class="pv2 w-30 ph3">Pool Allocation</td>
+                                <td class="pv2 w-20 ph3"><input type="checkbox" name="pool_allocation"/></td>
 
                                 <td class="pv2 ph3 bl">Payment Mode</td>
                                 <td class="pv2 ph3">
@@ -960,11 +992,11 @@ const components = {
                 if (data.admin_time) {
                     return `Active`
                 }
-                else if (data.rnd_time) {
-                    return `Admin Approval`
-                }
+                // else if (data.rnd_time) {
+                //     return `Admin Approval`
+                // }
                 else if (data.pi_time) {
-                    return `RnD Approval`
+                    return `Admin Approval`
                 }
                 else {
                     return `PI Approval`
@@ -974,11 +1006,11 @@ const components = {
                 if (data.admin_time) {
                     return `Active`
                 }
-                else if (data.rnd_time) {
-                    return `Admin Approval`
-                }
+                // else if (data.rnd_time) {
+                //     return `Admin Approval`
+                // }
                 else {
-                    return `RnD Approval`
+                    return `Admin Approval`
                 }
             }
         },
@@ -989,6 +1021,7 @@ const components = {
                 list+=`
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3">`+topup["request_at"]+`</td>
+                        <td class="pv2 ph3">`+(topup["pool_allocation"] ? '✔' : '✖')+`</td>
                         <td class="pv2 ph4 tr">`+Number(topup["hours"]).toLocaleString('en-In')+`</td>
                         <td class="pv2 ph3 tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</td>
                         <td class="pv2 ph3">`+topup["payment_mode"]+`</td>
@@ -1013,13 +1046,15 @@ const components = {
                 <tbody>
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3 w-20">Request Date</td>
-                        <td class="pv2 ph3 w-20 tr">Core hours</td>
+                        <td class="pv2 ph3 w-10">Pool Allocation</td>
+                        <td class="pv2 w-20 ph3 tr">`+self.data["unit"][self.data["resource"]]+`</td>
                         <td class="pv2 ph3 w-20 tr">Amount</td>
-                        <td class="pv2 ph3 w-20">Payment Source</td>
+                        <td class="pv2 ph3 w-10">Payment Mode</td>
                         <td class="pv2 ph3 w-20">Stage</td>
                     </tr>
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3">`+self.data["date"]+`</td>
+                        <td class="pv2 ph3"><input type="checkbox" name="pool_allocation"/></td>
                         <td class="pv2 ph3"><input oninput="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" name="hours" type="number" min="0" step="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" required value="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" /></td>
                         <td class="pv2 ph3 tr">₹`+Number(self.data["Rates"]["unit_recharge"][self.data["resource"]] * self.data["Rates"]["per_hour"][self.data["resource"]]).toLocaleString("en-IN")+`</td>
                         <td class="pv2 ph3">
@@ -1045,11 +1080,11 @@ const components = {
                 if (data.admin_time) {
                     return `Active`
                 }
-                else if (data.rnd_time) {
-                    return `Admin Approval`
-                }
+                // else if (data.rnd_time) {
+                //     return `Admin Approval`
+                // }
                 else if (data.pi_time) {
-                    return `RnD Approval`
+                    return `Admin Approval`
                 }
                 else {
                     return `PI Approval`
@@ -1059,11 +1094,11 @@ const components = {
                 if (data.admin_time) {
                     return `Active`
                 }
-                else if (data.rnd_time) {
-                    return `Admin Approval`
-                }
+                // else if (data.rnd_time) {
+                //     return `Admin Approval`
+                // }
                 else {
-                    return `RnD Approval`
+                    return `Admin Approval`
                 }
             }
         },
@@ -1135,11 +1170,11 @@ const components = {
             if (data.admin_time) {
                 return `Active`
             }
-            else if (data.rnd_time) {
-                return `Admin Approval`
-            }
+            // else if (data.rnd_time) {
+            //     return `Admin Approval`
+            // }
             else if (data.pi_time) {
-                return `RnD Approval`
+                return `Admin Approval`
             }
             else {
                 return `PI Approval`
@@ -1147,9 +1182,9 @@ const components = {
         },
         duration: function(id, rate) {
             return `<select name="duration" onchange="` + id + `_amount.innerText='₹' + (this.value-0)*`+rate+`" class="bg-white-40 ba br2 w-90">
-                    <option value='1'> 1 Quarter (Aug 2024 - Oct 2024) </option>
-                    <!-- <option value='2'> 2Q (Till 31<sup>st</sup> Dec 2023)</option>
-                    <option value='3'> 3Q (Till 31<sup>st</sup> March 2024)</option>
+                    <option value='1'> 1 Quarter  (Nov 2024 - Jan 2025) </option>
+                    <option value='2'> 2 Quarters (Nov 2024 - April 2025)</option>
+                    <!-- <option value='3'> 3Q (Till 31<sup>st</sup> March 2024)</option>
                     <option value='4'> 4Q (Till 30<sup>st</sup> June 2024)</option> -->
                 </select>`
         },
@@ -1254,11 +1289,11 @@ const components = {
             if (data.admin_time) {
                 return `Active`
             }
-            else if (data.rnd_time) {
-                return `Admin Approval`
-            }
+            // else if (data.rnd_time) {
+            //     return `Admin Approval`
+            // }
             else if (data.pi_time) {
-                return `RnD Approval`
+                return `Admin Approval`
             }
             else {
                 return `<!--<input type="checkbox" name="delete_request"/> Delete Request<br/>-->
@@ -1560,15 +1595,15 @@ const components = {
             if (data.admin_time) {
                 return `Active`
             }
-            else if (data.rnd_time) {
-                return `Admin Approval`
-            }
+            // else if (data.rnd_time) {
+            //     return `Admin Approval`
+            // }
             else if (data.pi_time) {
-                return `RnD Approval`
+                return `Admin Approval`
             }
             else {
                 return `<!--<input type="checkbox" name="delete_request"/> Delete Request<br/>-->
-                <input type="submit" value="Save"/>
+                <input type="submit" value="Recommend"/>
                 `
             }
         },
@@ -1582,6 +1617,7 @@ const components = {
                     <select name="payment_mode" onchange="set_payment_mode(this)">
                         <option `+( (mode == 'Project') ? 'selected' : '')+`>Project</option>
                         <option `+( (mode == 'Bank') ? 'selected' : '' )+`>Bank</option>
+                        <option `+( (mode == 'Pool') ? 'selected' : '' )+`>Pool</option>
                     </select>`
            }
 
@@ -1629,6 +1665,11 @@ const components = {
             else {
             let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled';
 
+                payment_mode = self.data["Application"]["payment_mode"]
+
+                if (self.data["Application"]["pool_allocation"] === true)
+                    payment_mode = "Pool"
+
                 return `
                 <form class="ba ma3 br2 br--bottom" data-source="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-action="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-component="Application-Group-Student">
                     <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
@@ -1640,7 +1681,7 @@ const components = {
                                 <td class="pv2 w-20 ph3">`+self.data["Application"]["application_id"]+`</td>
 
                                 <td class="pv2 ph3 bl">Payment Mode</td>
-                                <td class="pv2 ph3">`+self.payment_mode(self.data["account_type"], self.data["Application"]["payment_mode"])+`</td>
+                                <td class="pv2 ph3">`+self.payment_mode(self.data["account_type"], payment_mode)+`</td>
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 w-30 ph3">CPU core hours</td>
@@ -1692,15 +1733,15 @@ const components = {
             if (data.admin_time) {
                 return `Active`
             }
-            else if (data.rnd_time) {
-                return `Admin Approval`
-            }
+            // else if (data.rnd_time) {
+            //     return `Admin Approval`
+            // }
             else if (data.pi_time) {
-                return `RnD Approval`
+                return `Admin Approval`
             }
             else {
                 return `<!--<input type="checkbox" name="delete_request"/> Delete Request<br/>-->
-                <input type="submit" value="Save"/>
+                <input type="submit" value="Recommend"/>
                 `
             }
         },
@@ -1769,7 +1810,7 @@ const components = {
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 w-30 ph3">Quarters</td>
-                                <td class="pv2 w-20 ph3"><input oninput="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="duration" type="number" min="1" max="1" setp="1" required value="`+self.data["Application"]["duration"]+`"/></td>
+                                <td class="pv2 w-20 ph3"><input oninput="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="duration" type="number" min="1" max="2" step="1" required value="`+self.data["Application"]["duration"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
                                 <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["project_no"]+`" list="project_list_for_group" ` +input_project+ `/></td>                                
@@ -1816,11 +1857,11 @@ const components = {
             if (data.admin_time) {
                 return `Active`
             }
-            else if (data.rnd_time) {
-                return `Admin Approval`
-            }
+            // else if (data.pi_time) {
+            //     return `Admin Approval`
+            // }
             else {
-                return `RnD Approval`
+                return `Admin Approval`
             }
         },
         project_details: function(project_name, budget_head) {
@@ -1841,14 +1882,22 @@ const components = {
                     <select name="payment_mode" onchange="set_payment_mode(this)">
                         <option `+( (mode == 'Project') ? 'selected' : '')+`>Project</option>
                         <option `+( (mode == 'Bank') ? 'selected' : '' )+`>Bank</option>
+                        <option `+( (mode == 'Pool') ? 'selected' : '' )+`>Pool</option>
                     </select>`
            }
         },
         describe: function(account_type, data) {
+
             list = ``
 
             for (let topup of data) {
-                let input_project = (topup["payment_mode"] == 'Project') ? 'required' : 'disabled'
+                payment_mode = topup["payment_mode"]
+
+                if (topup["pool_allocation"] === true)
+                    payment_mode = "Pool"
+
+                let input_project = (payment_mode == 'Project') ? 'required' : 'disabled'
+
 
                 if (!!topup.pi_time) {
                     list+=`
@@ -1856,7 +1905,7 @@ const components = {
                             <div class="pv2 ph3 w-10 dib tc">`+topup["request_at"]+`</div>
                             <div class="pv2 ph4 w-20 dib tr">`+Number(topup["hours"]).toLocaleString('en-In')+`</div>
                             <div class="pv2 ph3 w-10 dib tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</div>
-                            <div class="pv2 ph3 w-10 dib tc">`+topup["payment_mode"]+`</div>
+                            <div class="pv2 ph3 w-10 dib tc">`+payment_mode+`</div>
                             <div class="pv2 ph3 w-20 dib tl">`+self.project_details(topup["project_no"], topup["budget_head"])+`</div>
                             <div class="pv2 ph3 w-20 dib tr">`+self.stage(topup)+`</div>
                         </div>`
@@ -1868,14 +1917,14 @@ const components = {
                             <div class="pv2 ph3 w-10 dib tc">`+topup["request_at"]+`</div>
                             <div class="pv2 ph3 w-20 dib tr"><input name="hours" oninput="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-80 bg-white-40 ba br2 tr" type="number" min="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" step="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" required value="`+topup["hours"]+`" /></div>
                             <div class="pv2 ph3 w-10 dib tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</div>
-                            <div class="pv2 ph3 w-10 dib tc">`+self.payment_mode(account_type, topup["payment_mode"])+`</div>
+                            <div class="pv2 ph3 w-10 dib tc">`+self.payment_mode(account_type, payment_mode)+`</div>
                             <div class="pv2 ph3 w-20 dib tc">
                                 <input name="project_no" class="bg-white-40 ba br2 w-90" type="text" placeholder="Project no." list="project_list_for_group" `+input_project+`/>
                                 <input name="budget_head" class="bg-white-40 ba br2 w-90" type="text" placeholder="Budget head" list="budget_head"/>
                             </div>
                             <div class="pv2 ph3 w-20 dib tc">
                                 <!--<input type="checkbox" name="delete_request"/> Delete Request<br/>-->
-                                <input class="bg-white-40 ba br2" type="submit" value="Save"/>
+                                <input class="bg-white-40 ba br2" type="submit" value="Recommend"/>
                             </div>
                         </form>`
                 }
@@ -1900,7 +1949,7 @@ const components = {
                                 <div class="pv2 w-10 ph3 dib tc">Request Date</div>
                                 <div class="pv2 w-20 ph3 dib tr">`+self.data["unit"][self.data["resource"]]+`</div>
                                 <div class="pv2 w-10 ph3 dib tr">Amount</div>
-                                <div class="pv2 w-10 ph3 dib tc">Payment Source</div>
+                                <div class="pv2 w-10 ph3 dib tc">Payment Mode</div>
                                 <div class="pv2 w-20 ph3 dib tl">Project Info</div>
                                 <div class="pv2 w-20 ph3 dib tc">Stage</div>
                             </div>

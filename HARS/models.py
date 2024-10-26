@@ -123,6 +123,7 @@ class Application(models.Model):
     rnd_time = models.DateTimeField(null=True, blank=True)
     admin_time = models.DateTimeField(null=True, blank=True)
 
+    pool_allocation = models.BooleanField(default=False)
     cpu_core_hours = models.IntegerField(default=20000)
     gpu_node_hours = models.IntegerField(default=0)
     duration = models.IntegerField(default=0)
@@ -132,6 +133,7 @@ class Application(models.Model):
     class PaymentMode(models.TextChoices):
         BANK = 'Bank', 'Bank'
         PROJECT = 'Project', 'Project' 
+        POOL = 'Pool', 'Pool' 
 
     payment_mode = models.CharField(max_length=16, choices=PaymentMode.choices, default=PaymentMode.PROJECT)
     project_no = models.CharField(max_length=32, null=True, blank=True)
@@ -211,6 +213,7 @@ class Topup(models.Model):
         CPU = 'CPU', 'CPU'
         GPU = 'GPU', 'GPU'
 
+    pool_allocation = models.BooleanField(default=False)
     resource = models.CharField(null=True, max_length=16, choices=Resource.choices, default=Resource.CPU)
     hours = models.IntegerField(default=0)
     units = models.IntegerField(default=0)
@@ -224,6 +227,8 @@ class Topup(models.Model):
 
     project_no = models.CharField(max_length=32, null=True, blank=True)
     budget_head = models.CharField(max_length=32, null=True, blank=True)
+
+    email_sent = models.BooleanField(default=False)
 
     def __str__(self):
         print(self.user_account.institute_profile.name)
