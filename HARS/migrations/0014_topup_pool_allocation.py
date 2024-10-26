@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('HARS', '0015_remove_topup_account_type_remove_topup_hpc_profile_and_more'),
+        ('HARS', '0013_application_pool_allocation_topup_email_sent_and_more'),
     ]
 
     operations = [
