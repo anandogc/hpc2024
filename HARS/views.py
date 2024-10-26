@@ -483,22 +483,10 @@ def application(request, account_type_id):
             data["cpu_step"] = 20000
             data["gpu_step"] = 300
 
-            core_hour = 20000
-
-            try:
-                core_hour = CoreHour.objects.get(username=request.user.username).core_hour
-                core_hour = round(int(core_hour) / 20000) * 20000
-
-                if core_hour < 20000:
-                    core_hour = 20000
-            except:
-                cour_hour = at.default_cpu_core_hours
-
-
             data['AccountType'] = {
                 "name": at.name,
                 "admin": at.admin,
-                "default_cpu_core_hours": core_hour,
+                "default_cpu_core_hours": at.default_cpu_core_hours,
                 "default_gpu_node_hours": 0 # at.default_gpu_node_hours
             }
 
