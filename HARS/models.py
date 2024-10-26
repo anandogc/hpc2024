@@ -189,7 +189,7 @@ class UserAccount(models.Model):
     is_active = models.BooleanField()
 
     def __str__(self):
-        return self.account_type.name
+        return f"{self.account_type.name}"  # - {self.inseitute_profile.name} {self.institute_profile.user.username}"
 
     class Meta:
         unique_together = ('institute_profile', 'account_type',)
