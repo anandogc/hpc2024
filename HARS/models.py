@@ -213,7 +213,6 @@ class Topup(models.Model):
         CPU = 'CPU', 'CPU'
         GPU = 'GPU', 'GPU'
 
-    pool_allocation = models.BooleanField(default=False)
     resource = models.CharField(null=True, max_length=16, choices=Resource.choices, default=Resource.CPU)
     hours = models.IntegerField(default=0)
     units = models.IntegerField(default=0)

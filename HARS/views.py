@@ -461,7 +461,8 @@ def charges(request, account_type_id):
 @login_required
 def application(request, account_type_id):
 
-    if account_type_id != "HPC2013-QA":
+    if account_type_id != "HPC2013-QA":  # ParamSanganak
+
         data = {"account_type": account_type_id}
 
         ip = InstituteProfile.objects.get(user=request.user)
@@ -517,16 +518,27 @@ def application(request, account_type_id):
             renew_date = HARSDates.objects.get(parameter='renew_date').value
             latest_application = Application.objects.filter(hpc_profile=profile, account_type=at, request_at__gt=renew_date).order_by('request_at').last()
 
+
             if "pool_allocation" in r:
                 pool_allocation = True
 
-                if ip.designation != 'F':   # For pool allocation parameters set by faculties will be commonly used by all group members
+                if ip.designation != "F":
                     r["cpu_core_hour"] = 0
                     r["gpu_node_hour"] = 0
-                    r["payment_mode"] = "Pool"
+                    r["amount"] = 0
 
             else:
                 pool_allocation = False
+
+
+            if "payment_mode" in r:
+                payment_mode = r['payment_mode']
+            elif pool_allocation:
+                payment_mode = "Pool"
+            else:
+                payment_mode = "Project"
+
+
 
             if "project_no" in r:
                 project_no = r["project_no"]
@@ -544,7 +556,7 @@ def application(request, account_type_id):
                     cpu_core_hours = int(r["cpu_core_hour"]),
                     gpu_node_hours = int(r["gpu_node_hour"]),
                     amount = amount,
-                    payment_mode = r["payment_mode"],
+                    payment_mode = payment_mode,
                     project_no = project_no,
                     budget_head = budget_head,
                     hpc_profile = profile,
@@ -768,27 +780,18 @@ def topup(request, resource, account_type_id):
         if request.method == "POST":
             r = json.loads(request.body)
 
-            if "pool_allocation" in r:
-                pool_allocation = True
-
-                if ip.designation != 'F':   # For pool allocation parameters set by faculties will be commonly used by all group members
-                    r["hours"] = 0
-
-            else:
-                pool_allocation = False
-
             topup = Topup(
                 resource=resource.upper(),
-                pool_allocation=pool_allocation,
                 hours=int(r["hours"]),
                 units=int(r["hours"])*data["Rates"]["per_hour"][resource]/data['Rates']["unit_recharge"][resource],
                 amount=int(r["hours"])*data["Rates"]["per_hour"][resource],
-                payment_mode=r["payment_mode"],
                 user_account=user_account
             )
 
 
             if ip.designation == "F":
+                topup.payment_mode=r["payment_mode"]
+                
                 # Naive datetime
                 naive_dt = datetime.now()
 
@@ -811,7 +814,6 @@ def topup(request, resource, account_type_id):
                     'pi_time': t.pi_time,
                     'rnd_time': t.rnd_time,
                     'admin_time': t.admin_time,
-                    'pool_allocation': t.pool_allocation,
                     'resource': t.resource,
                     'hours': t.hours,
                     'units': t.units,
@@ -832,7 +834,6 @@ def topup(request, resource, account_type_id):
                     'pi_time': t.pi_time,
                     'rnd_time': t.rnd_time,
                     'admin_time': t.admin_time,
-                    'pool_allocation': t.pool_allocation,
                     'resource': t.resource,
                     'hours': t.hours,
                     'units': t.units,
@@ -932,10 +933,15 @@ def group_member_application(request, username, account_type_id):
             else:
                 budget_head = None
 
+            if "pool_allocation" in r:
+                payment_mode = "Pool"
+            else:
+                payment_mode = r["payment_mode"]
+
 
 
             student_application.pi_time        = aware_dt
-            student_application.payment_mode   = r["payment_mode"]
+            student_application.payment_mode   = payment_mode
             student_application.project_no     = project_no
             student_application.budget_head    = budget_head
 
@@ -1126,7 +1132,6 @@ def group_member_topup(request, username, resource, account_type_id):
             "pi_time": student_topup.pi_time,
             "rnd_time": student_topup.rnd_time,
             "admin_time": student_topup.admin_time,
-            "pool_allocation": student_topup.pool_allocation,
             "resource": student_topup.resource,
             "hours": student_topup.hours,
             "units": student_topup.units,
@@ -1163,7 +1168,6 @@ def group_member_topup(request, username, resource, account_type_id):
                 "pi_time": student_topup.pi_time,
                 "rnd_time": student_topup.rnd_time,
                 "admin_time": student_topup.admin_time,
-                "pool_allocation": student_topup.pool_allocation,
                 "resource": student_topup.resource,
                 "hours": student_topup.hours,
                 "units": student_topup.units,

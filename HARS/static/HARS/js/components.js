@@ -330,10 +330,10 @@ const components = {
                             <td class="pv2 ph3">GPU node hours:</td>
                             <td class="pv2 ph3">₹`+self.data["gpu_per_node_hour"]+` per node hour</td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td class="pv2 ph3">Last year's CPU core hours:</td>
                             <td class="pv2 ph3">`+Number(self.data["last_core_hour"]).toLocaleString('en-IN')+`</td>
-                        </tr>
+                        </tr> -->
 
                     </tbody>
                 </table>`
@@ -772,15 +772,8 @@ const components = {
                                     <td class="pv2 w-20 ph3">`+self.data["Application"]["request_at"]+`</td>
                                 </tr>
                                 <tr class="striped--light-gray">
-                                    <td class="pv2 w-30 ph3">Pool Allocation</td>
-                                    <td class="pv2 w-20 ph3">`+(self.data["Application"]["pool_allocation"] ? '✔' : '✖')+`</td>
-
-                                    <td class="pv2 w-30 ph3 bl">CPU core hours</td>
+                                    <td class="pv2 w-30 ph3">CPU core hours</td>
                                     <td class="pv2 w-20 ph3">`+Number(self.data["Application"]["cpu_core_hour"]).toLocaleString("en-IN")+`</td>
-                                </tr>
-                                <tr class="striped--light-gray">
-                                    <td class="pv2 ph3">Payment Mode</td>
-                                    <td class="pv2 ph3">`+self.data["Application"]["payment_mode"]+`</td>
 
                                     <td class="pv2 ph3 bl">GPU node hours</td>
                                     <td class="pv2 ph3">`+Number(self.data["Application"]["gpu_node_hour"]).toLocaleString("en-IN")+`</td>
@@ -811,23 +804,11 @@ const components = {
                                 <td class="pv2 w-20 ph3"></td>
                             </tr>
                             <tr class="striped--light-gray">
-                                <td class="pv2 w-30 ph3">Pool Allocation</td>
-                                <td class="pv2 w-20 ph3"><input type="checkbox" name="pool_allocation"/></td>
-
-                                <td class="pv2 w-30 ph3 bl">CPU core hours</td>
-                                <td class="pv2 w-20 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="cpu_core_hour" type="number" min="0" step="`+self.data['cpu_step']+`" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`"/></td>
-                            </tr>
-                            <tr class="striped--light-gray">
-                                <td class="pv2 ph3">Payment Mode</td>
-                                <td class="pv2 ph3">
-                                    <select name="payment_mode" class="bg-white-40 ba br2">
-                                        <option>Project</option>
-                                        <option>Bank</option>
-                                    </select>
-                                </td>
+                                <td class="pv2 w-30 ph3">CPU core hours</td>
+                                <td class="pv2 w-20 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="cpu_core_hour" type="number" min="0" step="20000" value="0"/></td>
 
                                 <td class="pv2 ph3 bl">GPU node hours</td>
-                                <td class="pv2 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="gpu_node_hour" type="number" min="0" step="`+self.data['gpu_step']+`"" value="`+self.data["AccountType"]["default_gpu_node_hours"]+`"/></td>
+                                <td class="pv2 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="gpu_node_hour" type="number" min="0" step="600" value="0"/></td>
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Stage</td>
@@ -945,21 +926,21 @@ const components = {
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 w-30 ph3">CPU core hours</td>
-                                <td class="pv2 w-20 ph3"><input class="bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" type="number" name="cpu_core_hour" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`" min="0" step="`+self.data["cpu_step"]+`"/></td>
+                                <td class="pv2 w-20 ph3"><input class="bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" type="number" name="cpu_core_hour" value="20000" min="20000" step="20000"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
                                 <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" list="project_list" required/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">GPU node hours</td>
-                                <td class="pv2 ph3"><input class="bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" type="number" name="gpu_node_hour" value="`+self.data["AccountType"]["default_gpu_node_hours"]+`" min="0" step="`+self.data["gpu_step"]+`"/></td>
+                                <td class="pv2 ph3"><input class="bg-white-40 ba br2" oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" type="number" name="gpu_node_hour" value="0" min="0" step="600"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
                                 <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" list="budget_head"/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
-                                <td class="pv2 ph3 amount">₹`+Number(self.data['Rates']['cpu_per_core_hour']*self.data["AccountType"]["default_cpu_core_hours"] + self.data['Rates']['gpu_per_node_hour']*(self.data["AccountType"]["default_gpu_node_hours"] > -1 ? self.data["AccountType"]["default_gpu_node_hours"] : 0)).toLocaleString('en-IN')+`</td>
+                                <td class="pv2 ph3 amount">₹300</td>
 
                                 <td class="pv2 ph3 bl">Stage</td>
                                 <td class="pv2 ph3"><input class="bg-white-40 ba br2" type="submit" value="Apply"/></td>
@@ -1021,10 +1002,8 @@ const components = {
                 list+=`
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3">`+topup["request_at"]+`</td>
-                        <td class="pv2 ph3">`+(topup["pool_allocation"] ? '✔' : '✖')+`</td>
                         <td class="pv2 ph4 tr">`+Number(topup["hours"]).toLocaleString('en-In')+`</td>
                         <td class="pv2 ph3 tr">₹`+Number(topup["amount"]).toLocaleString('en-In')+`</td>
-                        <td class="pv2 ph3">`+topup["payment_mode"]+`</td>
                         <td class="pv2 ph3">`+self.stage(topup)+`</td>
                     </tr>`
             }
@@ -1046,23 +1025,14 @@ const components = {
                 <tbody>
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3 w-20">Request Date</td>
-                        <td class="pv2 ph3 w-10">Pool Allocation</td>
                         <td class="pv2 w-20 ph3 tr">`+self.data["unit"][self.data["resource"]]+`</td>
                         <td class="pv2 ph3 w-20 tr">Amount</td>
-                        <td class="pv2 ph3 w-10">Payment Mode</td>
                         <td class="pv2 ph3 w-20">Stage</td>
                     </tr>
                     <tr class="striped--light-gray">
                         <td class="pv2 ph3">`+self.data["date"]+`</td>
-                        <td class="pv2 ph3"><input type="checkbox" name="pool_allocation"/></td>
                         <td class="pv2 ph3"><input oninput="update_amount_in_next_cell(this, `+self.data["Rates"]["per_hour"][self.data["resource"]]+`)" class="w-100 bg-white-40 ba br2 tr" name="hours" type="number" min="0" step="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" required value="`+self.data["Rates"]["unit_recharge"][self.data["resource"]]+`" /></td>
                         <td class="pv2 ph3 tr">₹`+Number(self.data["Rates"]["unit_recharge"][self.data["resource"]] * self.data["Rates"]["per_hour"][self.data["resource"]]).toLocaleString("en-IN")+`</td>
-                        <td class="pv2 ph3">
-                            <select class="bg-white-40 ba br2" name="payment_mode">
-                                <option>Project</option>
-                                <option>Bank</option>
-                            </select>
-                        </td>
                         <td class="pv2 ph3">
                                 <input type="submit" value="Apply"/>
                         </td>
@@ -1367,8 +1337,15 @@ const components = {
                                 <td class="pv2 ph3">`+self.payment_mode()+`</td>
                             </tr>
                             <tr class="striped--light-gray">
+
                                 <td class="pv2 w-30 ph3">Quarters</td>
-                                <td class="pv2 w-20 ph3"><input oninput="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="duration" type="number" min="1" max="1" setp="1" required value="1"/></td>
+                                <td class="pv2 w-20 ph3">
+                                <select name="duration" onchange="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="bg-white-40 ba br2 w-90">
+                                    <option value='1'> 1 Quarter  (Nov 2024 - Jan 2025) </option>
+                                    <option value='2'> 2 Quarters (Nov 2024 - April 2025)</option>
+                                </select>
+
+                                <input oninput="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="duration" type="number" min="1" max="1" setp="1" required value="1"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
                                 <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="" list="project_list" required/></td>                                
@@ -1617,7 +1594,6 @@ const components = {
                     <select name="payment_mode" onchange="set_payment_mode(this)">
                         <option `+( (mode == 'Project') ? 'selected' : '')+`>Project</option>
                         <option `+( (mode == 'Bank') ? 'selected' : '' )+`>Bank</option>
-                        <option `+( (mode == 'Pool') ? 'selected' : '' )+`>Pool</option>
                     </select>`
            }
 
@@ -1634,8 +1610,16 @@ const components = {
                                 <td class="pv2 w-30 ph3">Application Id</td>
                                 <td class="pv2 w-20 ph3">`+self.data["Application"]["application_id"]+`</td>
 
+                                <td class="pv2 w-30 ph3 bl">Request Date</td>
+                                <td class="pv2 w-20 ph3">`+self.data["Application"]["request_at"]+`</td>
+                            </tr>
+                            <tr class="striped--light-gray">
+                                <td class="pv2 ph3">Pool Allocation</td>
+                                <td class="pv2 ph3">`+(self.data["Application"]["pool_allocation"] ? '✔' : '✖')+`</td>
+
                                 <td class="pv2 ph3 bl">Payment Mode</td>
                                 <td class="pv2 ph3">`+self.data["Application"]["payment_mode"]+`</td>
+
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 w-30 ph3">CPU core hours</td>
@@ -1663,12 +1647,9 @@ const components = {
                 </div>`
             }
             else {
-            let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled';
+                let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled';
 
                 payment_mode = self.data["Application"]["payment_mode"]
-
-                if (self.data["Application"]["pool_allocation"] === true)
-                    payment_mode = "Pool"
 
                 return `
                 <form class="ba ma3 br2 br--bottom" data-source="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-action="group/`+self.data["username"]+`/application/`+self.data["account_type"]+`" data-component="Application-Group-Student">
@@ -1680,15 +1661,23 @@ const components = {
                                 <td class="pv2 w-30 ph3">Application Id</td>
                                 <td class="pv2 w-20 ph3">`+self.data["Application"]["application_id"]+`</td>
 
+                                <td class="pv2 w-30 ph3 bl">Request Date</td>
+                                <td class="pv2 w-20 ph3">`+self.data["Application"]["request_at"]+`</td>
+                            </tr>
+                            <tr class="striped--light-gray">
+                                <td class="pv2 w-30 ph3">Pool Allocation</td>
+                                <td class="pv2 w-20 ph3"><input onclick="pool(this)" type="checkbox" name="pool_allocation"/></td>
+
                                 <td class="pv2 ph3 bl">Payment Mode</td>
                                 <td class="pv2 ph3">`+self.payment_mode(self.data["account_type"], payment_mode)+`</td>
                             </tr>
+
                             <tr class="striped--light-gray">
                                 <td class="pv2 w-30 ph3">CPU core hours</td>
                                 <td class="pv2 w-20 ph3"><input oninput="update_application_amount(this, `+self.data["Rates"]["cpu_per_core_hour"]+`, `+ self.data["Rates"]["gpu_per_node_hour"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="cpu_core_hour" type="number" min="0" step="`+self.data["cpu_step"]+`" required value="`+self.data["Application"]["cpu_core_hour"]+`"/></td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["project_no"]+`" list="project_list_for_group" ` +input_project+ `/></td>                               
+                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="`+self.data["Application"]["project_no"]+`" list="project_list_for_group" ` +input_project+ `/></td>
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">GPU node hours</td>

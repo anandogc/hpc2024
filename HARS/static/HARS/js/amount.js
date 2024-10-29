@@ -230,3 +230,39 @@ async function topup_group_submit(event) {
     return false
 }
 
+function pool(checkbox) {
+    if (checkbox.checked) {
+
+        let form = checkbox.closest('form');
+
+        form.querySelector('[name=cpu_core_hour]').value = 0
+        form.querySelector('[name=cpu_core_hour]').disabled = true
+
+        form.querySelector('[name=gpu_node_hour]').value = 0
+        form.querySelector('[name=gpu_node_hour]').disabled = true
+
+        form.querySelector('.amount').textContent = '₹0'
+
+
+        form.querySelector('[name=payment_mode]').disabled = true
+
+        form.querySelector('[name=project_no]').textContent = ''
+        form.querySelector('[name=project_no]').disabled = true
+        form.querySelector('[name=project_no]').required = false
+
+        form.querySelector('[name=budget_head]').textContent = ''
+        form.querySelector('[name=budget_head]').disabled = true
+        form.querySelector('[name=budget_head]').required = false
+    } else {
+
+        let form = checkbox.closest('form');
+        form.querySelector('[name=cpu_core_hour]').disabled = false
+        form.querySelector('[name=gpu_node_hour]').disabled = false
+
+        form.querySelector('[name=payment_mode]').disabled = false
+        form.querySelector('[name=project_no]').disabled = false
+        form.querySelector('[name=budget_head]').disabled = false
+
+        set_payment_mode(form.querySelector('[name=payment_mode]'))
+    }
+}
