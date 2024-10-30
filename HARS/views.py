@@ -778,6 +778,9 @@ def topup(request, resource, account_type_id):
 
     if (user_account):
         if request.method == "POST":
+            if user_account.application.pool_allocation == True:
+                return HttpResponse("Topups can not be applied for accounts with Pool Allocation.", status=422)
+
             r = json.loads(request.body)
 
             topup = Topup(
@@ -791,7 +794,7 @@ def topup(request, resource, account_type_id):
 
             if ip.designation == "F":
                 topup.payment_mode=r["payment_mode"]
-                
+
                 # Naive datetime
                 naive_dt = datetime.now()
 
@@ -923,6 +926,20 @@ def group_member_application(request, username, account_type_id):
             # Make it timezone-aware
             aware_dt = timezone.make_aware(naive_dt, timezone.get_current_timezone())
 
+            if "pool_allocation" in r:
+                pool_allocation = True
+
+                r["cpu_core_hour"] = 0
+                r["gpu_node_hour"] = 0
+                r["amount"] = 0
+
+                payment_mode = "Pool"
+
+            else:
+                pool_allocation = False
+                payment_mode = r["payment_mode"]
+
+
             if "project_no" in r:
                 project_no = r["project_no"]
             else:
@@ -932,15 +949,11 @@ def group_member_application(request, username, account_type_id):
                 budget_head = r["budget_head"]
             else:
                 budget_head = None
-
-            if "pool_allocation" in r:
-                payment_mode = "Pool"
-            else:
-                payment_mode = r["payment_mode"]
-
+                
 
 
             student_application.pi_time        = aware_dt
+            student_application.pool_allocation   = pool_allocation
             student_application.payment_mode   = payment_mode
             student_application.project_no     = project_no
             student_application.budget_head    = budget_head
