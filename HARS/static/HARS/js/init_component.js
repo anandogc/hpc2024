@@ -100,6 +100,12 @@ async function init_component(c) {
         'Accept': 'application/json'
         }
     })
+    // .then((response) => response.text())
+    // .then((text) => {
+    //     let component_name = c.getAttribute('data-component');
+    //     console.log(component_name + ":" + text)
+    //   // console.log(text);
+    // })
     .then((response) => {
         console.log("Data received from server", response)
         if (response.status !== 404) {

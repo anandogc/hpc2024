@@ -1300,14 +1300,14 @@ const components = {
                                 <td class="pv2 w-20 ph3">`+self.data["Application"]["duration"]+`</td>
 
                                 <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3">`+self.data["Application"]["project_no"]+`</td>                                
+                                <td class="pv2 w-30 ph3">`+(self.data["Application"]["project_no"] != null ? self.data["Application"]["project_no"] : "N/A") +`</td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3"></td>
                                 <td class="pv2 ph3"></td>
 
                                 <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3">`+self.data["Application"]["budget_head"]+`</td>                                
+                                <td class="pv2 w-30 ph3">`+(self.data["Application"]["budget_head"] != null ? self.data["Application"]["budget_head"] : "N/A") +`</td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
@@ -1321,8 +1321,6 @@ const components = {
                 </div>`
             }
             else {
-                let input_project = (self.data["Application"]["payment_mode"] == 'Project') ? 'required' : 'disabled';
-
                 return `
                 <form class="ba ma3 br2 br--bottom" data-source="user/application/`+self.data["account_type"]+`" data-action="user/application/`+self.data["account_type"]+`" data-component="Application-QA-Guide">
                     <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
@@ -1330,32 +1328,30 @@ const components = {
                     <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
                         <tbody>
                             <tr class="striped--light-gray">
-                                <td class="pv2 w-30 ph3">Application Id</td>
-                                <td class="pv2 w-20 ph3"></td>
+                                <td class="pv2 w-20 ph3">Application Id</td>
+                                <td class="pv2 w-30 ph3"></td>
 
                                 <td class="pv2 ph3 bl">Payment Mode</td>
                                 <td class="pv2 ph3">`+self.payment_mode()+`</td>
                             </tr>
                             <tr class="striped--light-gray">
 
-                                <td class="pv2 w-30 ph3">Quarters</td>
-                                <td class="pv2 w-20 ph3">
+                                <td class="pv2 w-20 ph3">Quarters</td>
+                                <td class="pv2 w-30 ph3">
                                 <select name="duration" onchange="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="bg-white-40 ba br2 w-90">
                                     <option value='1'> 1 Quarter  (Nov 2024 - Jan 2025) </option>
                                     <option value='2'> 2 Quarters (Nov 2024 - April 2025)</option>
                                 </select>
 
-                                <input oninput="update_application_amount_QA(this, `+self.data["rate"]+ `)" class="w-100 bg-white-40 ba br2 tr" name="duration" type="number" min="1" max="1" setp="1" required value="1"/></td>
-
-                                <td class="pv2 w-30 ph3 bl">Project No.</td>
+                                <td class="pv2 w-20 ph3 bl">Project No.</td>
                                 <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text" value="" list="project_list" required/></td>                                
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3"></td>
                                 <td class="pv2 ph3"></td>
 
-                                <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="" list="budget_head"/></td>                                
+                                <td class="pv2 w-20 ph3 bl">Budget Head</td>
+                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text" value="" list="budget_head"/></td>
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Amount</td>
@@ -1370,7 +1366,7 @@ const components = {
             }
         },
         view: function() {
-    if (self.status != 404) {
+            if (self.status != 404) {
                  return `
                 <div data-source="user/application/`+self.data["account_type"]+`" data-component="Application-QA-Guide">
                     `+self.application(self)+`
@@ -1385,118 +1381,118 @@ const components = {
             //update_application_amount(component, self.data["Rates"]["cpu_per_core_hour"], self.data["Rates"]["gpu_per_node_hour"])
             //param_hp_application_amount.innerHTML = Number(self.data['Rates']['cpu_per_core_hour']*param_hp_application_cpu.value + self.data['Rates']['gpu_per_node_hour']*param_hp_application_gpu.value).toLocaleString('en-IN')
         }
-        /*
-        stage: function(data) {
-            if (data.admin_time) {
-                return `Active`
-            }
-            else if (data.rnd_time) {
-                return `Admin Approval`
-            }
-            else {
-                return `RnD Approval`
-            }
-        },
-        application: function(self) {
-            if ("Application" in self.data) {
-                return `
-                <section class="ba ma3 br2 br--bottom">
+            /*
+            stage: function(data) {
+                if (data.admin_time) {
+                    return `Active`
+                }
+                else if (data.rnd_time) {
+                    return `Admin Approval`
+                }
+                else {
+                    return `RnD Approval`
+                }
+            },
+            application: function(self) {
+                if ("Application" in self.data) {
+                    return `
+                    <section class="ba ma3 br2 br--bottom">
+                            <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
+
+                            <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
+                                <tbody>
+                                    <tr class="striped--light-gray">
+                                        <td class="pv2 w-30 ph3">Application Id</td>
+                                        <td class="pv2 w-20 ph3">`+self.data["Application"]["application_id"]+`</td>
+
+                                        <td class="pv2 ph3 bl">Payment Mode</td>
+                                        <td class="pv2 ph3">`+self.data["Application"]["payment_mode"]+`</td> 
+                                    </tr>
+                                    <tr class="striped--light-gray">
+                                        <td class="pv2 w-30 ph3">CPU core hours</td>
+                                        <td class="pv2 w-20 ph3">`+Number(self.data["Application"]["cpu_core_hour"]).toLocaleString("en-IN")+`</td>
+
+                                        <td class="pv2 ph3 bl">Project No.</td>
+                                        <td class="pv2 ph3">`+self.data["Application"]["project_no"]+`</td>
+                                    </tr>
+                                    <tr class="striped--light-gray">
+                                        <td class="pv2 ph3">GPU node hours</td>
+                                        <td class="pv2 ph3">`+( (self.data["Application"]["gpu_node_hour"] > -1) ? Number(self.data["Application"]["gpu_node_hour"]).toLocaleString("en-IN") : "N/A")+`</td>
+                                        
+                                        <td class="pv2 ph3 bl">Budget Head</td>
+                                        <td class="pv2 ph3">`+self.data["Application"]["budget_head"]+`</td>
+                                    </tr>
+                                    <tr class="striped--light-gray">
+                                        <td class="pv2 ph3">Amount</td>
+                                        <td class="pv2 ph3">₹`+Number(self.data["Application"]["amount"]).toLocaleString("en-IN")+`</td>
+
+                                        <td class="pv2 ph3 bl">Stage</td>
+                                        <td class="pv2 ph3">`+self.stage(self.data["Application"])+`</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>`
+                }
+                else {
+                    return `
+                    <form class="ba ma3 br2 br--bottom" data-source="user/application/`+self.data["account_type"]+`" data-action="user/application/`+self.data["account_type"]+`" data-component="Application-RA-Guide">
                         <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
 
                         <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
                             <tbody>
                                 <tr class="striped--light-gray">
                                     <td class="pv2 w-30 ph3">Application Id</td>
-                                    <td class="pv2 w-20 ph3">`+self.data["Application"]["application_id"]+`</td>
+                                    <td class="pv2 w-20 ph3"></td>
 
                                     <td class="pv2 ph3 bl">Payment Mode</td>
-                                    <td class="pv2 ph3">`+self.data["Application"]["payment_mode"]+`</td> 
+                                    <td class="pv2 ph3">
+                                        <select name="payment_mode" class="bg-white-40 ba br2">
+                                            <option>Project</option>
+                                            <option>Bank</option>
+                                        </select>
+                                    </td>
                                 </tr>
                                 <tr class="striped--light-gray">
                                     <td class="pv2 w-30 ph3">CPU core hours</td>
-                                    <td class="pv2 w-20 ph3">`+Number(self.data["Application"]["cpu_core_hour"]).toLocaleString("en-IN")+`</td>
+                                    <td class="pv2 w-20 ph3">`+self.data["AccountType"]["default_cpu_core_hours"]+`<input type="hidden" name="cpu" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`"/></td>
 
-                                    <td class="pv2 ph3 bl">Project No.</td>
-                                    <td class="pv2 ph3">`+self.data["Application"]["project_no"]+`</td>
+                                    <td class="pv2 w-30 ph3 bl">Project No.</td>
+                                    <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text"/></td>                                
                                 </tr>
                                 <tr class="striped--light-gray">
                                     <td class="pv2 ph3">GPU node hours</td>
-                                    <td class="pv2 ph3">`+( (self.data["Application"]["gpu_node_hour"] > -1) ? Number(self.data["Application"]["gpu_node_hour"]).toLocaleString("en-IN") : "N/A")+`</td>
-                                    
-                                    <td class="pv2 ph3 bl">Budget Head</td>
-                                    <td class="pv2 ph3">`+self.data["Application"]["budget_head"]+`</td>
+                                    <td class="pv2 ph3">`+(self.data["AccountType"]["default_gpu_node_hours"] > -1 ? Number(self.data["AccountType"]["default_gpu_node_hours"]).toLocaleString("en-IN") : "N/A")+`<input type="hidden" name="gpu" value="`+self.data["AccountType"]["default_gpu_node_hours"]+`"/></td>
+
+                                    <td class="pv2 w-30 ph3 bl">Budget Head</td>
+                                    <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text"/></td>                                
                                 </tr>
                                 <tr class="striped--light-gray">
                                     <td class="pv2 ph3">Amount</td>
-                                    <td class="pv2 ph3">₹`+Number(self.data["Application"]["amount"]).toLocaleString("en-IN")+`</td>
+                                    <td class="pv2 ph3">₹`+Number(self.data['Rates']['cpu_per_core_hour']*self.data["AccountType"]["default_cpu_core_hours"] + self.data['Rates']['gpu_per_node_hour']*(self.data["AccountType"]["default_gpu_node_hours"] > -1 ? self.data["AccountType"]["default_gpu_node_hours"] : 0)).toLocaleString('en-IN')+`</td>
 
                                     <td class="pv2 ph3 bl">Stage</td>
-                                    <td class="pv2 ph3">`+self.stage(self.data["Application"])+`</td>
+                                    <td class="pv2 ph3"><input class="bg-white-40 ba br2" type="submit" value="Apply"/></td>
                                 </tr>
                             </tbody>
                         </table>
-                    </section>`
-            }
-            else {
-                return `
-                <form class="ba ma3 br2 br--bottom" data-source="user/application/`+self.data["account_type"]+`" data-action="user/application/`+self.data["account_type"]+`" data-component="Application-RA-Guide">
-                    <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
-
-                    <table class="collapse ba br2 b--black-10 pv2 ph3 w-100">
-                        <tbody>
-                            <tr class="striped--light-gray">
-                                <td class="pv2 w-30 ph3">Application Id</td>
-                                <td class="pv2 w-20 ph3"></td>
-
-                                <td class="pv2 ph3 bl">Payment Mode</td>
-                                <td class="pv2 ph3">
-                                    <select name="payment_mode" class="bg-white-40 ba br2">
-                                        <option>Project</option>
-                                        <option>Bank</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr class="striped--light-gray">
-                                <td class="pv2 w-30 ph3">CPU core hours</td>
-                                <td class="pv2 w-20 ph3">`+self.data["AccountType"]["default_cpu_core_hours"]+`<input type="hidden" name="cpu" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`"/></td>
-
-                                <td class="pv2 w-30 ph3 bl">Project No.</td>
-                                <td class="pv2 w-30 ph3"><input name="project_no" class="bg-white-40 ba br2" type="text"/></td>                                
-                            </tr>
-                            <tr class="striped--light-gray">
-                                <td class="pv2 ph3">GPU node hours</td>
-                                <td class="pv2 ph3">`+(self.data["AccountType"]["default_gpu_node_hours"] > -1 ? Number(self.data["AccountType"]["default_gpu_node_hours"]).toLocaleString("en-IN") : "N/A")+`<input type="hidden" name="gpu" value="`+self.data["AccountType"]["default_gpu_node_hours"]+`"/></td>
-
-                                <td class="pv2 w-30 ph3 bl">Budget Head</td>
-                                <td class="pv2 w-30 ph3"><input name="budget_head" class="bg-white-40 ba br2" type="text"/></td>                                
-                            </tr>
-                            <tr class="striped--light-gray">
-                                <td class="pv2 ph3">Amount</td>
-                                <td class="pv2 ph3">₹`+Number(self.data['Rates']['cpu_per_core_hour']*self.data["AccountType"]["default_cpu_core_hours"] + self.data['Rates']['gpu_per_node_hour']*(self.data["AccountType"]["default_gpu_node_hours"] > -1 ? self.data["AccountType"]["default_gpu_node_hours"] : 0)).toLocaleString('en-IN')+`</td>
-
-                                <td class="pv2 ph3 bl">Stage</td>
-                                <td class="pv2 ph3"><input class="bg-white-40 ba br2" type="submit" value="Apply"/></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>`
-            }
-        },
-        view: function() {
-            if (self.status != 404) {
-                return `
-                <div data-source="user/application/`+self.data["account_type"]+`"  data-component="Application" data-reload="param_hp_application">
-                    `+self.application(self)+`
-                </div>
-                `
-            }
-            else {
-                return `<div class="tc">Please complete your Work Profile and refresh the page to apply for an account.</div>`
-            }
-        },
-        "onupdate": function() {
-            param_hp_application_amount.innerHTML = Number(self.data['Rates']['cpu_per_core_hour']*param_hp_application_cpu.value + self.data['Rates']['gpu_per_node_hour']*param_hp_application_gpu.value).toLocaleString('en-IN')
-        }*/
+                    </form>`
+                }
+            },
+            view: function() {
+                if (self.status != 404) {
+                    return `
+                    <div data-source="user/application/`+self.data["account_type"]+`"  data-component="Application" data-reload="param_hp_application">
+                        `+self.application(self)+`
+                    </div>
+                    `
+                }
+                else {
+                    return `<div class="tc">Please complete your Work Profile and refresh the page to apply for an account.</div>`
+                }
+            },
+            "onupdate": function() {
+                param_hp_application_amount.innerHTML = Number(self.data['Rates']['cpu_per_core_hour']*param_hp_application_cpu.value + self.data['Rates']['gpu_per_node_hour']*param_hp_application_gpu.value).toLocaleString('en-IN')
+            }*/
     },
 
 
