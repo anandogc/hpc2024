@@ -967,7 +967,7 @@ def group_member_application(request, username, account_type_id):
                 student_application.amount         = amount
 
                 if amount == 0 and not pool_allocation:
-                    return HttpResponse("Applications with Pool Allocation can not have zero amount.", status=422)
+                    return HttpResponse("Applications without Pool Allocation can not have zero amount.", status=422)
 
 
             elif "duration" in r:
