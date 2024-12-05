@@ -425,7 +425,7 @@ const components = {
                                 <td class="pv2 w-20 ph3"></td>
 
                                 <td class="pv2 w-30 ph3 bl">CPU core hours</td>
-                                <td class="pv2 w-20 ph3"><input name="cpu_core_hour" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, `+ self.data['Rates']['gpu_per_node_hour']+`)" class="w-100 bg-white-40 ba br2" type="number" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`" /></td>
+                                <td class="pv2 w-20 ph3"><input name="cpu_core_hour" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, `+ self.data['Rates']['gpu_per_node_hour']+`)" class="w-100 bg-white-40 ba br2" type="number" value="`+self.data["AccountType"]["default_cpu_core_hours"]+`"/></td>
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 ph3">Payment Mode</td>
@@ -805,7 +805,7 @@ const components = {
                             </tr>
                             <tr class="striped--light-gray">
                                 <td class="pv2 w-30 ph3">CPU core hours</td>
-                                <td class="pv2 w-20 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="cpu_core_hour" type="number" min="0" step="20000" value="0"/></td>
+                                <td class="pv2 w-20 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="cpu_core_hour" type="number" min="0" step="20000" value="20000"/></td>
 
                                 <td class="pv2 ph3 bl">GPU node hours</td>
                                 <td class="pv2 ph3"><input class="w-100 bg-white-40 ba br2 tr" oninput="update_application_amount(this, `+self.data['Rates']['cpu_per_core_hour']+`, ` + self.data['Rates']['gpu_per_node_hour'] +`)" name="gpu_node_hour" type="number" min="0" step="600" value="0"/></td>
@@ -815,7 +815,7 @@ const components = {
                                 <td class="pv2 ph3"><input class="bg-white-40 ba br2" type="submit" value="Apply"/></td>
 
                                 <td class="pv2 ph3 bl">Amount</td>
-                                <td class="pv2 ph3 amount">₹`+Number(self.data['Rates']['cpu_per_core_hour']*self.data["AccountType"]["default_cpu_core_hours"] + self.data["AccountType"]["default_gpu_node_hours"]).toLocaleString('en-IN')+`</td>
+                                <td class="pv2 ph3 amount">₹300</td>
                             </tr>
                         </tbody>
                     </table>
