@@ -512,9 +512,6 @@ def application(request, account_type_id):
 
             amount = rate.cpu_per_core_hour * int(r["cpu_core_hour"]) + rate.gpu_per_node_hour * gpu_node_hour
 
-            # if (amount == 0):
-            #     return HttpResponse("Total amount must be more than zero.", status=422)
-
             renew_date = HARSDates.objects.get(parameter='renew_date').value
             latest_application = Application.objects.filter(hpc_profile=profile, account_type=at, request_at__gt=renew_date).order_by('request_at').last()
 
@@ -529,6 +526,10 @@ def application(request, account_type_id):
 
             else:
                 pool_allocation = False
+
+
+            if (amount == 0):
+                return HttpResponse("For Non-Pool accounts, total amount must be more than zero.", status=422)
 
 
             if "payment_mode" in r:
@@ -735,7 +736,7 @@ def topup(request, resource, account_type_id):
         "date": datetime.now().strftime('%d/%m/%Y'),
         "unit": {
             "cpu": "Core hours",
-            "gpu": "Node hours"
+            "gpu": "Card hours"
         },
         "AccountType": {},
         "Rates": [],
@@ -950,6 +951,8 @@ def group_member_application(request, username, account_type_id):
             else:
                 budget_head = None
                 
+            if amount == 0 and not pool_allocation:
+                return HttpResponse("Applications with Pool Allocation can not have zero amount.", status=422)
 
 
             student_application.pi_time        = aware_dt

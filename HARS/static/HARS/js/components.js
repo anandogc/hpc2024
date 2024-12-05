@@ -959,7 +959,12 @@ const components = {
                 `
             }
             else {
-                return `<div class="tc" data-source="user/application/PS-RA" data-component="Application-RA-Guide">Please complete your Work Profile to apply for an account.</div>`
+                return `
+                <section class="ba ma3 br2 br--bottom" data-source="user/application/PS-RA" data-component="Application-RA-Guide">
+                    <header class="bg-color1 color2 pa2 flex justify-between">Application</header>
+
+                    <div class="tc pa4 bg-light-gray">Please complete your Work Profile to apply for an account.</div>
+                </section>`
             }
         },
         "onupdate": function() {
