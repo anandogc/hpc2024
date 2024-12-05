@@ -528,8 +528,8 @@ def application(request, account_type_id):
                 pool_allocation = False
 
 
-            if (amount == 0):
-                return HttpResponse("For Non-Pool accounts, total amount must be more than zero.", status=422)
+            if (amount == 0 and ip.designation == "F"):
+                return HttpResponse("Total amount must be more than zero.", status=422)
 
 
             if "payment_mode" in r:
@@ -775,7 +775,7 @@ def topup(request, resource, account_type_id):
 
     user_account = UserAccount.objects.filter(institute_profile=ip, account_type=at, create_time__gt=renew_date).order_by('create_time').last()
     if not user_account and request.method == "POST":
-        return HttpResponse("Please activate your account before applying for Topup.", status=422)
+        return HttpResponse("Please fill in the Application and PI Approval before applying for Topup.", status=422)
 
     if (user_account):
         if request.method == "POST":
@@ -951,9 +951,6 @@ def group_member_application(request, username, account_type_id):
             else:
                 budget_head = None
                 
-            if amount == 0 and not pool_allocation:
-                return HttpResponse("Applications with Pool Allocation can not have zero amount.", status=422)
-
 
             student_application.pi_time        = aware_dt
             student_application.pool_allocation   = pool_allocation
@@ -968,6 +965,10 @@ def group_member_application(request, username, account_type_id):
                 student_application.cpu_core_hours = r["cpu_core_hour"]
                 student_application.gpu_node_hours = r["gpu_node_hour"]
                 student_application.amount         = amount
+
+                if amount == 0 and not pool_allocation:
+                    return HttpResponse("Applications with Pool Allocation can not have zero amount.", status=422)
+
 
             elif "duration" in r:
                 amount = int(r["duration"]) * Qrate
