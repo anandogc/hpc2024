@@ -679,7 +679,7 @@ def application(request, account_type_id):
                     cpu_core_hours = 0,
                     gpu_node_hours = 0,
                     duration = duration,
-                    amount = duration*rate,
+                    amount = (duration-1)*rate,
                     payment_mode = r["payment_mode"],
                     hpc_profile = profile,
                     account_type = at

@@ -72,7 +72,7 @@ class UserAccountMixin:
 
 @admin.register(InstituteProfile)
 class InstituteProfileAdmin(admin.ModelAdmin, ExportCsvMixin):
-    list_display = ('name', 'department', 'id_no', 'designation')
+    list_display = ('pk', 'name', 'department', 'id_no', 'designation')
     search_fields = ['name', 'department', 'id_no', 'designation']
     list_filter = ('department', 'designation')
     actions = ["export_as_csv"]
