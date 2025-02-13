@@ -32,8 +32,6 @@ def Send_emails_for_account_type(account_type):
             a.email_sent = True
             a.save()
 
-            #except:
-            #    pass
 
 
 Send_emails_for_account_type('PS-RA')

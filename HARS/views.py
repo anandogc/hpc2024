@@ -779,7 +779,7 @@ def topup(request, resource, account_type_id):
 
     if (user_account):
         if request.method == "POST":
-            if user_account.application.pool_allocation == True:
+            if user_account.application.pool_allocation == True and ip.designation != "F":
                 return HttpResponse("Topups can not be applied for accounts with Pool Allocation.", status=422)
 
             r = json.loads(request.body)
@@ -879,7 +879,12 @@ def group_member_application(request, username, account_type_id):
     student_user = get_object_or_404(get_user_model(), username=username)
     student_ip = get_object_or_404(InstituteProfile, user=student_user)
     student_hpc_profile = get_object_or_404(HPCProfile, institute_profile=student_ip, pi_profile=ip)
-    student_application = get_object_or_404(Application, hpc_profile=student_hpc_profile, account_type=at, request_at__gt=renew_date)
+    #student_application = get_object_or_404(Application, hpc_profile=student_hpc_profile, account_type=at, request_at__gt=renew_date).last()
+
+    try:
+        student_application = Application.objects.filter(hpc_profile=student_hpc_profile, account_type=at, request_at__gt=renew_date).last()
+    except:
+        raise Http404("No Application matches the given query.")
 
     data = {
             "account_type": account_type_id,

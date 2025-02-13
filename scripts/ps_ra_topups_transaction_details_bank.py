@@ -6,7 +6,7 @@ from HARS.models import AccountType
 
 regular_access = AccountType.objects.get(type_id='PS-RA')
 
-topups = Topup.objects.filter(pi_time__isnull=False, payment_mode="Project").order_by('pi_time')
+topups = Topup.objects.filter(pi_time__isnull=False, payment_mode="Bank").order_by('pi_time')
 
 designation = {
         'S': 'Student',

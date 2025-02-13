@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.http import HttpResponse
 from django.utils import timezone
 from datetime import datetime
 from django import forms
@@ -25,21 +26,36 @@ from .models import CoreHour
 # https://books.agiliq.com/projects/django-admin-cookbook/en/latest/export.html
 class ExportCsvMixin:
     def export_as_csv(self, request, queryset):
-
-        meta = self.model._meta
-        field_names = [field.name for field in meta.fields]
+        """
+        Generic CSV export admin action.
+        """
+        field_names = [field.name for field in self.model._meta.fields]
+        list_display_fields = self.get_list_display(request)
 
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(self.model._meta)
         writer = csv.writer(response)
 
-        writer.writerow(field_names)
+        # Write the header row
+        writer.writerow(list_display_fields)
+
+        # Write data rows
         for obj in queryset:
-            row = writer.writerow([getattr(obj, field) for field in field_names])
+            row = []
+            for field in list_display_fields:
+                if hasattr(obj, field):
+                    value = getattr(obj, field)
+                    if callable(value):
+                        value = value()
+                else:
+                    # Get the value from the function defined in the admin
+                    value = getattr(self, field)(obj)
+                row.append(value)
+            writer.writerow(row)
 
         return response
 
-    export_as_csv.short_description = "Export Selected"
+    export_as_csv.short_description = "Export Selected as CSV"
 
 class UserAccountMixin:
     def create_user_acount(self, request, queryset):
@@ -72,7 +88,7 @@ class UserAccountMixin:
 
 @admin.register(InstituteProfile)
 class InstituteProfileAdmin(admin.ModelAdmin, ExportCsvMixin):
-    list_display = ('name', 'department', 'id_no', 'designation')
+    list_display = ('pk', 'name', 'department', 'id_no', 'designation')
     search_fields = ['name', 'department', 'id_no', 'designation']
     list_filter = ('department', 'designation')
     actions = ["export_as_csv"]
@@ -115,8 +131,8 @@ class QuarterlyRateAdmin(admin.ModelAdmin, ExportCsvMixin):
     actions = ["export_as_csv"]
 
 @admin.register(Application)
-class ApplicationAdmin(admin.ModelAdmin, UserAccountMixin):
-    list_display = ('pk', 'user', 'request_at', 'pi_time', 'type_name', 'pool_allocation', 'cpu_core_hours', 'gpu_node_hours', 'amount', 'payment_mode', 'email_sent', 'notes')
+class ApplicationAdmin(admin.ModelAdmin, UserAccountMixin, ExportCsvMixin):
+    list_display = ('pk', 'user', 'pi_name', 'request_at', 'pi_time', 'type_name', 'pool_allocation', 'cpu_core_hours', 'gpu_node_hours', 'duration', 'amount', 'payment_mode', 'notes')
     list_filter = ('account_type', 'pool_allocation')
     # search_fields = ['user']
     actions = ["create_user_acount", "export_as_csv"]
@@ -127,7 +143,7 @@ class UserAccountAdmin(admin.ModelAdmin, ExportCsvMixin):
 
 @admin.register(Topup)
 class TopupAdmin(admin.ModelAdmin, ExportCsvMixin):
-    list_display = ('name', 'pi_name', 'user_account', 'request_at', 'pi_time', 'rnd_time', 'admin_time', 'resource', 'hours', 'units', 'amount', 'payment_mode', 'project_no', 'budget_head')
+    list_display = ('pk', 'name', 'pi_name', 'user_account', 'request_at', 'pi_time', 'rnd_time', 'admin_time', 'resource', 'hours', 'units', 'amount', 'payment_mode', 'project_no', 'budget_head')
     list_filter = ('resource',)
     actions = ["export_as_csv"]
 

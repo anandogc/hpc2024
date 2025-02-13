@@ -153,8 +153,19 @@ class Application(models.Model):
     def user(self):
         return f"{self.hpc_profile.institute_profile.name} ({self.hpc_profile.institute_profile.id_no}, {self.hpc_profile.institute_profile.user.username})"
 
+    def applicant(self):
+        return f"{self.hpc_profile.institute_profile.name} ({self.hpc_profile.institute_profile.id_no}, {self.hpc_profile.institute_profile.user.username})"
+
     def type_name(self):
         return self.account_type.name
+
+    def pi_name(self):
+        if self.hpc_profile.pi_profile:
+            return self.hpc_profile.pi_profile.name
+        else:
+            return self.hpc_profile.institute_profile.name
+
+
 
     # def To_json(self):
     #     return {

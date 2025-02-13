@@ -95,9 +95,13 @@ def Send_mail(profile_name, details):
       
     # Converts the Multipart msg into a string 
     text = msg.as_string() 
+
+    recepents = mail['To'] + ", " + mail['CC']
+    if "," in recepents:
+        recepents = recepents.split(",")
       
     # sending the mail 
-    s.sendmail(settings.from_header, mail['To'] + "," + mail['CC'], text) 
+    s.sendmail(settings.from_header, recepents, text) 
       
     # terminating the session 
     s.quit()
