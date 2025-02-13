@@ -22,6 +22,8 @@ from .models import MailSetting
 from .models import Mail
 from .models import CoreHour
 
+from .mail import Send_mail
+
 # Register your models here.
 # https://books.agiliq.com/projects/django-admin-cookbook/en/latest/export.html
 class ExportCsvMixin:
@@ -132,20 +134,19 @@ class QuarterlyRateAdmin(admin.ModelAdmin, ExportCsvMixin):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin, UserAccountMixin, ExportCsvMixin):
-    list_display = ('pk', 'user', 'pi_name', 'request_at', 'pi_time', 'type_name', 'pool_allocation', 'cpu_core_hours', 'gpu_node_hours', 'duration', 'amount', 'payment_mode', 'notes')
+    list_display = ('pk', 'user', 'pi_name', 'request_at', 'pi_time', 'type_name', 'pool_allocation', 'cpu_core_hours', 'gpu_node_hours', 'duration', 'amount', 'payment_mode', 'email_sent', 'notes')
     list_filter = ('account_type', 'pool_allocation')
     # search_fields = ['user']
     actions = ["send_email", "export_as_csv"]
 
     def send_email(self, request, queryset):
         for application in queryset:
-            if application.hpc_profile.pi_profile and application.pi_time is None:  # Group Member
+
+            if application.hpc_profile.pi_profile:  # Group Member
                 email = f"{application.hpc_profile.pi_profile.user.username}@iitk.ac.in"
                 name = application.hpc_profile.pi_profile.name
-                #try:
+
                 Send_mail("PI_approval", {'name': name, 'email': email})
-                #except:
-                #    pass
 
             if application.payment_mode == 'Bank':
                 email = f"{application.hpc_profile.institute_profile.user.username}@iitk.ac.in"
@@ -154,7 +155,6 @@ class ApplicationAdmin(admin.ModelAdmin, UserAccountMixin, ExportCsvMixin):
                 ac_type = application.account_type.name
                 amount = application.amount
 
-                #try:
                 Send_mail("Bank_payment", {'name': name, 'email': email, 'ac_type': ac_type, 'amount': amount, 'id_no': id_no})
 
 
