@@ -138,23 +138,24 @@ class ApplicationAdmin(admin.ModelAdmin, UserAccountMixin, ExportCsvMixin):
     actions = ["send_email", "export_as_csv"]
 
     def send_email(self, request, queryset):
-        if self.hpc_profile.pi_profile and self.pi_time is None:  # Group Member
-            email = f"{self.hpc_profile.pi_profile.user.username}@iitk.ac.in"
-            name = self.hpc_profile.pi_profile.name
-            #try:
-            Send_mail("PI_approval", {'name': name, 'email': email})
-            #except:
-            #    pass
+        for application in queryset:
+            if application.hpc_profile.pi_profile and application.pi_time is None:  # Group Member
+                email = f"{application.hpc_profile.pi_profile.user.username}@iitk.ac.in"
+                name = application.hpc_profile.pi_profile.name
+                #try:
+                Send_mail("PI_approval", {'name': name, 'email': email})
+                #except:
+                #    pass
 
-        if self.payment_mode == 'Bank':
-            email = f"{self.hpc_profile.institute_profile.user.username}@iitk.ac.in"
-            name = self.hpc_profile.institute_profile.name
-            id_no = self.hpc_profile.institute_profile.id_no
-            ac_type = self.account_type.name
-            amount = self.amount
+            if application.payment_mode == 'Bank':
+                email = f"{application.hpc_profile.institute_profile.user.username}@iitk.ac.in"
+                name = application.hpc_profile.institute_profile.name
+                id_no = application.hpc_profile.institute_profile.id_no
+                ac_type = application.account_type.name
+                amount = application.amount
 
-            #try:
-            Send_mail("Bank_payment", {'name': name, 'email': email, 'ac_type': ac_type, 'amount': amount, 'id_no': id_no})
+                #try:
+                Send_mail("Bank_payment", {'name': name, 'email': email, 'ac_type': ac_type, 'amount': amount, 'id_no': id_no})
 
 
 @admin.register(UserAccount)
