@@ -167,7 +167,25 @@ class UserAccountAdmin(admin.ModelAdmin, ExportCsvMixin):
 class TopupAdmin(admin.ModelAdmin, ExportCsvMixin):
     list_display = ('pk', 'name', 'pi_name', 'user_account', 'request_at', 'pi_time', 'rnd_time', 'admin_time', 'resource', 'hours', 'units', 'amount', 'payment_mode', 'project_no', 'budget_head')
     list_filter = ('resource',)
-    actions = ["export_as_csv"]
+    actions = ["send_emails", "export_as_csv"]
+
+    def send_emails(self, request, queryset):
+        for t in queryset:
+            if t.user_account.institute_profile.work_profile.pi_profile and t.pi_time is None:  # Group Member
+                email = f"{t.user_account.institute_profile.work_profile.pi_profile.user.username}@iitk.ac.in"
+                name = t.user_account.institute_profile.work_profile.pi_profile.name
+
+                Send_mail("PI_approval", {'name': name, 'email': email})
+
+            if t.payment_mode == 'Bank':
+                email = f"{t.user_account.institute_profile.user.username}@iitk.ac.in"
+                name = t.user_account.institute_profile.name
+                id_no = t.user_account.institute_profile.id_no
+
+                amount = t.amount
+
+                Send_mail("Bank_payment", {'name': name, 'email': email, 'amount': amount, 'id_no': id_no})
+
 
 @admin.register(HARSDates)
 class HARSDatesAdmin(admin.ModelAdmin, ExportCsvMixin):
