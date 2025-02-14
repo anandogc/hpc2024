@@ -160,7 +160,8 @@ class ApplicationAdmin(admin.ModelAdmin, UserAccountMixin, ExportCsvMixin):
 
 @admin.register(UserAccount)
 class UserAccountAdmin(admin.ModelAdmin, ExportCsvMixin):
-    list_display = ('institute_profile', 'create_time', 'expiry_time', 'statistics_updated_time', 'application', 'account_type', 'is_active')
+    list_display = ('pk', 'institute_profile', 'create_time', 'expiry_time', 'statistics_updated_time', 'application', 'apply_time', 'account_type', 'is_active')
+    actions = ["export_as_csv"]
 
 @admin.register(Topup)
 class TopupAdmin(admin.ModelAdmin, ExportCsvMixin):

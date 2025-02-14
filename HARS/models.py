@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -204,6 +205,12 @@ class UserAccount(models.Model):
 
     class Meta:
         unique_together = ('institute_profile', 'account_type',)
+
+    def apply_time(self):
+        if self.application is not None:
+            return self.application.request_at
+        else:
+            return datetime.date(2024,5,5);
 
 
 class Statistics(models.Model):
